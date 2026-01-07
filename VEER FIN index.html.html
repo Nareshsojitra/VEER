@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veer Finance Services - Financial Growth</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .hover-scale:hover { transform: scale(1.05); transition: transform 0.3s; }
+        html { scroll-behavior: smooth; }
+        
+        /* Hero Background with Finance Overlay */
+        .hero-bg {
+            background-image: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.7)), url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Customer List Scrollbar Styling */
+        .customer-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .customer-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .customer-list::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .customer-list::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation Bar (Corporate Blue) -->
+    <nav class="bg-slate-900 text-white p-4 shadow-xl fixed w-full z-50 top-0 border-b-4 border-amber-500">
+        <div class="container mx-auto flex justify-between items-center">
+            
+            <!-- Logo Area -->
+            <a href="#home" class="flex items-center gap-3">
+                <!-- Logo Image -->
+                <img src="NAME PLATE8.JPG" alt="Veer Finance Logo" class="h-12 md:h-16 object-contain bg-white rounded-md p-1">
+                <div class="flex flex-col">
+                    <span class="text-xl md:text-2xl font-bold tracking-wide uppercase text-white">Veer</span>
+                    <span class="text-xs md:text-sm text-amber-400 font-medium tracking-widest">Finance Services</span>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <ul class="hidden md:flex space-x-8 font-medium items-center text-sm uppercase tracking-wider">
+                <li><a href="#home" class="hover:text-amber-400 transition duration-300">Home</a></li>
+                <li><a href="#services" class="hover:text-amber-400 transition duration-300">Services</a></li>
+                <li><a href="#clients" class="hover:text-amber-400 transition duration-300">Clients</a></li>
+                <li><a href="#about" class="hover:text-amber-400 transition duration-300">About Us</a></li>
+                <li><a href="#contact" class="bg-amber-500 text-slate-900 px-6 py-2 rounded hover:bg-amber-400 transition font-bold shadow-lg hover:shadow-amber-500/50">Contact</a></li>
+            </ul>
+
+            <!-- Mobile Menu Icon -->
+            <button class="md:hidden text-2xl text-amber-500">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-bg text-white h-screen flex items-center justify-center text-center px-4 pt-20">
+        <div class="max-w-5xl relative z-10">
+            <div class="mb-6 animate-pulse">
+                <i class="fas fa-chart-line text-6xl text-amber-500"></i>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-2xl">
+                તમારી સંપત્તિમાં <span class="text-amber-500">વૃદ્ધિ</span> અને <br>
+                <span class="text-amber-500">સુરક્ષા</span> માટેનું શ્રેષ્ઠ માધ્યમ
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 text-slate-200 font-light max-w-3xl mx-auto border-l-4 border-amber-500 pl-4 bg-slate-900/50 py-2">
+                "વીર ફાયનાન્સ સર્વિસ" - જ્યાં તમારા નાણાં સુરક્ષિત છે અને ભવિષ્ય ઉજ્જવળ છે.
+            </p>
+            
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <a href="#clients" class="bg-amber-500 text-slate-900 px-8 py-4 rounded text-lg font-bold hover:bg-amber-400 transition shadow-lg transform hover:-translate-y-1">
+                    અમારા ગ્રાહકો જુઓ
+                </a>
+                <a href="https://wa.me/919737208108" target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded text-lg font-bold hover:bg-white hover:text-slate-900 transition flex items-center justify-center gap-2">
+                    <i class="fab fa-whatsapp text-2xl"></i> WhatsApp Chat
+                </a>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="mt-16 grid grid-cols-3 gap-4 text-center border-t border-slate-600 pt-8 text-slate-300 text-sm md:text-base">
+                <div>
+                    <i class="fas fa-users text-amber-500 mb-2 text-xl"></i>
+                    <p>સંતુષ્ટ ગ્રાહકો</p>
+                </div>
+                <div>
+                    <i class="fas fa-rupee-sign text-amber-500 mb-2 text-xl"></i>
+                    <p>શ્રેષ્ઠ વળતર</p>
+                </div>
+                <div>
+                    <i class="fas fa-hand-holding-heart text-amber-500 mb-2 text-xl"></i>
+                    <p>ભરોસાપાત્ર સલાહ</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 container mx-auto px-4 bg-white relative">
+        <div class="text-center mb-16">
+            <span class="text-amber-600 font-bold tracking-widest uppercase text-sm">Our Expertise</span>
+            <h2 class="text-4xl font-bold text-slate-900 mt-2">
+                અમારી પ્રોફેશનલ <span class="text-amber-600">સેવાઓ</span>
+            </h2>
+            <div class="w-20 h-1.5 bg-slate-900 mx-auto mt-4 rounded"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Service 1 -->
+            <div class="bg-slate-50 p-8 rounded-lg shadow-lg hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition-all duration-300">
+                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-blue-900 text-4xl mb-6 shadow-md group-hover:bg-blue-900 group-hover:text-white transition">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-800">Mutual Funds</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    શેરબજારના ઉતાર-ચઢાવમાં પણ શ્રેષ્ઠ વળતર મેળવવા માટે SIP અને લમ્પ-સમ (Lumpsum) રોકાણનું સચોટ પ્લાનિંગ.
+                </p>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="bg-slate-50 p-8 rounded-lg shadow-lg hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition-all duration-300">
+                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-red-600 text-4xl mb-6 shadow-md group-hover:bg-red-600 group-hover:text-white transition">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-800">Health Insurance</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    તમારા અને તમારા પરિવારના સ્વાસ્થ્યની સુરક્ષા. મેડિક્લેમ અને ક્રિટિકલ ઇલનેસ કવર માટે શ્રેષ્ઠ પોલિસી.
+                </p>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="bg-slate-50 p-8 rounded-lg shadow-lg hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition-all duration-300">
+                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-green-600 text-4xl mb-6 shadow-md group-hover:bg-green-600 group-hover:text-white transition">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-800">SIP & Wealth</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    નાની બચતમાંથી મોટી મૂડી બનાવો. લોંગ ટર્મ વેલ્થ ક્રિએશન માટે એક્સપર્ટ એડવાઈઝ.
+                </p>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="bg-slate-50 p-8 rounded-lg shadow-lg hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition-all duration-300">
+                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-slate-800 text-4xl mb-6 shadow-md group-hover:bg-slate-800 group-hover:text-white transition">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-3 text-slate-800">Loan Services</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    તમારા સપનાના ઘર, બિઝનેસ કે પર્સનલ જરૂરિયાત માટે સરળ અને ઝડપી લોન પ્રોસેસ.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Chart Section -->
+    <section class="py-20 bg-slate-900 text-white overflow-hidden">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">શા માટે <span class="text-amber-500">Veer Finance</span> પસંદ કરશો?</h2>
+                <ul class="space-y-6">
+                    <li class="flex items-start gap-4">
+                        <div class="bg-amber-500 rounded-full p-2 mt-1">
+                            <i class="fas fa-check text-slate-900"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">ટ્રાન્સપરન્ટ સર્વિસ</h4>
+                            <p class="text-slate-400 text-sm">અમે છુપાયેલા ચાર્જ વગર સંપૂર્ણ પારદર્શક સેવા આપીએ છીએ.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="bg-amber-500 rounded-full p-2 mt-1">
+                            <i class="fas fa-chart-line text-slate-900"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">ડેટા આધારિત રોકાણ</h4>
+                            <p class="text-slate-400 text-sm">માર્કેટના ચાર્ટ અને એનાલિસિસના આધારે જ રોકાણની સલાહ.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-4">
+                        <div class="bg-amber-500 rounded-full p-2 mt-1">
+                            <i class="fas fa-user-shield text-slate-900"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg">24/7 સપોર્ટ</h4>
+                            <p class="text-slate-400 text-sm">ક્લેમ સેટલમેન્ટ હોય કે રોકાણ, અમે હંમેશા તમારી સાથે છીએ.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="md:w-1/2 relative">
+                <!-- Abstract Chart -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-2xl relative">
+                    <div class="flex justify-between items-end h-64 gap-2 md:gap-4 px-4 pb-4 border-b border-slate-600">
+                        <div class="w-full bg-red-500/50 h-[30%] rounded-t hover:h-[40%] transition-all duration-700"></div>
+                        <div class="w-full bg-amber-500/50 h-[50%] rounded-t hover:h-[60%] transition-all duration-700"></div>
+                        <div class="w-full bg-blue-500/50 h-[40%] rounded-t hover:h-[45%] transition-all duration-700"></div>
+                        <div class="w-full bg-green-500/60 h-[70%] rounded-t hover:h-[80%] transition-all duration-700 relative group">
+                            <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white text-black text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">Growth</span>
+                        </div>
+                        <div class="w-full bg-amber-500 h-[85%] rounded-t hover:h-[95%] transition-all duration-700 relative">
+                            <i class="fas fa-arrow-up text-white absolute top-2 left-1/2 transform -translate-x-1/2 animate-bounce"></i>
+                        </div>
+                    </div>
+                    <p class="text-center mt-4 text-slate-400 text-sm uppercase tracking-widest">તમારો ગ્રોથ ચાર્ટ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CUSTOMER LIST SECTION (With Search) -->
+    <section id="clients" class="py-20 bg-slate-50 px-4">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">અમારા <span class="text-amber-600">સંતુષ્ટ ગ્રાહકો</span> (Valued Clients)</h2>
+                <p class="text-slate-500 mt-2">જેમણે અમારા પર ભરોસો મૂક્યો છે</p>
+                <div class="w-20 h-1 bg-amber-500 mx-auto mt-4 rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                
+                <!-- Mutual Funds Clients Card -->
+                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
+                    <div class="bg-blue-900 p-4 flex items-center justify-between text-white">
+                        <h3 class="font-bold text-xl"><i class="fas fa-chart-pie mr-2 text-amber-400"></i> Mutual Fund Clients</h3>
+                        <span class="bg-blue-800 text-xs px-2 py-1 rounded">Investments</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <!-- Search Bar -->
+                        <div class="mb-4 relative">
+                            <input type="text" id="mf-search" placeholder="નામ શોધો (Search Name)..." class="w-full p-2 pl-10 border border-slate-300 rounded focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm transition">
+                            <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                        </div>
+                        
+                        <!-- List ID for JS -->
+                        <ul id="mf-list" class="customer-list space-y-3 h-80 overflow-y-auto pr-2">
+                            <!-- JS will add names here -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Health Insurance Clients Card -->
+                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
+                    <div class="bg-red-700 p-4 flex items-center justify-between text-white">
+                        <h3 class="font-bold text-xl"><i class="fas fa-heartbeat mr-2 text-white"></i> Health Insurance Clients</h3>
+                        <span class="bg-red-800 text-xs px-2 py-1 rounded">Protection</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <!-- Search Bar -->
+                        <div class="mb-4 relative">
+                            <input type="text" id="health-search" placeholder="નામ શોધો (Search Name)..." class="w-full p-2 pl-10 border border-slate-300 rounded focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 text-sm transition">
+                            <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                        </div>
+
+                        <!-- List ID for JS -->
+                        <ul id="health-list" class="customer-list space-y-3 h-80 overflow-y-auto pr-2">
+                            <!-- JS will add names here -->
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="bg-slate-100 py-20 px-4">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8">About <span class="text-blue-900">Veer Finance Services</span></h2>
+            <div class="max-w-4xl mx-auto bg-white p-10 rounded-xl shadow-lg border-t-4 border-blue-900">
+                <p class="text-lg text-slate-700 leading-relaxed font-medium">
+                    <i class="fas fa-quote-left text-amber-500 text-3xl mr-3 align-top"></i>
+                    અમે <span class="text-blue-900 font-bold">Veer Finance Services</span> ખાતે તમને યોગ્ય ફાયનાન્સિયલ પ્લાનિંગ દ્વારા આર્થિક આઝાદી અપાવવા માટે કટિબદ્ધ છીએ. 
+                    અમારો મુખ્ય હેતુ ગ્રાહકોને પારદર્શક, ડેટા આધારિત અને સાચી સલાહ આપવાનો છે. ભલે તે મ્યુચ્યુઅલ ફંડ હોય, શેરબજાર હોય કે ઈન્સ્યોરન્સ, અમે તમારા દરેક આર્થિક નિર્ણયમાં તમારા સારથી બનીશું.
+                    <i class="fas fa-quote-right text-amber-500 text-3xl ml-3 align-bottom"></i>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-slate-900 text-white px-4 relative border-t-4 border-amber-500">
+        <div class="container mx-auto text-center relative z-10">
+            <h2 class="text-4xl font-bold mb-12 text-white">અમારો સંપર્ક કરો</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Phone Card -->
+                <a href="tel:+919737208108" class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-phone text-2xl text-amber-500 group-hover:text-slate-900"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-amber-400 group-hover:text-white">Call Us</h3>
+                    <p class="text-slate-300 group-hover:text-white transition">+91 97372 08108</p>
+                </a>
+                <!-- Email Card -->
+                <a href="mailto:nareshsojitra003@gmail.com" class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-envelope text-2xl text-amber-500 group-hover:text-slate-900"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-amber-400 group-hover:text-white">Email Us</h3>
+                    <p class="text-slate-300 group-hover:text-white transition break-all text-sm">nareshsojitra003@gmail.com</p>
+                </a>
+                <!-- Address Card -->
+                <a href="https://www.google.com/maps/search/?api=1&query=Skylark+Shopping+Varachha+Road+Surat" target="_blank" class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-map-marker-alt text-2xl text-amber-500 group-hover:text-slate-900"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-2 text-amber-400 group-hover:text-white">Visit Office</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed group-hover:text-white transition">
+                        ૪૦૭, સ્કાયલાર્ક શોપીંગ, બંબાગેટ ની પાછળ,<br> 
+                        સ્પીનિંગમીલ, વરાછા રોડ, સુરત.
+                    </p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-500 text-center py-8 border-t border-slate-800">
+        <p class="text-lg text-slate-400">© 2026 <span class="text-amber-500 font-bold">Veer Finance Services</span>. All Rights Reserved.</p>
+        <p class="text-sm mt-2">Growth | Security | Trust</p>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919737208108" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center w-16 h-16 text-4xl border-2 border-white animate-pulse hover:animate-none">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- SCRIPT FOR CUSTOMER LIST WITH SEARCH -->
+    <script>
+        // =========================================================================
+        // DATA: Customer Lists (Copied from previous requests)
+        // =========================================================================
+
+        const mutualFundClients = [
+            "KANANI NISHANT",
+"ZADAFIYA BHUMI JIGNESHKUMAR",
+"RAMESHBHAI MOHANBHAI BHALALA",
+"DAYANI NIHAR DINESHBHAI",
+"UMESH MAIDA",
+"KISHANKUMAR KALUBHAI MORADIYA",
+"SOLANKI DIPAK MAHESHBHAI",
+"LAXMANBHAI PRABHUBHAI SUMBAD",
+"BHARATIBEN NAVINBHAI CHAUDHARY",
+"DONDA PRADIPBHAI LABHUBHAI",
+"ASMITABEN ALPESHBHAI MALAVIYA",
+"BHAVESHBHAI BALUBHAI KOTADIYA",
+"SUBHASH RANA",
+"SANJAYKUMAR R JOGANI",
+"MALANI SANJAYBHAI RASIKBHAI",
+"SAVALIYA CHANDRIKABEN BAVCHANDBHAI",
+"ASODARIYA MAHESHKUMAR N",
+"RATANAPARA VIJAY JASMATBHAI",
+"CHAUHAN BHAVESHBHAI VINUBHAI",
+"RAMANI VINUBHAI RAVJIBHAI",
+"GAJERA RAVIKUMAR PRAVINBHAI",
+"DOBARIYA KAUSHIK RAMESHBHAI",
+"KAKADIYA BHAVESH DUDABHAI",
+"AVANI ASHVINBHAI RAMANI",
+"HARKHANI DIPAK VAJUBHAI",
+"BARAIYA BHARAT LAKHMANBHAI",
+"MAKAVANA MAYURBHAI NATHABHAI",
+"HET JAYSUKHBHAI KUNJADIYA",
+"TANK NILESH JIVRAJBHAI",
+"BHUVA VIMALABEN KISHORBHAI",
+"MITALBEN NITINBHAI PATOLIYA",
+"NITIN DEVSHIBHAI PATOLIYA",
+"KHUNT SHANTABEN CHANDUBHAI",
+"BABARIYA JAYDEEP MANHARBHAI",
+"THUMMAR SAMIR K",
+"KUMBHANI SHANTIBHAI VALLABHBHAI",
+"DIVYAJIVANDASJISWAMI GURU NILKANTHCHARANDASJISWAMI",
+"RUPAVATIYA JAYDEEPBHAI MANSUKHBHAI",
+"AJAYKUMAR VINUBHAI DHANANI",
+"MAKVANA MANISH MANUBHAI",
+"MANISHA PARESHBHAI RADADIYA",
+"KRUNAL CHHABILBHAI DHOLARIYA",
+"HIRPARA VIPUL VITTHALBHAI",
+"VISHAL M BHALALA",
+"KALUBHAI ZAVERBHAI KHOKHARIYA HUF",
+"SAVAJ PINTUBHAI MANSUKHBHAI",
+"HITESHBHAI R DHOLA",
+"MD SHAHBAJ ANSARI",
+"BHAVESHBHAI VINUBHAI DUDHAT",
+"AKOLIYA HANSABEN VINUBHAI",
+"CHETAN BABUBHAI SINGALA",
+"JIRAL HARDIK KANSAGARA",
+"SATASIA BHARATBHAI D",
+"SAVANI MAHESHBHAI KALYANBHAI",
+"AKOLIYA PRASHANT VINUBHAI",
+"RAJNITESH KUMAR",
+"PATEL JASHIBEN DASHARATHBHAI",
+"PUNITBHAI BABUBHAI MULANI",
+"AISHVARYA BHAGAVAT SONAVANE",
+"JAYPRAKASH RADHAVJIBHAI PARSANIYA",
+"VIPULBHAI MANSUKHBHAI BHIMANI",
+"ARVINDBHAI RAGHAVBHAI PATEL",
+"BHUPATBHAI K THESIYA",
+"SAVSAVIYA DIVYA ANKITKUMAR",
+"RAMANI JAIMINKUMAR BHAGVANDAS",
+"SADDAM ANSARI",
+"KEVALKUMAR ASHOKBHAI MULANI",
+"AYUSHI ARVINDBHAI AMBALIYA",
+"VEKARIYA HITESHBHAI DHANJIBHAI",
+"DILIPBHAI BABUBHAI DESAI",
+"KHATRA DIPAK LALJIBHAI",
+"TWINKALBEN VASANTBHAI PAMBHAR",
+"DARSHITA JAYSUKHBHAI AKABARI",
+"HARDIKKUMAR J MUNGALA",
+"MUKESH KARSHANBHAI MULANI",
+"BHAGWAN SINGH",
+"RADHIKABEN JITENDRABHAI BORDA",
+"JITENDRA VALLABHBHAI BORDA",
+"BORAD ASHVINBHAI PARSHOTAMBHAI",
+"PANSURIYA CHANDRESHKUMAR V",
+"TUSHAR MANSUKHBHAI DESAI",
+"ANJALIBEN JAGRESH GAJERA",
+"PADSALA KRISH JITUBHAI",
+"REKHABEN BHARATBHAI VAGHASIYA",
+"PATEL BHARATKUMAR POPATLAL",
+"RAM JIGAR PARBATBHAI",
+"NAVINBHAI BHURABHAI CHAUDHARI",
+"KOLI ARUN MOTILAL",
+"JIGNESH GOVINDBHAI THOREE",
+"PAGHADAL KRISHNA MANISHBHAI",
+"ASHVIN JIVRAJBHAI SAVANI",
+"DHARMESH PRAVINCHANDRA UPADHYAY",
+"AKSHAR JAYSHUKHBHAI BALDHA",
+"CHHAUHAN RUDRA ASHVINBHAI",
+"CHAUHAN ANERI BHAVESHBHAI",
+"BHARATKUMAR JAYANTILAL MALAVIYA",
+"JIGNESHBHAI RASIKBHAI GAJERA",
+"DHAKECHA PRAVINBHAI BABUBHAI",
+"BHALU JAY GOKULBHAI",
+"RAMANI ASMITA K",
+"RAMANI SEJALBEN NIKUNJBHAI",
+"BOGHRA VANDANA HITESHBHAI",
+"LIMBASIYA MANASIBEN SURESHBHAI",
+"DINESH RAMDAS PATIL",
+"PATEL MILANKUMAR THAKORBHAI",
+"DAYANI YAGNIK MAGANBHAI",
+"MULANI ASHISHKUMAR N",
+"KARAD CHIRAGBHAI ARVINDBHAI",
+"SAVALIYA KAILASHBEN VIPULBHAI",
+"TRAPASIYA ANIKET CHANDUBHAI",
+"ROHITKUMAR BABUBHAI BORAD",
+"SARDHARA SHWETABEN CHIRAG",
+"LATHIYA KAJALBEN ALPESHBHAI",
+"ANKOLIYA DIVYABEN HARDIKKUMAR",
+"SONALBEN VIPULBHAI KORAT",
+"MITALBEN AXAY KASODARIYA",
+"NARESHBHAI JERAMBHAI PALADIYA",
+"BHIKADIYA NITESH BHIKHABHAI",
+"VIJAYBHAI N CHOVATIYA",
+"DHRUV PRAKASHBHAI ZALAVADIYA",
+"KOMAL CHIRAGBHAI ZAVERI",
+"NILESHBHAI DAYABHAI MANIYA",
+"JAYSUKHBHAI ZAVERBHAI NAKRANI",
+"VAGHASIYA MAHENDRABHAI P",
+"AKBARI DIVYESHKUMAR PRAVINBHAI",
+"RANJANBEN KANTILAL GAJERA",
+"VAGHASIYA NIRAVKUMAR HARJIBHAI",
+"KRISHNABEN VIPULBHAI SUDANI",
+"SOJITRA ILABEN SURESHBHAI",
+"DIPAKBHAI MANSUKHBHAI MANGROLIYA",
+"PARESH RAMESHBHAI HAPANI",
+"JAGANI KETANKUMAR NANUBHAI",
+"MAHENDRA KUMAR NAGAR",
+"DRASHTI VIMALBHAI SOJITRA",
+"NAGAR ARUNKUMAR FULCHAND",
+"MEHUL SURESHBHAI MELKIYA",
+"DANGODRA ARVINDBHAI LAKHAMANBHAI",
+"BABARIYA JAGRUTIBEN BHARATBHAI",
+"DHARMESHBHAI BATUKBHAI SIDHDHPURA",
+"GEETA PATEL",
+"BALAR KOMALBEN KALPESHBHAI",
+"KATHIRIYA PINAL UMESH",
+"VORA ALPABEN HARESHKUMAR",
+"GOYANI ASHABEN BHAVESHBHAI",
+"KALSARIYA RUTVIK JADAVBHAI",
+"MUKHTAR ANSARI",
+"VAGHASIYA DHARMI",
+"KAPOPARA YOGESH NATHABHAI",
+"REKHABEN PRAKASHBHAI KUKADIYA",
+"RUPAPARA VASANTIBEN HIRENKUMAR",
+"BHAVIKKUMAR JAGDISHBHAI GHINAIYA",
+"GHINAIYA SANDIP JAGADISHBHAI",
+"DHAMELIYA JAGDISHKUMAR",
+"RADADIYA KAJALBEN NIKUNJBHAI",
+"BHADANI VARSHABEN MAHESHBHAI",
+"VADDORIYA BHAVESH V",
+"HARKHANI BHAVIK MANSUKHBHAI",
+"LATABEN JITUBHAI ROKAD",
+"VAGHANI KISHAN NARESHBHAI",
+"MULANI REKHABEN ASHISHKUMAR",
+"VARIYA PARITABEN NATHABHAI",
+"DAYABEN ANILBHAI THESIYA",
+"RANACHHODBHAI VASHRAMBHAI DUNGARANI",
+"PARESH SHASHIKANTBHAI RANA",
+"DAXABEN ASHOKBHAI GELANI",
+"ANGHAN PRAVINBHAI HIRABHAI",
+"HASMUKHBHAI HIRAJIBHAI ANGHAN",
+"KACHA DHARABEN DHAVALBHAI",
+"DEEPAK PANCHANI",
+"HIRAPARA RAMESHBHAI SHAMBHUBHAI",
+"NANABHAV ARJUNBHAI BAGUL",
+"JAYSHREE NAYANKUMAR VAGHASIYA",
+"DONDA KIRANBEN SHAILESHBHAI",
+"JITESH DEVCHANDBHAI RAMANI",
+"ANILBHAI DHIRUBHAI THESIYA",
+"NITA VIJAY GAJERA",
+"HITESH NANDLALBHAI VARIYA",
+"MAKVANA ASHVINBHAI NANJIBHAI",
+"KAKADIYA RAJNIKANTBHAI MADHUBHAI",
+"DHAMELIYA RUTVIKKUMAR RAJESHBHAI",
+"BORAD BHARGAV ASHOKBHAI",
+"KUKADIYA KRUPAL ASHVINBHAI",
+"SITARAM VENIRAM LASHKRI",
+"KANANI RANJITBHAI BHAGVANBHAI",
+"NARESHKUMAR VALJIBHAI RAVANI",
+"VAGHASIYA KETAN H",
+"KISHAN VINODBHAI PARMAR",
+"JYOT MAYURBHAI GONDALIYA",
+"BHARODIYA NIKHIL MUKESHBHAI",
+"MUNJAPARA DIPAKKUMAR VAJUBHAI",
+"DOMADIYA VISHAL RAMESHBHAI",
+"ITALIYA KIRANBEN ROHITBHAI",
+"KYADA DEVANG BHAVESHBHAI",
+"MAHESH KUMAR",
+"SORATHIYA MAHI JITESHBHAI",
+"MANISHKUMAR GHANSHYAMBHAI LAKKAD",
+"NATHANI SEJALBEN MANSUKHLAL",
+"MINALI MANSUKHBHAI NATHANI",
+"RAMOLIYA ABHAY SHAMBHUBHAI",
+"KALPESH GOKULBHAI HARKHANI",
+"SAGUNABEN MAHENDRABHAI RAJPARA",
+"THUMMAR LALJIBHAI HARJIBHAI",
+"DILIP MANSUKHBHAI NATHANI",
+"BHAYANI RAJESHBHAI RAMJIBHAI",
+"JITENDRA PADSALA",
+"KAKADIYA RAVIBHAI BHARATBHAI",
+"RABADIYA ROHITKUMAR KESHAVBHAI",
+"LAKHANI PIYUSH VITHALBHAI",
+"KHUNT RENUKA NARENDRABHAI",
+"SANKHYYOGI ASHABEN LILABEN",
+"ASHOKBHAI V DOMADIYA",
+"JASANI CHINTANKUMAR KISHORBHAI",
+"SORATHIYA MOKSH JITESHBHAI",
+"RAJUBHAI DEVJIBHAI RADADIYA",
+"DOBARIYA VIPULBHAI SHIVLALBHAI",
+"RAMESHBHAI VALJIBHAI DOMADIYA",
+"KATHIRIYA JAGDISHBHAI ISHVARBHAI",
+"UDAY BHIKHUBHAI THUMAR",
+"KUKADIYA MAANKUMAR ASHVINBHAI",
+"GODHANI RAJUBHAI MOHANBHAI",
+"VAGHANI RAVIKUMAR NARESHBHAI",
+"KANANI VANDANBEN PRAKASHBHAI",
+"KACHHADIYA KIRAN BHADRESHBHAI",
+"MAKVANA NITINBHAI BABUBHAI",
+"JOSHI KISHAN YOGESHBHAI",
+"GOSWAMI SHIVANGGIRI NARESHGIRI",
+"DUDHAT RUSHIKA DIPAKBHAI",
+"HIRENKUMAR KESHAVLAL RUPAPRA",
+"MANISHKUMAR KALUBHAI PAGHDAL",
+"MAVANI MITALBEN DHARMESHBHAI",
+"VIJAY HARIBHAI GOYANI",
+"KUKADIYA SUNIL TULASIBHAI",
+"RADADIYA PRITESHBHAI VELJIBHAI",
+"BHANDERI PARTH HARESHBHAI",
+"RAMANI JIGNESHKUMAR RAMJIBHAI",
+"DHANANI RUDRA VINODBHAI",
+"RADADIYA DIVYANGKUMAR MAHESHBHAI",
+"LALJIBHAI DEVCHANDBHAI SHELADIYA",
+"JOGANI KIRANBEN MEHULBHAI",
+"KISHAN DINESHBHAI VEKARIYA",
+"PINTU RAMESHBHAI THUMMAR",
+"PATOLIYA GIRISHBHAI MAGANBHAI",
+"DARSHAN ASHOKBHAI SHIYAL",
+"BARVALIYA HARDIKKUMAR J",
+"DAVARIYA AKSHITA JAYSUKHBHAI",
+"USHABEN SHAILESHBHAI KUKADIYA",
+"DHEDHI LALIT VITHALBHAI",
+"KORAT NIKUNJKUMAR BABUBHAI",
+"MOHAMMAD SADDAM ANSARI",
+"RAMABEN MANSUKHBHAI DESAI",
+"MUKESH KHODABHAI DOMADIYA",
+"KATARIYA KEVAL",
+"KARTIKBHAI ARVINDBHAI BALDHA",
+"CHAUDHARY LILABEN MAHESHBHAI",
+"VIVEK YOGESHBHAI TRIVEDI",
+"KAUSHIK ASHOK UGMANA",
+"RIDDHI RAVI RAMANI",
+"VIJAYA SAKHARE",
+"VISHALBHAI CHAGANBHAI TADHA",
+"RABARI ARAVINDBHAI RAMABHAI",
+"TUSHARBHAI GORDHANBHAI SUTARIYA",
+"VIRALKUMAR BHAGVANBHAI TIMBADIYA",
+"JYOTIBEN JAYESHBHAI DHORIYA PATEL",
+"JAYDIP RAMESHBHAI SAVLIYA",
+"HEMANGI MUKESHBHAI VEKARIYA",
+"SANJAYBHAI LALJIBHAI KUKADIYA",
+"BEENA JAYESH MANGROLIYA",
+"RAJESHREEBEN CHANDUBHAI VAVADIYA",
+"HARISHKUMAR HIMATBHAI BHALALA",
+"DHANRAJBHAI RASIKBHAI SAKARIYA",
+"CHANDRAKANT RAMKRISHNA MANDGE",
+"JAGDISH DHANJIBHAI CHOVATIYA",
+"HITESHKUMAR DHANJIBHAI CHOVATIYA",
+"DESAI ANJALI MALAYKUMAR",
+"MANSUKHLAL MOHANBHAI DESAI",
+"SHAILESHBHAI MANSUKHBHAI BABARIYA",
+"ASMITABEN SHAILESHBHAI BABARIYA",
+"MANOJKUMAR ARJANBHAI MANGUKIYA",
+"NITABEN JITENDRABHAI CHOVATIYA",
+"HARSHIL JAYSUKHBHAI UKANI",
+"CHIRAG RAMESHBHAI SARDHARA",
+"DHARMESHBHAI GHANSHYAMBHAI DUDHAT",
+"RAHUL PARSHOTAMBHAI VAGHANI",
+"TUSHAR RAJESHBHAI SONANI",
+"DAKSHABEN ALPESHBHAI RADADIYA",
+"KANCHANBEN VALJIBHAI HARKHANI",
+"ASHABEN JAYSUKHBHAI AKABARI",
+"VIJAYBHAI HIMATBHAI SOHALIYA",
+"SANDIPBHAI VALJIBHAI HARKHANI",
+"CHIRAG JAYSUKHBHAI NAKRANI",
+"PRATIKKUMAR RAMESHBHAI SONANI",
+"KOMALBEN ALPESHBHAI FALAKIYA",
+"KAUSHIKBHAI PRAVINBHAI PANCHANI",
+"JITUBHAI PUNABHAI AKABARI",
+"RUTVI SAPRA",
+"ANILBHAI KUMBHANI",
+"ALPESH BHOLABHAI RADADIYA",
+"ASHISHBHAI MANSUKHBHAI KOTADIYA",
+"HITESHBHAI DHIRUBHAI MORADIYA",
+"SHAILESHKUMAR RANCHHODBHAI VEKARIYA",
+"ASHUTOSHBHAI KARAMSHIBHAI SAVALIYA",
+"VINAY JIVRAJBHAI MAKVANA",
+"MANSUKHBHAI BHIKHABHAI KAKDIYA",
+"MANUBHAI NARANBHAI CHUDASAMA",
+"KAILASHBEN BABUBHAI RAMANI",
+"DIPAKBHAI MADHUBHAI DUDHAT",
+"NIRUBEN HARKESHBHAI RAMANI",
+"BHADRESHBHAI BAGHABHAI NASIT",
+"ATESH GHANSHYAM BHAI PATEL",
+"CHANDRAVADAN RAMANBHAI PATEL",
+"DIVYESH KUMAR BHIMJIBHAI KACHHADIYA",
+"DHARMESH MANUBHAI PANDAV",
+"MITUL HARESHBHAI MANGUKIYA",
+"VILASBEN KISHORBHAI MANDANKA",
+"NITESHBHAI PARSOTTAMBHAI BHANDERI",
+"MUKESHKUMAR LAVJIBHAI VEKARIYA",
+"RASIKBHAI SAVJIBHAI MANGROLIYA",
+"GHANSHYAMBHAI LABHUBHAI SAVALIYA",
+"HASMUKHBHAI DEVJIBHAI SOJITRA",
+"VIJAY DHIRUBHAI PATOLIYA",
+"SAGARBHAI DHIRUBHAI VADALIYA",
+"Deepak Kumar Verma",
+"NIRAJ DILIPBHAI BUHA",
+"BRIJESH KISMATBHAI SARKHEDI",
+"RASIKBHAI PARSHOTTAMBHAI KAKADIYA",
+"KARTIKKUMAR KISHORBHAI DUDHAT",
+"NITABEN RAJESHBHAI PAGHDAL",
+"HIREN ULLASKUMAR PAGHADAR",
+"TEJAS POPATBHAI DAYANI",
+"SANJAYBHAI DHIRUBHAI SAVALIYA",
+"DHAVAL POPATBHAI DAYANI",
+"ANKITA SUBHASHKUMAR BHINGARADIYA",
+"NAYANABEN LALITBHAI BHINGARADIYA",
+"DIPIKABEN CHANDRAKANTBHAI BHINGARADIYA",
+"LALJIBHAI PARSHOTTAMBHAI ZADFIYA",
+"RAJU RASIKBHAI KAKADIYA",
+"ALPESHBHAI JAYANTIBHAI MALAVIYA",
+"KETAN VITHHALBHAI DAYANI",
+"CHANDRESHBHAI BHIKHABHAI GAJERA",
+"DHAVAL MUKESHBHAI LAKHANI",
+"ASHABEN PANKAJBHAI DAYANI",
+"RAVI SHANTILAL RAMANI",
+"RAJESHBHAI MANUBHAI SORATHIYA",
+"BIPINBHAI BHIKHABHAI DONGA",
+"SURESH PARSHOTAMBHAI KAPADIYA",
+"KALUBHAI POPATBHAI GELANI",
+"RAJVIBEN MUKESHBHAI DOMADIYA",
+"MONABEN VISHALBHAI PATEL",
+"KISHORBHAI KALUBHAI KYADA",
+"NITINBHAI DHIRUBHAI AKBARI",
+"KAUSHIK RASHIKBHAI KAKDIYA",
+"KISHORBHAI RATIBHAI MANDANKA",
+"NAYNABEN NARESHBHAI KUMBHANI",
+"DHARMESHBHAI GANESHBHAI MAVANI",
+"HARESH DHANJIBHAI SOJITRA",
+"JAYSHRIBEN ASVINBHAI KATHIRIYA",
+"ASHABEN RAKESHBHAI VAGHELA",
+"ALKESHKUMAR NATUBHAI PATEL",
+"HARESHBHAI KOLDIYA",
+"PARITA HIRENBHAI SUDANI",
+"HIRENKUMAR DINESHBHAI SUDANI",
+"NIKUL DHANJIBHAI SOJITRA",
+"VIJAYBHAI HARDASBHAI LIMBACHIYA",
+"MUKUNDBHAI LAXMANBHAI KHAKHARIYA",
+"SHAILESH LABHUBHAI DONDA",
+"PARULBEN UMESHKUMAR NAKRANI",
+"SHAILESHKUMAR CHATURBHAI SARDHARA",
+"VIPULBHAI KESHUBHAI NAKARANI",
+"VAMANBHAI NANUBHAI JAGANI",
+"CHANDRAKANT BHAGVANBHAI BHINGARADIYA",
+"ARVINDBHAI SHAMJIBHAI VAGHASIYA",
+"ANKIT DHIRUBHAI DIHORA",
+"CHETAN JAGDISHBHAI GAJERA",
+"SATISH TULSHIBHAI BELADIYA",
+"JIGNESHKUMAR BABUBHAI MAVANI",
+"PRINSA YOGESHBHAI RADADIYA",
+"LALIT BHAGVANBHAI BHINGARADIYA",
+"DHRUV JITENDRABHAI BHIMANI",
+"JIGNESHBHAI KABABHAI ZADAFIYA",
+"NAITIK BABUBHAI DAVRA",
+"BIREN BHAGAVANBHAI BHINGARADIYA",
+"RAHULBHAI DHIRUBHAI MAVANI",
+"PIYUSHBHAI LALJIBHAI SAVALIYA",
+"KALPESH SAVJIBHAI VAGHASIYA",
+"NILESHBHAI PETHANI",
+"ANKITA HARDIKBHAI MANGUKIYA",
+"LAKHANI SHOBHNABEN BHARATBHAI",
+"MITUL HIMMATBHAI MANGUKIYA",
+"HARESHBHAI KANUBHAI KABARIYA",
+"VIJAYBHAI KANUBHAI KABARIYA",
+"JITUBHAI DAMJIBHAI KHUNT",
+"HIRALBEN KALUBHAI KANANI",
+"ANKITKUMAR GUMANBHAI VASAVA",
+"UMESHBHAI MANSUKHBHAI JOGANI",
+"RANJANBEN GHANSHYAMBHAI GOPANI",
+"ASMITABEN BHAVESHKUMAR KATHIRIYA",
+"GAURAV MANSUKHBHAI MANGUKIYA",
+"NARENDRABHAI CHANDUBHAI KHUNT",
+"JIGNESH BHAGVANJIBHAI GAJERA",
+"HARESH HASMUKHBHAI DESAI",
+"GAURAVKUMAR KHODABHAI SAVANI",
+"ASHVINBHAI SAVJIBHAI KUKADIYA",
+"KOMALBEN NILESHBHAI BHALALA",
+"MANISHABEN RIPULBHAI BHIMANI",
+"VIPULKUMAR BHAGWANBHAI DHOLAKIYA",
+"DAYABEN SHANTILAL RAMANI",
+"SHABNAM KHATUN",
+"RIPULBHAI VALLBHBHAI BHIMANI",
+"ALPA BHAVESHBHAI RAMANI",
+"ASHVINKUMAR CHAUHAN",
+"PAYAL SANDIP DUDHAT",
+"KINJALBEN BHAVESHKUMAR MULANI",
+"SANJAYKUMAR BABUBHAI GAJERA",
+"ASHOKABHAI DHANSUKHABHAI UGMANA",
+"RATILALBHAI VINUBHAI SAVALIYA",
+"JANAKBHAI KANTILAL KAKADIYA",
+"ASHVINKUMAR RAMESHBHAI LIMBANI",
+"SAVALIYA NANDLAL VINUBHAI",
+"NIRAVKUMAR JAYESHBHAI IDHATIYA",
+"RAVI NATVARLAL VANDRA",
+"HASMUKHBHAI BHIKHABHAI BHIMANI",
+"RINKALBEN SANDIPKUMAR ANGHAN",
+"JAYDEEPKUMAR RAMESHBHAI SANGANI",
+"NIKUNJKUMAR MANUBHAI RADADIYA",
+"NILESH BABUBHAI PADSALA",
+"NIMUBEN ASHOKBHAI PAGHADAL",
+"SHILPABEN SHAILESHBHAI SARDHARA",
+"MANISHABEN CHETANBHAI VEKARIYA",
+"SANJAY NANUBHAI DUDHAT",
+"RAMESH MANJIBHAI SAVANI",
+"RAMESHBHAI SHAMJIBHAI GOYANI",
+"TIRTH BHIKHABHAI PATEL",
+"VIJAYBHAI SIDHDHAPURA",
+"VISHVA BHIKHALAL PATEL",
+"ASHISH VAJUBHAI CHOVATIYA",
+"AXAY RAGHAVBHAI KASODARIYA",
+"USHABEN VALLABHBHAI FALKIYA",
+"MALAY MANSUKHBHAI DESAI",
+"SAGARBHAI VALJIBHAI KOTADIYA",
+"SURESHBHAI JIVRAJBHAI BHALANI",
+"SHYAMBHAI VITHALBHAI BHALU",
+"NILESH SANJAYBHAI PATIL",
+"GRUHIT GHANSHYAMBHAI BHALANI",
+"SANDIP GORDHANBHAI ANGHAN",
+"GOPIBEN MITULBHAI MANGUKIYA",
+"NITINKUMAR JERAMBHAI VAVLIYA",
+"PRAVINABEN BHARATBHAI POKAL",
+"GANESHBHAI PUNJABHAI GAJERA",
+"DHARABEN KALPESHBHAI GOTHI",
+"SAGAR MUKESHBHAI MALAVIYA",
+"CHANDUBHAI VITTHALBHAI BHIMANI",
+"REKHABEN ASHWINBHAI CHAUHAN",
+"MUKESHBHAI VITHALBHAI BHIMANI",
+"JITENDRABHAI VITTHALBHAI BHIMANI",
+"SAGARKUMAR DHANJIBHAI SAVALIYA",
+"LALU ANSARI",
+"RAVI MANSUKHBHAI MANGUKIYA",
+"DASHARATH KALUBHAI PATEL",
+"SHILPA SANJAYBHAI BHALALA",
+"RINABEN VIMALBHAI PARMAR",
+"MANISHABEN ASHVINBHAI RAMANI",
+"ALPESH VALLABHBHAI FALAKIYA",
+"ROHITKUMAR DIPAKBHAI SUKHADIYA",
+"SANJAYBHAI LABHUBHAI CHEETA",
+"KINJALBEN BHAVESHBHAI CHAUHAN",
+"BHAVESHBHAI GABHRUBHAI SOJITRA",
+"SHAILESHKUMAR KALUBHAI GAJIPARA",
+"BHAVESHBHAI JAGJIVANBHAI CHAUHAN",
+"MILANKUMAR BHARATBHAI ITALIYA",
+"BHAVESH SHANTILAL RAMANI",
+"JAGUBEN KATHIRIYA",
+"BHAVANABEN GOKULBHAI BHALU",
+"VISHAL RAMESHBHAI PATEL",
+"SHOBHANABEN BHARATKUMAR RAMANI",
+"PRAKASHBHAI ISHVARBHAI KATHIRIA",
+"MAYANKKUMAR BIPINBHAI PATEL",
+"DIVYESHBHAI MANSUKHBHAI DEVANI",
+"AMOLKUMAR SONI",
+"ROHITBHAI BHARATBHAI ITALIYA",
+"BHARAT BHAVANBHAI RIBADIYA",
+"YOGITA AMOLKUMAR SONI",
+"KRISHNA BHAGVANBHAI RAMANI",
+"RAM CHANDRA PRASAD",
+"SEJAL JAYESHBHAI BAGSARIYA",
+"MAHESHBHAI DULABHAI UKANI",
+"JITENDRABHAI BABUBHAI GAJERA",
+"ANKITKUMAR MADHUBHAI VORA",
+"VISHAL GAMIT",
+"MAHESHBHAI AMBABHAI KHUNT",
+"JENTIBHAI KHODABHAI BHAKHAR",
+"GITABEN BHAVESHBHAI KOTADIYA",
+"MANISHABEN BHAVESHBHAI BABARIYA",
+"DAYABEN KAPILBHAI GAJERA",
+"BHAVIK HIMMATBHAI PADHIYAR",
+"GOPALBHAI MAGANBHAI PATOLIYA",
+"SATYAMBHAI GOVINDBHAI SAVALIYA",
+"KAPIL BHUPATBHAI GAJERA",
+"MILAN MANSUKHBHAI JADVANI",
+"KARUNABEN SANDIPBHAI HARKHANI",
+"RAHUL ASHOKBHAI DOMADIYA",
+"JAYESH RASIKBHAI MANGROLIYA",
+"KAUSHIK PRABHUDAS AKBARI",
+"JIGNABEN BHARATBHAI VIRADIYA",
+"SHAILESHBHAI TULSIBHAI KUKADIYA",
+"ASHWIN KALUBHAI KATHIRIYA",
+"NITESHKUMAR PARSOTTAMBHAI DHANANI",
+"DHARA HARESHBHAI DHAMELIYA",
+"VANITABEN NIMESHABHAI RAMANI",
+"CHIRAG DINESHBHAI SURANI",
+"RITABEN SANJAYBHAI GAJERA",
+"PRAKASHBHAI JAGABHAI KATHROTIYA",
+"RITESHBHAI BHAYALAL MANGUKIYA",
+"MEHULBHAI VAJUBHAI VAGHASIYA",
+"KISHORBHAI NATHABHAI RAMANI",
+"GITABEN KISHORBHAI RAMANI",
+"NIKUL LAXMANBHAI KATARIYA",
+"SATISHKUMAR MATHURBHAI SOJITRA",
+"ANILBHAI MANJIBHAI CHITRODA",
+"JIGNESHKUMAR KANTILAL RATHOD",
+"VIJAYKUMAR DHANJIBHAI AGHERA",
+"CHANDRESHKUMAR VINUBHAI VASANI",
+"SANMUKHKUMAR RAMESHBHAI THUMAR",
+"AMIT RAMESHBHAI DOMDIYA",
+"DHARMESHKUMAR BHARATBHAI VAGHANI",
+"RIDDHI MAYURBHAI GONDALIYA",
+"VIPULBHAI BABUBHAI VIRADIYA",
+"SURESHBHAI CHHAGANBHAI VAVADIYA",
+"SAGARBHAI ARVINDBHAI DHANANI",
+"SUDHABEN JITESHBHAI SORATHIYA",
+"UMANG KALUBHAI PATEL",
+"BHARATBHAI BABUBHAI VIRADIYA",
+"VIVEKBHAI BHUPATBHAI PALADIYA",
+"KHUSHBU BHAVANBHAI MULANI",
+"BHAVESHBHAI DAMJIBHAI VIRADIYA",
+"BHARATBHAI MOHANBHAI MANGUKIA",
+"ANKITA BEN GAURANGBHAI BALDHA",
+"BHADRESH DHIRUBHAI KACHHADIYA",
+"BHAVYAKUMAR MANSUKHBHAI HARKHANI",
+"HARDIKKUMAR HIMMATBHAI MANGUKIYA",
+"JIGNESHBHAI MANJIBHAI DOBARIYA",
+"JAYESHBHAI KHODABHAI AMIPARA",
+"NARESHKUMAR DHANJIBHAI SOJITRA",
+"GITABEN JOGANI",
+"KAUSHIK GOKALBHAI HOTHI",
+"DAXABEN PUNITBHAI BHALALA",
+"DIPAKKUMAR DHIRUBHAI SAVALIYA",
+"KALPESHBHAI DAHYABHAI VIRANI",
+"JAYDIP PRAVINBHAI MANIYA",
+"KRISHNABEN NILESHBHAI SOJITRA",
+"CHHAYA CHETAN PARMAR",
+"HITESHBHAI RASIKBHAI AKOLIYA",
+"ILESHKUMAR NANDLALBHAI MULANI",
+"JAYSUKHBHAI PUNABHAI AKBARI",
+"BHAVESHBHAI KALUBHAI KYADA",
+"KAPILBHAI KANTIBHAI RAMANI",
+"TULASHIBHAI DHIRUBHAI CHOVATIYA",
+"ASHVINBHAI KANTIBHAI RAMANI",
+"MANOJKUMAR BHUDARBHAI DARAJI",
+"ANILBHAI PARSHOTTAMBHAI BHALALA",
+"JEETESHBHAI RAMESHBHAI KUKADIYA",
+"VISHAL D BUHA",
+"KULDIP HIRABHAI LATHIDADIYA",
+"MEHUL KANUBHAI GAUDANI",
+"NIKUNJ BABUBHAI MANGUKIYA",
+"VIPUL ASHOKBHAI BODARYA",
+"NILESH VALJIBHAI BHALALA",
+"CHIRAGBHAI RAMESHBHAI DHAMELIYA",
+"NITESHBHAI ARVINDBHAI BALAR",
+"MANSUKHBHAI CHHAGANBHAI SAVALIYA",
+"JANAKKUMAR GOYANI",
+"RINKALBEN TULSHIBHAI CHOVATIYA",
+"ASHOKBHAI NARSINHBHAI PAGHADAL",
+"KHUSHAL BHIKHABHAI JYANI",
+"SAGARBHAI BHIKHABHAI MALAVIYA",
+        ];
+
+        const healthInsuranceClients = [
+"DANKHRA RAMESHBHAI   + PA",
+"KALATHIYA LAXMANBHAI",
+"PANSHERIYA DIPAKBHAI S",
+"DESAI HIMMATBHAI B",
+"RADADIYA BABUBHAI",
+"SOJITRA NIKUL D",
+"SOJITRA HARESHBHAI D",
+"KANANI VADILAL  ( 3  YEAR )",
+"KANANI BAVCHANDBHAI",
+"SAVALIYA PANKAJBHAI  ( 3 YEAR ) 9904875609",
+"JAGANI VAMAN   9664656608",
+"SOJITRA ASHVINBHAI",
+"SAVALIYA JENTIBHAI + PA  9904875609",
+"ANTALIYA ASHOKBHAI",
+"JYANI ALPESHBHAI RAMESHBHAI + PA",
+"DOBARIYA VIPULBHAI JAYANTIBHAI",
+"LATHIYA ANKIT HIMMATBHAI",
+"LATHIYA VISHALBHAI HIMMATBHAI",
+"SETA SUMIT V",
+"POLARA RASIKBHAI B",
+"ZALAVADIYA SURESHBHAI M",
+"SAVALIYA CHETANKUMAR D 9998875071",
+"BODA BHAVESH D 9998875071",
+"SOJITRA ROHITBHAI JAYSUKHBHAI",
+"SOJITRA CHIRAG J",
+"GOYANI PANKAJBHAI N",
+"PATEL DHAVALKUMAR KANUBHAI",
+"KUKADIYA PRAKASHBHAI KHIMJIBHAI",
+"PATEL DHAVALKUMAR K",
+"PARMAR VIMAL RAMESHBHAI",
+"PARMAR HIREN RAMESHBHAI",
+"SANGANI ROHIT",
+"DOBARIYA MANJULABEN",
+"JAIN  GAUTAMCHANDRA  ( JAIN )  HIPA TPA",
+"GAJERA BHAVESHBHAI J",
+"GAJIPARA SHAILESHBHAI",
+"ISAMALIYA JAYESHBHAI D",
+"VAGHANI JEET RAGHAVBHAI",
+"BHIMANI RIPULBHAI V",
+"KOTAK NIKHILKUMAR N  9106995880",
+"THUMMAR AMITBHAI R",
+"MALANI CHIRAG A   9727679978       2020",
+"MALANI CHANDRESHBHAI  2020",
+"BAVASIYA KAUSHIKBHAI B",
+"BARVALIYA TARUNBHAI PARESHBHAI",
+"MALALI ARVINDBHAI ",
+"MAKRUBIYA CHIMANBHAI",
+"VAGHASIYA RAMNIKBHAI C",
+"KATHIRIYABHAVESHBHAI   ( TPA HITPA )",
+"KATHIRIYA MAHESHBHAI ( TPA HITPA )",
+"LATHIYA JIVRAJBHAI K",
+"CHODVADIYA CHIRAG VALJIBHAI",
+"KATHIRIYA KISHAN ASHWINBHAI",
+"VASOYA VIPILBHAI",
+"KORAT RAVINDRA",
+"GOYANI DINESHBHAI",
+"MONPARA PARTHIV",
+"PALADIYA KETAN",
+"PALADIYA BHUPATBHAI",
+"PALADIYA VIVEKBHAI",
+"PANCHANI VIJAYBHAI B   9687868588 ( P 2021 )",
+"GOYANI SHAILESHBHAI K",
+"KUMBHANI PIYUSHBHAI",
+"MAKRUBIYA TARUNBHAI",
+"BAVASOYA JITENDRA",
+"ITALIYA DEVRAJBHAI",
+"SONI AMOL",
+"SONI NARMADABEN",
+"GOYANI ASHABEN B",
+"GAJERA KAPIL B",
+"GODHANI MAHENDRA",
+"GODHANI DHRUVBHAI",
+"KASVALA PANKAJKUMAR",
+"JAIN RAJESH ( JAIN )",
+"KIKANI PRFUL D",
+"LIMBANI JANAKBHAI CHHAGANBHAI",
+"PADSALA JITUBHAI",
+"MISHRA ARUNKUMAR",
+"MISHRA VEDPRAKASH",
+"MALAVIYA RAJESH N",
+"MALAVIYA DIPAK",
+"KATRODIYA HIREN        8690998283",
+"KUKADIYA SUNIL",
+"RAVAL PRAKASHBHAI",
+"RAKHOLIYA SUDHIRBHAI  ( 3 YEAR )",
+"RAMANI RASIKBHAI",
+"CHAUDHARI PRAFULKUMAR",
+"GOYANI MAHESHBHAI",
+"GOYANI SANDIPBHAI",
+"DOBARIYA JIGNESHBHAI",
+"SAVALIYA ASHVIN MAGANBHAI",
+"SUVAGIYA RAJESHBHAI",
+"SUKHADIYA ROHITKUMAR",
+"SUKHADIYA CHIMANKUMAR",
+"KATRODIYA GAUTAM  7069388190",
+"RAMANI PARESH L",
+"DHOLA HITESH",
+"KOTHIYA VINODBHAI",
+"KHOKHAR SAGAR",
+"LEELA KALPESH",
+"RAMANI RAJESHBHAI B",
+"SATANI ALPESH",
+"GALANI GAURAV",
+"GALANI PIYUSH",
+"GALANI CHIRAGKUMAR",
+"GOTI VINUBHAI",
+"RAMANI GIRISH B",
+"GAMI JATINKUMAR",
+"MANGUKIYA HIMATBHAI",
+"VAGHASIYA VALLABHBHAI",
+"SABALPARA RAJNIKANT",
+"BORAD VIPUL MANUBHAI",
+"ISAMALIYA VIPUL L",
+"GOYANI NILAM",
+"GOYANI RUCHITA",
+"MANGROLIYA MAYANK",
+"SAVALIYA VISHALKUMAR  ( 3 YEAR )",
+"DONDA DIPAK",
+"DHADUK  MANOJBHAI",
+"PADHARA ASHVINBHAI",
+"RAMANI NILESHBHAI",
+"GAJERA RAMESHBHAI HARIBHAI",
+"ZALAVADIYA KEYURBHAI",
+"SAVANI BHAVIN",
+"MANGUKIYA DHARMESHBHAI",
+"DOBARIYA JIGNESH M ",
+"DOBARIYA SHANJAY M",
+"LASHKARI SITARAM",
+"MAKVANA ANILKUMAR  9925672673",
+"PAGHDAL ANKIT G",
+"RADADIYA ANKIT G",
+"GAJERA ASHOKBHAI",
+"GAJERA KETANBHAI",
+"MALANI JAGDISHBHAI",
+"ANGHAN GORDHANBHAI  ( 3 YEAR ) ",
+"ANGHAN SANDIPKUMAR",
+"ANGHAN RAKESH",
+"CHAUHAN VICKY",
+"PANWAR JETHARAM  ( JAIN )",
+"JAIN RAMESHKUMAR  ( JAIN ) ",
+"DAKHARA ASHVINBHAI",
+"GAJERA JAGRESHBHAI B  9723305174",
+"GORASIYA KISHORBHAI  ( J DOBARIYA )",
+"JOGANI SANJAYKUMAR",
+"KATHIRIYA RASIKLAL",
+"MAKWANA HARESHBHAI  ( PUNIT )",
+"VITHTHANI RAKESH ( PUNIT )",
+"LAKKAD DINESHBHAI",
+"KALATHIYA RAJUBHAI",
+"KALATHIYA NILESHBHAI",
+"SAVALIYA HARDIK KUMAR ( 3 YEAR )",
+"BHIMANI NILESHBHAI",
+"MAKVANA MAHESHBHAI M  ( 9978417077 )",
+"MALANI MUKESHBHAI G",
+"RAJPARA HARDIK K",
+"SAVALIYA DHARMESHBHAI ( 3 YEAR )",
+"BARVALIYA ALPESHBHAI ",
+"KATHIRIYA ASHVINBHAI B",
+"GONDALIYA VIJAYBHAI ( 3 YEAR )",
+"DHANANI AJAYKUMAR",
+"SAKARIYA GOPAL",
+"MALANI PIYUSHBHAI",
+"ALAGIYA LALJIBHAI V",
+"ALAGIYA MUKESHBHAI",
+"DESAI PRAFULBHAI D",
+"ISAMALIYA JIGNESHBHAI",
+"ISAMALIYA SHAILEHBHAI",
+"VIRANI BHAVDIP",
+"VIRANI RAJESH",
+"GAJERA DIPAKBHAI N   9426648629",
+"GAJERA SANDIPBHAI N   9426648629",
+"LATHIYA PRAGJIBHAI",
+"BUHA RAHUL R  ( Ref. Vijay Kumbhani )",
+"SARDHARA ATULKUMAR M",
+"PARAKHIYA MANISH P  ( PORT 2019 )",
+"GODHANI KALPESH",
+"UKANI BHAVIK J",
+"SAVSAVIYA BHAVESH   9913307776",
+"GELANI GOPAL",
+"GELANI MANHAR",
+"GELANI RAGHAVBHAI",
+"LATHIYA JAYSUKHBHAI",
+"LATHIYA VALLABHBHAI",
+"VAGHASIYA MANOJKUMAR",
+"GAJERA DHRUVINKUMAR  9662738357",
+"GAJERA ASHVINBHAI",
+"GAJERA MUKESHBHAI",
+"LILA ASHVINBHAI",
+"NAKRANI AMITBHAI  7874577450",
+"JAIN KAMLESH ( JAIN )",
+"NAKRANI NARESHBHAI ",
+"NAKARANI DIVYESHKUMAR",
+"TRAPASIYA CHIRAG",
+"TRAPASIYA KETAN",
+"SAVALIYA SANDIP",
+"BORAD ASHVINBHAI",
+"DESAI MALAY ( PUNITBHAI )",
+"SATANI MANSUKHBHAI",
+"RAJPARA PANKAJBHAI",
+"DEVANI DIPAKBHAI",
+"KHUNT SANDIP",
+"BARVALIYA YAGNESHE",
+"BARVALIYA JIVANBHAI",
+"HARKHANI BHAVESHBHAI ( PUNITBHAI )",
+"BODAR SURESHBHAI",
+"NAROLA MAHESH KUMAR",
+"AKBARI HARESHBHAI ",
+"KOLADIYA JAGDISHBHAI",
+"SATANI SANDIPBHAI",
+"BHALU SHYAM",
+"MAKANI HITESHBHAI",
+"GORASIYA ASHOKBHAI",
+"GONDALIYA DARSHIL ( 3 YEAR )",
+"VAVADIYA BHAVESHBHAI",
+"RUPANI BHAVESHBHAI",
+"SONI KEYUR",
+"VAGHASIYA HANSABEN + PA ",
+"BHANDERI RAJESH",
+"VIRADIYA RONAK",
+"VIRADIYA SAHIL",
+"SHIROYA CHATURBHAI",
+"SHIROYA MAHESHBHAI",
+"CHITALIYA HARJIBHAI",
+"SUTARIYA HARDIK",
+"THESIYA RASIKBHAI",
+"CHODAVADIYA SURESHBHAI 9879270871",
+"CHODAVADIYA NITABEN",
+"VEKARIYA BHAVESHBHAI J",
+"VEKARIYA SHAILESHBHAI J",
+"RUPAVATIYA GITABEN",
+"DESAI DILIPBHAI",
+"VAGHANI SUNIL M",
+"VASANI MUKESHBHAI",
+"CHAVADA BHARATBHAI",
+"VAGHASIYA JAGADISHBHAI",
+"PASTAGIYA JAYPRAKASH",
+"CHODAVADIYA NARESHBHAI",
+"VEKARIYA SURESHBHAI M",
+"JAYANI KALUBHAI",
+"GOTI UMESHBHAI ",
+"PALADIYA UMESHBHAI",
+"PALADIYA JAYESHBHAI",
+"DHOLAKIYA PARESHBHAI",
+"MALANI VIJAYBHAI P",
+"MALANI JITENDRABHAI P",
+"VEKARIYA THAKARSHIBHAI",
+"BUHA VISHAL  ( PUNIT )",
+"GOTI RAMESHBHAI  8320221103",
+"THUMMAR SURESHKUMAR",
+"KATHIRIYA YOGESH",
+"VADADORIYA ANKITBHAI",
+"JAYANI VIPULBHAI",
+"ZALAVADIYA NILESHBHAI",
+"GAJERA JAYSHREEBEN  V",
+"VASOYA MANIJBHAI",
+"VASOYA MUKESHBHAI",
+"RAMANI NIKUNJ B",
+"DHAMELIYA SHAILESHBHAI  9712073989",
+"PANSURIYA NAVINBHAI",
+"DHAMELIYA JAGADISHKUMAR",
+"SIDHDHAPURA KISHN     ( Ref KAva Narendra )",
+"KHANT RIPULBHAI  9879367521",
+"JASANI BHADRESHKUMAR",
+"JASANI SANJAYBHAI",
+"VEKARIYA PARESHBHAI",
+"GAJERA CHETANBHAI JAGADISHBHAI",
+"GAJERA GRIJESH  V",
+"GAJERA CHETAN  V",
+"SAVSAVIYA HIMMATBHAI",
+"SAVSAIYA JIGNESHBHAI",
+"KOLADIYA ANILBHAI",
+"MALAVIYA BHIMJIBHAI",
+"RUPANI NILESHBHAI",
+"DESAI KETAN K",
+"BHALALA ASHOK D",
+"VEKARIYA YOGESH J  ( 9925705198 )",
+"VEKARIYA BHADRESH  J  ( 9925705198 )",
+"VEKARIYA BHAVESH J ( 9925705198 )",
+"DEDANIYA SANJAY",
+"BABARIYA RACHANABEN",
+"MALANI PARASHOTAMBHAI",
+"ZALAVADIYA HIREN",
+"MANGROLIYA CHIRAG D",
+"SHINGALA RAKESHBHIA L",
+"VEKARIYA JAGDISHBHAI S",
+"DHOLAKIYA KALPESH P",
+"RAMANI HARDIK B",
+"MENDAPARA JAYPAL",
+"GONDALIYA VIMAL P",
+"FALDU KISHOR HARIBHAI",
+"SAVALIYA NILESHBHAI",
+"HIRPARA BHARATBHAI",
+"KHUNT KAMLESH M",
+"LATHIYA SANJAY KUMAR",
+"MAKHESANA SANJAYBHAI",
+"VAGADIYA PARAGBHAI",
+"DHOLARIYA KAMLESH C  ",
+"DHOLARIYA BHARAT C ",
+"DHOLARIYA MAHENDRA ",
+"ALAGIYA BHUPATBHAI",
+"GAJERA NILESHBHAI",
+"CHITALIYA JAGDISHBHAI 9978052483",
+"CHITALIYA SHAILESHBHAI 9879325936",
+"BORAD DIPAKBHAI",
+"MAVANI BALVANTBHAI",
+"MAVANI SAGAR",
+"MAVANI KEVAL",
+"RADADIYA ALPESH B",
+"KATRODIYA VASANTBEN ",
+"BANTHIYA SHOBHNADEV  ( JAIN )",
+"BANTHIYA KANTILAL ( JAIN )",
+"DUNGRANI JAYESHKUMAR",
+"MAKWANA DINESHBHAI  7096724593",
+"AKBARI GOVINDBHAI",
+"VAHOLIYA SHAILESHBHAI",
+"BABARIYA SHAILESHBHAI",
+"SAVALIYA SAMIR",
+"SAVALIYA MANJULABEN",
+"OLPADIYA JAGDISH",
+"OLPADIYA KRISHNA",
+"SORTHIYA SURESH",
+"VADADORIYA BHAVESHBHAI",
+"VADODARIYA BHARATBHAI",
+"VADADORIYA HANSABEN",
+"BUTANI HARSIN + PA",
+"BALAR NITESH ( PUNITBHAI  )",
+"MEPANI LAXMANBHAI 7383868658",
+"MEPANI SAVAN  LAXMANBHAI ",
+"BHIMANI DIPAKBHAI",
+"GOTI MANISHKUMAR",
+"SIDPARA JATINBHAI",
+"VAGHASIYA JAGDISHKUMAR",
+"LILA RAMESHBHAI",
+"SHAH BABULAL  ( JAIN )",
+"CHAJER SANYAMKUMAR ( JAIN )",
+"CHAJER SACHIN ( JAIN )",
+"CHAJER CHAGANRAJ ( JAIN )",
+"ROKAD PARESHBHAI",
+"THUMMAR MANOJKUMAR",
+"CHAUDHARI VORARAM",
+"CHAUDHARI DUDARAM",
+"MAKAVANA BHADRESH ( MAKWANA )",
+"THUMMAR HIREN B",
+"HIHORIYA SAVAN",
+"NAGANI BHARATBHAI",
+"GONDALIYA GHANSHYAMBHAI 9925119025",
+"SANKLECHA SUNDIP ( JAIN )",
+"PANSURIYA NILESH D",
+"BHIMANI SHAILESHBHAI V",
+"LUNAGARIYA MAHENDRA",
+"LUNAGARIYA RAJNIKANT  ( 3 YEAR )",
+"VAGHELA ASHABEN",
+"SAVSAVIYA MAYUR",
+"CHOVATIYA ARVINDBHAI",
+"DOBARIYA HARESHBHAI V",
+"SHYANI LALJIBHAI",
+"PATOLIYA NITIN",
+"RAMANI BHAVESHBHAI M",
+"DEVANI PRAVINBHAI",
+"ISAMALIYA HINABEN",
+"SABHAYA MAHENDRAKUMAR",
+"DHANANI CHIRAG",
+"BOGHRA RAKESH",
+"MANUKIYA MITUL",
+"KANANI VISHAL",
+"VAGHASIYA DURLABHBHAI  8160032667",
+"GODHANI SURESHBHAI  ( 3 YEAR )",
+"RADADIYA JAYDIP",
+"RADADIYA DINESHBHAI 9726025330",
+"SHIROYA KALPESH  ( PUNITBHAI )",
+"GAJERA DHARMESHBHAI",
+"KATHIRIYA BHAVIK",
+"PATOLIYA CHATURBHAI",
+"ZALAVADIYA CHIRAG",
+"BHIMANI SMIT GIRISHBHAI",
+"DESAI TUSHAR M",
+"DESAI RAJESHBHAI",
+"KAKADIYA DIKAISHBHAI",
+"JESANI SMIT HASMUKHBHAI",
+"BARVALIYA RAJESH SHAMBHUBHAI",
+"RADADIYA ASHOKBHAI",
+"RADADIYA RAHULBHAI",
+"KORAT NIKUNJ B         ( 2020  P )",
+"BORAD NARESHBHAI VINUBHAI",
+"SABALPARA SHIVANG",
+"PATOLIYA HASMUKHBHAI",
+"HIRPARA DILIPBHAI RAMNIKBHAI",
+"HIRPARA CHATUR",
+"VEKARIYA CHUNIBHAI + PA",
+"VEKARIYA UMESHBHAI CHUNIBHAI",
+"DHAMELIYA RAKESHBHAI",
+"RAMOLIYA ABHAY",
+"RAMOLIYA SHAMBHUBHAI + PA",
+"DONDA SHAILESH ( PUNITBHAI )",
+"KEVADIYA PRATIKKUMAR",
+"SAVSAVIYA LALITKUAMR",
+"TRAPASIYA YOGESH J",
+"VAGHASIYA HANSABEN  TOP UP",
+"MANGUKIYA JAYESHBHAI ( PUNITBHAI",
+"PATOLIYA CHIRAG KUMAR",
+"BHUVA CHETANBHAI",
+"CHAUTHRI PRAKASHBHAI",
+"KEVADIYA SURESHBHAI D",
+"KAKADIYA BHAVESHBHAI D",
+"AMBALIYA SAVJIBHAI",
+"GOTI ASHISH P",
+"JOSHI MANOJBHAI",
+"JODHANI MAYUR G",
+"JODHANI GABHRUBHAI",
+"VADDORIYA PARAS S",
+"VADADORIYA DHAVAL S",
+"DHAMELIYA NEMUBHAI  9925990282",
+"NAROLA VIPULBHAI P",
+"VEKARIYA ANKESH JITUBHAI",
+"VEKARIYA VIKASH JITUBHAU",
+"GODHANI MAHESHBHAI CHHAGANBHAI",
+"VEKARIYA JIGAR MAHESHBHAI 9879298329",
+"PAGHDAL MANISHKUMAR",
+"LADUMORE GNYANBHAI",
+"SIDHDHPARA DHARMESHBHAI",
+"KOTHARI VIRALBHAI BHARATBHAI",
+"SAVSAVIYA SHAILESHBHAI D",
+"VEKARIYA CHANDRESHBHAI",
+"KUMBHANI ANILBHAI R",
+"DHADUK AMITBHAI D",
+"HAOANI VAITULBHAI",
+"ZALAVADIYA GHANSHYAMBHAI",
+"GAJERA SANDIPBHAI C ( MAYUR )",
+"VADALIYA GAURAV",
+"PARMAR SANJAY M",
+"KUKADIYA SHAILESHBHAI",
+"JODHANI ALPESH",
+"JODHANI GHNSHYAM",
+"BAVISHI ASHVIN  9016784133",
+"VEKARIYA JAGDISHBHAI",
+"VEKARIYA SAGAR",
+"ASODARIYA JIGNESHBHAI ( MAYUR )",
+"AKOLIYA RAJESHBHAI",
+"SHELADIYA DHARMESHKUMAR",
+"SHELADIYA VIMALKUMAR",
+"BHILARE KAILASHBHAI",
+"BUHA KAMLESHBHAI",
+"VEKARIYA MAHESHBHAI L",
+"KYADA BHAVESH ( PUNITBHAI  )",
+"KACHHADIYA MEHUL D ( MAYUR )",
+"RAMANI VINODBHAI B",
+"RADADIYA SANJAYBHAI B",
+"MULANI JATISH A",
+"VADADORIYA CHATURBHAI",
+"TIMBADIYA VIPULBHAI",
+"BOGHANI DILIPBHAI",
+"KACHHADIYA MAYURBHAI D ( MAYUR )",
+"VIRANI DHARMESHBHAI L",
+"DHADUK KETANBHAI V",
+"KACHHADIYA MAHESHBHAI ( MAYUR )",
+"RAMANI PANKIT A",
+"BHALALA PUNITBHAI ( PUNITBHAI )",
+"SUHAGIYA SURESHBHAI  8000530588",
+"KAVA NARENDRA",
+"KACHHADIYA NARESHBHAI ( MAYURBHAI )",
+"KACHHADIYA HIMMATBHAI ( MAYUR )",
+"BARVALIYA KALPESHBHAI",
+"PATEL ANILKUMAR RAVJIBHAI",
+"GOTI HASMUKHBHAI",
+"GOTI BIREN",
+"SATANI GORDHANBHAI",
+"GOYANI HASMUKHBHAI",
+"CHHABHADIYA JAYDIP SHAMBHUBHAI",
+"MORADIYA PARTHKUMAR  ( REF, CHAVAN HARSODA )",
+"BOGHANI MAHESHBHAI P",
+"KANANI KALUBHAI",
+"VEKARIYA DHIRUBHAI",
+"VEKARIYA ANIL D",
+"PAGHADAL RAJESH R",
+"VEKARIYA SURESHBHAI K",
+"GAJERA BHAUTIK V",
+"NASIT HARESHBHAI ",
+"BOGHANI NARESHBHAI",
+"CHODAVADIYA ANIL",
+"JYANI KHUSHALBHAI",
+"VAVADIYA SURESHBHAI",
+"VAGHASIYA DINESHBHAI",
+"VEKARIYA DINESHBHAI V",
+"MANIYA NAYANBHAI",
+"RAMANI HARSH G",
+"VALDORIYA SURESHBHAI + PA",
+"VADALIYA MEERA  ( GAURAV VADALIYA )",
+"DAVARA BHARATKUMAR",
+"DOBARIYA KAUSHIKBHAI R",
+"ISAMALIYA ASHABEN  977824467",
+"MAKANI VIPULBHAI J",
+"MANGUKIYA HARDIKBHAI H",
+"KANAK KISHANBHAI K",
+"GAJERA ANKUAR BHAI J",
+"RAMANI HIMMATBHAI N",
+"DHAMELIYA NIKUNJ D",
+"DHAMELIYA JIGNESH D",
+"DHAMELIYA DHIRUBHAI",
+"HAPANI ANKIT ",
+"VAGADIYA YAGNIK",
+"RAMANI KAPIL K",
+"VIRADIYA DIVYESH",
+"RAMANI HIMMATBHAI",
+"BHADANI PRATIK",
+"SURANI KETANKUMAR",
+"SURANI DILIP",
+"VAGHASIYA LALJIBHAI ( MAYUR )",
+"HIRPARA NIKUNJBHAI 9913531831 / 8758753839",
+"VIRANI DHARMESHBHAI ",
+"GAJERA SHANTIBHAI",
+"ISAMALIYA SUDHIRBHAI",
+"ISAMALIYA SHARAD 9925688978",
+"KAKADIYA RAJNIKANT",
+"SARDHARA VIRALBHAI",
+"GAJERA MEHUL  9624799750",
+"BODAR ASHOKBHAI",
+"KACHCHI BHUPENDRABHAI",
+"BAVISHI RAJESHBHAI  9106654656",
+"BAVISHI CHATURBHAI",
+"LALAKIYA JANTIBHAI",
+"LALAKIYA ABHAYBHAI",
+"PARSANIYA HITESHBHAI  9316733715",
+"SUKHADIYA ROHIT  9429184587",
+"RABADIYA BHARATBHAI",
+"BUHA ASHOKBHAI",
+"SHELADIYA HARESHBHAI ",
+"TAVETHIYA KETANBHAI",
+"RADADIYA RAMJIBHAI",
+"SHELADIYA PARESHBHAI  +  PA",
+"LUKHI PARESHBHAI",
+"VEKARIYA ASHISHBHAI V",
+"BAVISHI SURAJ  982438000",
+"SATANI VISHAL N 9727023990",
+"DOBARIYA JAYESH  HIMMATBHAI  ( JAYESH 9825151600",
+"VEKARIYA MAHESH P",
+"VEKARIYA MEHULKUMAR P",
+"VEKARIYA PRAFULBHAI",
+"RAMANI VISHAL",
+"VASTARPARA DINESHBHAI",
+"MIYANI LADHABHAI   982522127991",
+"RADADIYA BHAVESHBHAI K",
+"GANDHANI MAMTABEN",
+"NAKARANI NILESHBHAI",
+"VIRANI BHARATKUMAR L",
+"VIRANI SANDIP  9979021133",
+"RAMANI VITHTHALBHAI",
+"BHALU NILESHBHAI",
+"DAKHARA BHAVESHBHAI",
+"MALANI NARESH",
+"PADASALA VIMAL RAMNIKBHAI",
+"PANSERIYA HASMUKHBHAI",
+"DHAKECHA  GHANSHYAMBHAI",
+"NAKARANI CHATURBHAI",
+"DAYANI DHAVALBHAI",
+"SUTARIYA BIPINBHAI",
+"DAYANI PANKAJBHAI ",
+"DAYANI KETANBHAI",
+"ZADAFIYA MANJIBHAI",
+"BALAR BHAVINKUMAR",
+"ZADAFIYA KISHOR M",
+"BUHA RAJU  9913870983",
+"DONGA BHARGAV",
+"KAMANI MAHESHBHAI",
+"RAMANI ASHVINBHAI K",
+"SHIROYA AJAY",
+"DONGA PRASHANT B",
+"GUPTA GOVIND  ( Rrf DONGS PRASHANT )",
+"RABADIYA RAMESHBHAI",
+"CHODVADIYA HASHAMUKHBHAI",
+"SABHAYA SANJAYBHAI",
+"VIRADIYA BHAVESH ( PUNITBHAI )",
+"KARKAR MANHARBHAI",
+"SHANKAR SANJAYBHAI",
+"GAJERA SHARDABEN",
+"KANANI MANISH",
+"HIRPARA HITESHBHAI 762299555",
+"SAVSAVIYA NILESHBHAI S",
+"JOGANI MANOJKUMAR",
+"GAJERA NILESHBHAI",
+"RANK HARESHBHAI",
+"MANGROLA RAJ DINESHBHAI",
+"MANGROLA DINESHBHAI",
+"KATARIYA NIKULBHAI",
+"UKANI UDAYBHAI",
+"DUDHAT PRASHANTKUMAR",
+"DUDHAT KENIL",
+"THAKKAR JAGDISHBHAI ",
+"SANCHANIA VIRAL JAGDISHBHAI",
+"ANGHAN KIRITBHAI ",
+"MANGUKIYA BHARATBHAI",
+"BHALALA RAMESHBHAI",
+"CHOVATIYA KISHOR K",
+"KALATHIYA HITESHBHAI ",
+"MALANI SURESHBHAI ",
+"BHIMANI CHANDUBHAI V",
+"BHIMANI MUKESHBHAI V",
+"BHIMANI JITENDRABHAI V",
+"MALANI MEHULBHAI B",
+"PALADIYA SHAILESHBHAI",
+"GAJERA CHANDUBHAI",
+"GAJERA HIRENBHAI CHANDUBHAI",
+"PANCHANI DHIRUBHAI N",
+"KAKADIYA JAYDIP",
+"KAKADIYA SANDIP",
+"KUMBHANI DHARMESHBHAI",
+"RAMANI KAPILBHAI i20",
+"KALANI NAYANKUMAR",
+"PATEL NILESHBHAI",
+"NAKARANI ANKUR",
+"LIMBANI ASHVIN",
+"LIMBANI RAMESHBHAI",
+"MANGUKIYA MITULBHAI",
+"PUHAN PREMANAND",
+"RADADIYA MATHURBHAI  +  PA",
+"BHALANI RAJENDRA  8734084650",
+"TAVETHIYA SHARDABEN",
+"VASOYA PANKAJBHAI CHHAGANBHAI",
+"VASHOYA MADHUBHAI",
+"CHODAVADIYA VIRALKUMAR",
+"DESAI HARSIL B  8866158199   8200001049",
+"SAVALIYA VIPULBHAI  9067867656",
+"PAGHADAL VIPULBHAI MAGANBHAI",
+"LIMBANI PARESHBHAI",
+"RADADIYA RAMESHBHAI  9723326314",
+"RAMANI HANSABEN",
+"PATOLIYA HARDIK",
+"MIYANI MUKESHBHAI L",
+"MIYANI KRUNAL M",
+"VAGHASIYA VIMAL ",
+"ANGHAN PRADIP",
+"MERULIYA JAYESHBHAI",
+"SUTARIYA RAJNIKANT",
+"HIRPARA KISHIRBHAI B",
+"VAGHASIYA KAILASHBEN  7069386080",
+"BHANDERI GANPATLAL  ( JAIN )",
+"ZALAVADIYA RAJNIKANT",
+"BABARIYA NIKUNJ BHAVESHBHAI",
+"DANKHARA HARESHBHAI ",
+"GAJERA ASHISHBHAI",
+"DOBARIYA NARENDRABHAI  9725600444",
+"KHUNT KAILASHBEN J",
+"VEKARIYA NARESHBHAI",
+"VEKARIYA SIDHDHARTH",
+"GATHIYA JAGDISHBHAI",
+"PATEL KAMLESHBHAI   7777929079",
+"GAJERA BHAVESHBHAI L",
+"KUMBHANI BHAVDIPBHAI R",
+"PATEL YASHKUMAR K",
+"RADADIYA RAJNIBHAI N",
+"PATEL SANJAYKUMAR  V  9879414130  7201928637",
+"AMBANI MEENABEN ( JAIN )",
+"AMBANI NARESH ( JAIN )",
+"LILA PRAVINBHAI ",
+"LILA AVINASH  9879065711",
+"BHESANIYA PANKAJBHAI",
+"KAPADIYA KAUSHIK",
+"PALADIYA DHARMESH GHANSHYAMBHAI ( NARESH )",
+"SARDHARA SAGAR  9429374981",
+"SARDARA BRIJESHBHAI 6351348225",
+"BHIKADIYA NITESHBHAI",
+"BABARIYA BHAVESHBHAI P",
+"BABARIYA BHARATBHAI P",
+"BHIKADIYA KISHORBHA  B     P 2023",
+"CHODAVADIYA MAGANBHAI ",
+"GELANI VIRAL J",
+"VASOYA RAKESH K",
+"RATHOD AJAY",
+"BUHA ASHVINBHAI",
+"GOYANI BHAVESHBHAI",
+"KAPADIYA BHADHAVBHAI +  PA",
+"KAPADIYA DINESHBHAI  9879067382",
+"RAMANI NAYAN B",
+"RAMANI HARKESH B",
+"BALADHA CHATRABHUJDAS",
+"PAGHADAL MILAN ( PUNITBHAI )",
+"KUKADIYA RAMESHBHAI",
+"SHINGALA PUNITBHAI B",
+"VAGHANI ASHABEN           P - 2023",
+"KHENI RAJUBHAI",
+"DESAI KALUBHAI",
+"DESAI JENISH",
+"DHAMELIYA KARTIK  9574432125",
+"BALAR BHAVESHBHAI S  ( MAYUR )",
+"BALAR PUNITBHAI ( MAYUR )",
+"ISAMALIYA MAHESHBHAI",
+"BALAR BABUBHAI  886425080",
+"RAMANI KISHORBHAI N",
+"JODHANI SHANTIBHAI ",
+"HARSODA GHANSHYAMBHAI ",
+"LATHIYA RAMESHBHAI  9824703697",
+"LATHIYA SHAYESH R  9824703697",
+"SHEKHALIYA KALPESHBHAI   8306879950",
+"PATOLIYA DEVCHANDBHAI",
+"GEVARIYA CHIRAG M",
+"GEVARIYA CHIRAG M",
+"RAMANI JITENDRABHAI  KHODABHAI",
+"SHELADIYA MAHENDRABHAI",
+"BALDHA GAURANGKUMAR  ( PUNITBHAI )",
+"RAFALIYA MAHESHBHAI ",
+"DAKHARA RUPEN",
+"DAKHARA NISHIT",
+"DAKHARA NARESHBHAI",
+"MALANI JANAKBHAI ",
+"SAVSAVIYA VINUBHAI ",
+"SAVSAVIYA CHETANBHAI",
+"KUMBHANI ASHISH K",
+"SANGHANI SAGAR D",
+"SHELADIYA ATUL",
+"GOYANI HARESHBHAI",
+"GOYANI JENISH",
+"CHOTHANI ASHVINBHAO",
+"CHOTHANI GHANSHYAMBHAI",
+"LIMBANI ARUNBHAI  8866346757",
+"KORAT VIPULBHAI G",
+"ZALAVADIYA BHAVESHBHAI L",
+"GANGANI BIPINBHAI ",
+"LAKHANI PINTU",
+"SAVSAVIYA HARESHBHAI N",
+"DANKHARA RAMESHBHAI K",
+"GAJERA CHETANKUMAR B",
+"DOBARIYA GOPALBHAI",
+"DOBARIYA VIJAYBHAI",
+"KUKADIYA PRAKASHBHAI  9909781658",
+"NADIYADARA GOVINDBHAI  997881173",
+"SAVALIYA MANSUKHBHAI",
+"KHADAK DIPAKBHAI",
+"LATHIYA NILESHKUMAR",
+"SOJITRA NIKUL D   9737208108",
+"SOJITRA HARESHBHAI D  8238114804",
+"ANTALA ASHOKBHAI",
+"BOKHA ALPESHBHAI",
+        ];
+
+        // =========================================================================
+        // Logic for Rendering and Searching
+        // =========================================================================
+
+        // Function to render the list
+        function renderClients(clientId, clientData, colorClass) {
+            const listElement = document.getElementById(clientId);
+            listElement.innerHTML = ""; // Clear existing
+
+            if (clientData.length === 0) {
+                listElement.innerHTML = `<li class="text-slate-400 text-center p-4">કોઈ નામ મળ્યું નથી.</li>`;
+                return;
+            }
+
+            clientData.forEach(client => {
+                const li = document.createElement("li");
+                li.className = `flex items-center text-slate-700 p-2 bg-slate-50 rounded border-l-4 ${colorClass} hover:bg-slate-100 transition`;
+                
+                // Icon based on color class (blue for MF, red for Health)
+                const iconClass = colorClass.includes("blue") ? "fa-user-circle text-slate-400" : "fa-check-circle text-green-500";
+                
+                li.innerHTML = `
+                    <i class="fas ${iconClass} mr-3"></i>
+                    <span class="font-medium">${client}</span>
+                `;
+                listElement.appendChild(li);
+            });
+        }
+
+        // Function to handle search
+        function setupSearch(inputId, listId, originalData, colorClass) {
+            document.getElementById(inputId).addEventListener('keyup', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredData = originalData.filter(client => 
+                    client.toLowerCase().includes(searchTerm)
+                );
+                renderClients(listId, filteredData, colorClass);
+            });
+        }
+
+        // Initialize lists and search on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial Render
+            renderClients("mf-list", mutualFundClients, "border-blue-500");
+            renderClients("health-list", healthInsuranceClients, "border-red-500");
+
+            // Setup Search Listeners
+            setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
+            setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
+        });
+    </script>
+
+</body>
+</html>
