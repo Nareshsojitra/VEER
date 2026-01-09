@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veer Finance Services - Financial Growth</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .hover-scale:hover { transform: scale(1.05); transition: transform 0.3s; }
+        html { scroll-behavior: smooth; }
+        
+        .font-royal { font-family: 'Cinzel', serif; }
+        .font-elegant { font-family: 'Playfair Display', serif; }
+
+        .hero-bg {
+            background-image: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.7)), url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .customer-list::-webkit-scrollbar { width: 6px; }
+        .customer-list::-webkit-scrollbar-track { background: #f1f1f1; }
+        .customer-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .customer-list::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-slate-900 text-white p-4 shadow-xl fixed w-full z-50 top-0 border-b-4 border-red-600">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#home" class="flex items-center gap-4 group">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-red-600 to-white rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
+                    <img src="NAME%20PLATE8.JPG" 
+                         onerror="this.style.display='none'; document.getElementById('fallback-icon').classList.remove('hidden');" 
+                         alt="Veer Finance Logo" 
+                         class="relative h-14 w-14 md:h-16 md:w-16 object-cover bg-white border-2 border-red-600 rounded-full p-0.5 shadow-2xl">
+                    <div id="fallback-icon" class="hidden relative h-14 w-14 md:h-16 md:w-16 bg-slate-800 border-2 border-red-600 rounded-full flex items-center justify-center text-red-500 text-3xl shadow-xl">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-center">
+                    <h1 class="text-2xl md:text-4xl font-bold tracking-wider text-white leading-none group-hover:text-red-100 transition font-royal drop-shadow-md">
+                        VEER <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-200 font-elegant italic tracking-normal">Finance</span>
+                    </h1>
+                    <span class="text-[10px] md:text-xs text-slate-300 font-bold tracking-[0.4em] uppercase mt-1 font-royal">Growth & Security</span>
+                </div>
+            </a>
+            <ul class="hidden md:flex space-x-8 font-medium items-center text-sm uppercase tracking-wider">
+                <li><a href="#home" class="hover:text-red-400 transition duration-300">Home</a></li>
+                <li><a href="#services" class="hover:text-red-400 transition duration-300">Services</a></li>
+                <li><a href="#clients" class="hover:text-red-400 transition duration-300">Clients</a></li>
+                <li><a href="#contact" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500 transition font-bold shadow-lg">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero-bg text-white h-screen flex items-center justify-center text-center px-4 pt-20">
+        <div class="max-w-5xl relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-2xl">
+                તમારી સંપત્તિમાં <span class="text-amber-500">વૃદ્ધિ</span> અને <br>
+                <span class="text-amber-500">સુરક્ષા</span> માટેનું શ્રેષ્ઠ માધ્યમ
+            </h1>
+            <p class="text-xl md:text-2xl mb-10 text-slate-200 font-light max-w-3xl mx-auto border-l-4 border-amber-500 pl-4 bg-slate-900/50 py-2">
+                "વિર ફાઇનન્સ સર્વિસ" - જ્યાં તમારા નાણાં સુરક્ષિત છે અને ભવિષ્ય ઉજ્જવળ છે.
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <a href="#clients" class="bg-amber-500 text-slate-900 px-8 py-4 rounded text-lg font-bold hover:bg-amber-400 transition shadow-lg">અમારા ગ્રાહકો જુઓ</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- CUSTOMER LIST SECTION -->
+    <section id="clients" class="py-20 bg-slate-50 px-4">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">અમારા <span class="text-amber-600">સંતુષ્ટ ગ્રાહકો</span></h2>
+                <div class="w-20 h-1 bg-amber-500 mx-auto mt-4 rounded"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Mutual Funds -->
+                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
+                    <div class="bg-blue-900 p-4 flex flex-col sm:flex-row items-center justify-between text-white gap-2">
+                        <h3 class="font-bold text-xl"><i class="fas fa-chart-pie mr-2 text-amber-400"></i> Mutual Fund</h3>
+                        <span class="bg-blue-800 text-sm px-3 py-1 rounded-full border border-blue-400 font-bold shadow-sm">Total: <span id="mf-count-display">0</span></span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <input type="text" id="mf-search" placeholder="નામ શોધો..." class="w-full p-2 mb-4 border border-slate-300 rounded text-sm">
+                        <ul id="mf-list" class="customer-list space-y-3 h-80 overflow-y-auto pr-2"></ul>
+                    </div>
+                </div>
+                <!-- Health Insurance (With PDF Lock) -->
+                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
+                    <div class="bg-red-700 p-4 flex flex-col sm:flex-row items-center justify-between text-white gap-2">
+                        <h3 class="font-bold text-xl"><i class="fas fa-heartbeat mr-2 text-white"></i> Health Insurance</h3>
+                        <span class="bg-red-800 text-sm px-3 py-1 rounded-full border border-red-400 font-bold shadow-sm">Total: <span id="health-count-display">0</span></span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <input type="text" id="health-search" placeholder="નામ શોધો..." class="w-full p-2 mb-4 border border-slate-300 rounded text-sm">
+                        <ul id="health-list" class="customer-list space-y-3 h-80 overflow-y-auto pr-2"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-70 z-[100] hidden flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-xl p-8 max-w-sm w-full shadow-2xl transform transition-all scale-100 border-t-4 border-red-600">
+            <h3 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">
+                <i class="fas fa-shield-alt text-red-600"></i> સુરક્ષા ચેક
+            </h3>
+            <p class="text-slate-500 mb-6 text-sm">તમારી પોલિસી ડાઉનલોડ કરવા માટે પાસવર્ડ નાખો.</p>
+            
+            <div class="mb-4">
+                <label class="block text-slate-700 text-sm font-bold mb-2">પાસવર્ડ</label>
+                <input type="password" id="policy-password" class="w-full p-3 border border-slate-300 rounded-lg focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition" placeholder="Enter Password">
+                <p id="password-error" class="text-red-500 text-xs mt-2 hidden flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> ખોટો પાસવર્ડ! ફરી પ્રયાસ કરો.</p>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-6">
+                <button onclick="closeModal()" class="px-4 py-2 text-slate-500 hover:text-slate-700 font-medium transition">રદ કરો</button>
+                <button onclick="checkPassword()" class="px-6 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 shadow-lg hover:shadow-red-500/30 transition transform active:scale-95">ઓપન કરો</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-slate-900 text-white px-4 relative border-t-4 border-amber-500">
+        <div class="container mx-auto text-center relative z-10">
+            <h2 class="text-4xl font-bold mb-12 text-white">અમારો સંપર્ક કરો</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <a href="tel:+919737208108" class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition">
+                    <i class="fas fa-phone text-4xl text-amber-500 mb-4"></i>
+                    <h3 class="font-bold text-xl">+91 97372 08108</h3>
+                </a>
+                <a href="mailto:nareshsojitra003@gmail.com" class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition">
+                    <i class="fas fa-envelope text-4xl text-amber-500 mb-4"></i>
+                    <h3 class="font-bold text-xl">Email Us</h3>
+                </a>
+                <a href="https://maps.google.com" target="_blank" class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition">
+                    <i class="fas fa-map-marker-alt text-4xl text-amber-500 mb-4"></i>
+                    <h3 class="font-bold text-xl">સુરત, ગુજરાત</h3>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. CONFIGURATION ---
+        let targetPdfUrl = "";
+        let targetPassword = "";
+
+        // --- 2. CLIENT DATA ---
+        
+        // Mutual Funds (ફક્ત નામ - Strings)
+        const mutualFundClients = [
+            "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA",
+            "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA", "KISHANKUMAR KALUBHAI MORADIYA",
+            // ... બાકીના બધા નામ અહીં યથાવત રાખવા ...
+            "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD"
+        ];
+
+        // Health Insurance (મિશ્ર - Strings અને Objects)
+        // જો PDF હોય તો: { name: "...", pdf: "...", password: "..." }
+        // જો PDF ના હોય તો ફક્ત નામ: "NAME STRING"
+        const healthInsuranceClients = [
+            { name: "DANKHRA RAMESHBHAI   + PA", pdf: "files/DANKHRA RAMESHBHAI   + PA.pdf", password: "1111" },
+            { name: "KALATHIYA LAXMANBHAI", pdf: "files/KALATHIYA LAXMANBHAI.pdf", password: "9913474898" },
+            { name: "PANSHERIYA DIPAKBHAI S", pdf: "files/PANSHERIYA DIPAKBHAI S.pdf", password: "9377536361" },
+            { name: "DESAI HIMMATBHAI B", pdf: "files/DESAI HIMMATBHAI B.pdf", password: "9825745187" },
+            { name: "RADADIYA BABUBHAI", pdf: "files/RADADIYA BABUBHAI.pdf", password: "9979951838" },
+            { name: "SOJITRA NIKUL D", pdf: "files/SOJITRA NIKUL D.pdf", password: "8238114804" },
+            { name: "SOJITRA HARESHBHAI D", pdf: "files/SOJITRA HARESHBHAI D.pdf", password: "8141336397" }
+        ];
+
+
+        // --- 3. FUNCTIONS ---
+
+        function renderClients(clientId, clientData, colorClass) {
+            const listElement = document.getElementById(clientId);
+            listElement.innerHTML = "";
+            
+            if (clientData.length === 0) {
+                listElement.innerHTML = `<li class="text-slate-400 text-center p-4">કોઈ નામ મળ્યું નથી.</li>`;
+                return;
+            }
+
+            clientData.forEach(client => {
+                const li = document.createElement("li");
+                li.className = `flex items-center justify-between text-slate-700 p-3 bg-slate-50 rounded-lg border-l-4 ${colorClass} hover:bg-slate-100 transition shadow-sm`;
+
+                let content = "";
+                
+                // Check Type: String (No PDF) vs Object (Has PDF)
+                if (typeof client === 'string') {
+                    // Simple Name
+                    const iconClass = colorClass.includes("blue") ? "fa-user-circle text-blue-400" : "fa-check-circle text-green-500";
+                    content = `
+                        <div class="flex items-center gap-3">
+                            <i class="fas ${iconClass} text-lg"></i>
+                            <span class="font-medium text-sm md:text-base">${client}</span>
+                        </div>
+                    `;
+                } else {
+                    // Object with PDF
+                    content = `
+                        <div class="flex items-center gap-3">
+                            <div class="bg-red-100 p-2 rounded-full">
+                                <i class="fas fa-file-pdf text-red-600"></i>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-slate-800 text-sm md:text-base">${client.name}</span>
+                                <span class="text-xs text-green-600 font-bold tracking-wide"><i class="fas fa-lock text-[10px]"></i> Protected</span>
+                            </div>
+                        </div>
+                        <button onclick="openModal('${client.pdf}', '${client.password}')" 
+                                class="bg-white border border-red-200 text-red-600 hover:bg-red-50 px-4 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-2 shadow-sm hover:shadow-md group">
+                            <span>Download</span> <i class="fas fa-download group-hover:translate-y-0.5 transition-transform"></i>
+                        </button>
+                    `;
+                }
+
+                li.innerHTML = content;
+                listElement.appendChild(li);
+            });
+        }
+
+        function setupSearch(inputId, listId, originalData, colorClass) {
+            document.getElementById(inputId).addEventListener('keyup', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredData = originalData.filter(client => {
+                    const nameToCheck = (typeof client === 'string') ? client : client.name;
+                    return nameToCheck.toLowerCase().includes(searchTerm);
+                });
+                renderClients(listId, filteredData, colorClass);
+            });
+        }
+
+        // --- 4. MODAL LOGIC ---
+
+        function openModal(pdfUrl, password) {
+            targetPdfUrl = pdfUrl;
+            targetPassword = password;
+            
+            // Reset UI
+            document.getElementById('policy-password').value = "";
+            document.getElementById('password-error').classList.add('hidden');
+            
+            const modal = document.getElementById('password-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('policy-password').focus();
+            }, 100);
+        }
+
+        function closeModal() {
+            document.getElementById('password-modal').classList.add('hidden');
+            targetPdfUrl = "";
+            targetPassword = "";
+        }
+
+        function checkPassword() {
+            const inputPassword = document.getElementById('policy-password').value;
+            const errorMsg = document.getElementById('password-error');
+
+            if (inputPassword === targetPassword) {
+                // Success: Download/Open PDF
+                const link = document.createElement('a');
+                link.href = targetPdfUrl;
+                link.download = targetPdfUrl.split('/').pop(); // Optional: forces download
+                link.target = "_blank";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                closeModal();
+            } else {
+                // Error
+                errorMsg.classList.remove('hidden');
+                document.getElementById('policy-password').classList.add('border-red-500', 'ring-1', 'ring-red-500');
+            }
+        }
+
+        // Enable "Enter" key in password field
+        document.getElementById('policy-password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // --- 5. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderClients("mf-list", mutualFundClients, "border-blue-500");
+            renderClients("health-list", healthInsuranceClients, "border-red-500");
+            
+            setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
+            setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
+            
+            document.getElementById("mf-count-display").innerText = mutualFundClients.length;
+            document.getElementById("health-count-display").innerText = healthInsuranceClients.length;
+        });
+
+    </script>
+</body>
+</html>
