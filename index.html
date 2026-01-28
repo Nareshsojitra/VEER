@@ -63,6 +63,27 @@
             0% { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 1; }
             100% { transform: translate(var(--tw-x), var(--tw-y)) rotate(var(--tw-rotate)) scale(1.2); opacity: 0; }
         }
+
+        /* AI Chatbot Styles */
+        #ai-chat-window {
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            max-width: 90vw;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            z-index: 1000;
+            overflow: hidden;
+            border: 2px solid #ef4444;
+        }
+        .ai-msg { background: #f1f5f9; padding: 10px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; align-self: flex-start; font-size: 14px; }
+        .user-msg { background: #ef4444; color: white; padding: 10px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; align-self: flex-end; font-size: 14px; }
+        .typing { font-style: italic; color: #64748b; font-size: 12px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -88,7 +109,6 @@
 
             <!-- Central God Photo Section -->
             <div class="flex flex-1 flex-col items-center justify-center px-2 relative" id="photo-container">
-                <!-- Maharaj Photo -->
                 <div class="photo-lift h-20 w-16 md:h-28 md:w-22 bg-white p-0.5 rounded-xl border-2 border-amber-500 shadow-lg overflow-hidden flex items-center justify-center mt-1 cursor-pointer z-20" 
                      id="god-photo" onmouseenter="startFlowerShow()" onmousemove="spawnFlower(event)">
                     <img src="harikrushnamaharaj.jpg" alt="Swaminarayan" onerror="this.src='https://placehold.co/200x300/white/orange?text=Maharaj';" class="w-full h-full object-cover">
@@ -230,8 +250,24 @@
         </div>
     </section>
 
+    <!-- Stats Display -->
+    <div class="bg-slate-800 py-6">
+        <div class="container mx-auto flex flex-wrap justify-center gap-8 text-white">
+            <div class="text-center px-6">
+                <i class="fas fa-users text-3xl text-amber-500 mb-2"></i>
+                <div class="text-2xl font-bold" id="total-visits">0</div>
+                <div class="text-xs uppercase tracking-widest text-slate-400">કુલ મુલાકાતીઓ</div>
+            </div>
+            <div class="text-center px-6">
+                <i class="fas fa-file-download text-3xl text-red-500 mb-2"></i>
+                <div class="text-2xl font-bold" id="total-downloads">0</div>
+                <div class="text-xs uppercase tracking-widest text-slate-400">કુલ ડાઉનલોડ</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-slate-900 text-white px-4 relative border-t-4 border-amber-500">
+    <section id="contact" class="py-24 bg-slate-900 text-white px-4 border-t-4 border-amber-500">
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-bold mb-12">અમારો સંપર્ક કરો</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -265,26 +301,130 @@
                     <p class="text-slate-300 text-sm leading-relaxed group-hover:text-white transition">૪૦૭, સ્કાયલાર્ક શોપીંગ, બંબાગેટ ની પાછળ,<br> વરાછા રોડ, સુરત.</p>
                 </a>
             </div>
-        </div>
-    </div>
-<!-- Global Tracker Info -->
-            <div class="flex flex-wrap justify-center gap-4 text-sm">
-                <div class="stats-badge px-4 py-2 rounded-full"><i class="fas fa-users text-amber-500 mr-2"></i>મુલાકાતીઓ: <span id="total-visits" class="font-bold text-amber-400">...</span></div>
-                <div class="stats-badge px-4 py-2 rounded-full"><i class="fas fa-file-download text-red-500 mr-2"></i>ડાઉનલોડ: <span id="total-downloads" class="font-bold text-red-400">...</span></div>
-            </div>
-        <div class="text-center mt-12 text-slate-500 text-sm border-t border-slate-800 pt-8">
-            <p>© 2026 રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ. All Rights Reserved.</p>
+            <p class="mt-20 text-slate-500 text-sm border-t border-slate-800 pt-8">© 2026 રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ. All Rights Reserved.</p>
         </div>
     </section>
 
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/919737208108" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition hover:-translate-y-2 transform duration-300 z-50 flex items-center justify-center w-16 h-16 text-3xl border-2 border-white animate-pulse"><i class="fab fa-whatsapp"></i></a>
+    <!-- Floating Buttons (WhatsApp & AI) -->
+    <a href="https://wa.me/919737208108" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center w-14 h-14 text-2xl border-2 border-white"><i class="fab fa-whatsapp"></i></a>
+    
+    <button onclick="toggleAIChat()" class="fixed bottom-24 right-6 bg-red-600 text-white p-4 rounded-full shadow-2xl hover:bg-red-700 transition z-50 flex items-center justify-center w-14 h-14 text-2xl border-2 border-white animate-bounce"><i class="fas fa-robot"></i></button>
 
-    <!-- SCRIPTS -->
+    <!-- AI Chat Window -->
+    <div id="ai-chat-window">
+        <div class="bg-red-600 p-4 text-white font-bold flex justify-between items-center">
+            <span>Ramani AI સહાયક</span>
+            <button onclick="toggleAIChat()"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="ai-messages" class="flex-1 overflow-y-auto p-4 flex flex-col">
+            <div class="ai-msg">નમસ્તે! હું રામાણી સર્વિસનો AI સહાયક છું. હું તમને ઇન્સ્યુરન્સ કે મ્યુચ્યુઅલ ફંડ વિશે કેવી રીતે મદદ કરી શકું?</div>
+        </div>
+        <div class="p-3 border-t flex gap-2">
+            <input type="text" id="ai-input" placeholder="તમારો પ્રશ્ન પૂછો..." class="flex-1 p-2 border rounded focus:outline-none text-sm">
+            <button onclick="sendAIMessage()" class="bg-red-600 text-white px-4 py-2 rounded text-sm"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        async function initTracking() {
+            await signInAnonymously(auth);
+            const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats');
+
+            onSnapshot(statsDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('total-visits').innerText = data.visits || 0;
+                    document.getElementById('total-downloads').innerText = data.downloads || 0;
+                }
+            }, (error) => console.error("Stats listener error:", error));
+
+            try {
+                const docSnap = await getDoc(statsDocRef);
+                if (!docSnap.exists()) {
+                    await setDoc(statsDocRef, { visits: 1, downloads: 0 });
+                } else {
+                    await updateDoc(statsDocRef, { visits: increment(1) });
+                }
+            } catch (err) { console.error("Tracking error:", err); }
+        }
+
+        window.incrementDownloadCount = async () => {
+            const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats');
+            await updateDoc(statsDocRef, { downloads: increment(1) });
+        };
+
+        window.onload = initTracking;
+    </script>
+
     <script>
-        // Mutual Fund Clients Updated List
+        const apiKey = "";
+        
+        async function askGemini(query) {
+            const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના સ્માર્ટ આસિસ્ટન્ટ છો. તમારી સેવાઓમાં SIP, લમ્પ-સમ ઇન્વેસ્ટમેન્ટ, હેલ્થ ઇન્સ્યુરન્સ અને મેડિક્લેમનો સમાવેશ થાય છે. તમે ગુજરાતીમાં ટૂંકા અને સચોટ જવાબ આપો. જો કોઈ ગ્રાહક રોકાણ માટે પૂછે, તો તેમને સંપર્ક નંબર +91 97372 08108 આપો.";
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: query }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+                const result = await response.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો, અત્યારે હું જવાબ આપી શકતો નથી. કૃપા કરીને ફોન પર સંપર્ક કરો.";
+            } catch (err) {
+                return "નેટવર્ક સમસ્યા છે. કૃપા કરીને થોડીવાર પછી પ્રયત્ન કરો.";
+            }
+        }
+
+        async function sendAIMessage() {
+            const input = document.getElementById('ai-input');
+            const msgContainer = document.getElementById('ai-messages');
+            const query = input.value.trim();
+            if (!query) return;
+
+            const userDiv = document.createElement('div');
+            userDiv.className = 'user-msg';
+            userDiv.innerText = query;
+            msgContainer.appendChild(userDiv);
+            input.value = "";
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing mb-2';
+            typingDiv.innerText = "વિચારી રહ્યો છું...";
+            msgContainer.appendChild(typingDiv);
+
+            const responseText = await askGemini(query);
+            typingDiv.remove();
+
+            const aiDiv = document.createElement('div');
+            aiDiv.className = 'ai-msg';
+            aiDiv.innerText = responseText;
+            msgContainer.appendChild(aiDiv);
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        function toggleAIChat() {
+            const win = document.getElementById('ai-chat-window');
+            win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // --- PRESERVING EXISTING CLIENT DATA & LOGIC ---
         const mutualFundClients = [
-            "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
+           "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
             "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
             "ASMITABEN ALPESHBHAI MALAVIYA", "BHAVESHBHAI BALUBHAI KOTADIYA", "SUBHASH RANA", "SANJAYKUMAR R JOGANI", "MALANI SANJAYBHAI RASIKBHAI",
             "SAVALIYA CHANDRIKABEN BAVCHANDBHAI", "ASODARIYA MAHESHKUMAR N", "RATANAPARA VIJAY JASMATBHAI", "CHAUHAN BHAVESHBHAI VINUBHAI", "RAMANI VINUBHAI RAVJIBHAI",
@@ -400,10 +540,8 @@
             "NILESH VALJIBHAI BHALALA", "CHIRAGBHAI RAMESHBHAI DHAMELIYA", "NITESHBHAI ARVINDBHAI BALAR", "MANSUKHBHAI CHHAGANBHAI SAVALIYA", "JANAKKUMAR GOYANI",
             "RINKALBEN TULSHIBHAI CHOVATIYA", "ASHOKBHAI NARSINHBHAI PAGHADAL", "KHUSHAL BHIKHABHAI JYANI", "SAGARBHAI BHIKHABHAI MALAVIYA"
         ];
-
-        // Health Insurance Data with Full List
         const healthInsuranceClients = [
-{ name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
+            { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
 { name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
 { name: "AJAYKUMAR VINUBHAI DHANANI 2025", pdf: "AJAYKUMAR VINUBHAI DHANANI 2025.pdf", password: "1111" },
 { name: "AKBARI GOVINDBHAI 2025", pdf: "AKBARI GOVINDBHAI 2025.pdf", password: "1111" },
@@ -1345,71 +1483,39 @@
 { name: "JAYESHBHAI DALSUKHBHAI ISAMALIYA 2026", pdf: "JAYESHBHAI DALSUKHBHAI ISAMALIYA 2026.pdf", password: "1111" },
 { name: "PARMAR HIRENBHAI RAMESHBHAI 2026", pdf: "PARMAR HIRENBHAI RAMESHBHAI 2026.pdf", password: "1111" },
 { name: "TARUNBHAI PARESHBHAI BARVALIYA 2026", pdf: "TARUNBHAI PARESHBHAI BARVALIYA 2026.pdf", password: "1111" }
-            // Note: Limited sample here for stability, please add others in same format if needed.
         ];
 
-        // Functions
         function renderClients(clientId, clientData, colorClass) {
             const listElement = document.getElementById(clientId);
             if(!listElement) return;
-            
             const countId = clientId === "mf-list" ? "mf-count-display" : "health-count-display";
             document.getElementById(countId).innerText = clientData.length;
-
             listElement.innerHTML = "";
             clientData.forEach(client => {
                 let displayName = typeof client === 'object' ? client.name : client;
                 let password = typeof client === 'object' ? client.password : "1111";
                 let pdfFile = typeof client === 'object' ? client.pdf : "";
-
                 const li = document.createElement("li");
                 li.className = `flex items-center justify-between text-slate-700 p-2 bg-slate-50 rounded border-l-4 ${colorClass} hover:bg-slate-100 transition shadow-sm`;
-                
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
                 let content = `<div class="flex items-center flex-1"><i class="fas ${icon} mr-3"></i><span class="font-medium text-xs md:text-sm">${displayName}</span></div>`;
-                
                 if (clientId === "health-list") {
-                    content += `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}')" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition shadow-sm flex items-center gap-1 whitespace-nowrap"><i class="fas fa-download"></i> Download</button>`;
+                    content += `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}')" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition shadow-sm flex items-center gap-1"><i class="fas fa-download"></i> Download</button>`;
                 }
-
                 li.innerHTML = content;
                 listElement.appendChild(li);
             });
         }
 
-        // Improved Multi-word search logic
-        function setupSearch(inputId, listId, originalData, colorClass) {
-            const input = document.getElementById(inputId);
-            if(!input) return;
-            input.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase().trim();
-                if (!term) {
-                    renderClients(listId, originalData, colorClass);
-                    return;
-                }
-                
-                // Split search term into multiple words
-                const searchWords = term.split(/\s+/).filter(word => word.length > 0);
-                
-                const filtered = originalData.filter(c => {
-                    const name = (typeof c === 'object' ? c.name : c).toLowerCase();
-                    // Check if EVERY word in the search query exists somewhere in the name
-                    return searchWords.every(word => name.includes(word));
-                });
-                
-                renderClients(listId, filtered, colorClass);
-            });
-        }
-
-        function handleDownload(displayName, requiredPassword, pdfFilename) {
+        async function handleDownload(displayName, requiredPassword, pdfFilename) {
             const pass = prompt(displayName + " ની પોલિસી ડાઉનલોડ કરવા માટે પાસવર્ડ દાખલ કરો:");
             if (pass === requiredPassword) {
+                if (window.incrementDownloadCount) await window.incrementDownloadCount();
                 const githubUser = "Nareshsojitra";
                 const repo = "VEER";
                 const folder = "POLICY";
                 const branch = "main";
                 const fileUrl = `https://raw.githubusercontent.com/${githubUser}/${repo}/${branch}/${folder}/${encodeURIComponent(pdfFilename)}`;
-                
                 const link = document.createElement('a');
                 link.href = fileUrl;
                 link.setAttribute('download', pdfFilename);
@@ -1417,20 +1523,22 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-                
-                const message = document.createElement('div');
-                message.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-lg shadow-2xl z-[100] font-bold animate-bounce";
-                message.innerText = "ડાઉનલોડ શરૂ થઈ રહ્યું છે...";
-                document.body.appendChild(message);
-                setTimeout(() => message.remove(), 3000);
-
             } else if (pass !== null) {
-                const errorMsg = document.createElement('div');
-                errorMsg.className = "fixed top-20 left-1/2 transform -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-lg shadow-2xl z-[100] font-bold";
-                errorMsg.innerText = "ખોટો પાસવર્ડ! ફરી પ્રયાસ કરો.";
-                document.body.appendChild(errorMsg);
-                setTimeout(() => errorMsg.remove(), 3000);
+                alert("ખોટો પાસવર્ડ! ફરી પ્રયાસ કરો.");
             }
+        }
+
+        function setupSearch(inputId, listId, originalData, colorClass) {
+            const input = document.getElementById(inputId);
+            if(!input) return;
+            input.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                const filtered = originalData.filter(c => {
+                    const name = (typeof c === 'object' ? c.name : c).toLowerCase();
+                    return name.includes(term);
+                });
+                renderClients(listId, filtered, colorClass);
+            });
         }
 
         function startFlowerShow() { for(let i=0; i<6; i++) setTimeout(() => createFlower(), i * 150); }
