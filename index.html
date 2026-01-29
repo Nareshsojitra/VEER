@@ -308,7 +308,7 @@
         </div>
     </div>
 
-    <!-- Footer Copyright (Size Increased) -->
+    <!-- Footer Copyright -->
     <footer class="bg-slate-950 pb-8 pt-4 text-center">
         <p class="text-slate-400 text-xs md:text-sm font-medium">
             © 2026 રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ. All Rights Reserved.
@@ -318,7 +318,7 @@
     <!-- Floating Buttons (WhatsApp & AI) -->
     <a href="https://wa.me/919737208108" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition z-50 flex items-center justify-center w-14 h-14 text-2xl border-2 border-white"><i class="fab fa-whatsapp"></i></a>
     
-    <!-- AI Button with "AI" Text Logo -->
+    <!-- AI Button -->
     <button onclick="toggleAIChat()" class="fixed bottom-24 right-6 bg-red-600 text-white rounded-full shadow-2xl hover:bg-red-700 transition z-50 flex items-center justify-center w-14 h-14 border-2 border-white animate-bounce">
         <span class="ai-btn-text text-xl">AI</span>
     </button>
@@ -341,21 +341,21 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs & Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Firebase Configuration - Keys provided by user
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "AIzaSyAAIDNHKpIczvMDkzYXxJ4wuxSnihtlp5k",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyAsnb6DfPoWc_ZmuzBi3Mu53TVoEXI491E",
+            authDomain: "ramani-insurance.firebaseapp.com",
+            projectId: "ramani-insurance",
+            storageBucket: "ramani-insurance.appspot.com",
+            messagingSenderId: "9737208108",
+            appId: "1:9737208108:web:ramani123"
         };
-        
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
         let db, auth;
@@ -363,19 +363,27 @@
             const app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
-        } catch (e) { }
+        } catch (e) {
+            console.error("Firebase Init Error:", e);
+        }
 
         async function startStatsTracking(user) {
             if (!user || !db) return;
+            // RULE 1: Strict Paths - Firestore document for stats
             const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'counters');
+            
+            // Listen for changes in real-time
             onSnapshot(statsDocRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('total-visits').innerText = data.visits || 0;
                     document.getElementById('total-downloads').innerText = data.downloads || 0;
                 }
-            }, (error) => { });
+            }, (error) => {
+                console.error("Stats Listen Error:", error);
+            });
 
+            // Increment visits only once per session
             try {
                 const docSnap = await getDoc(statsDocRef);
                 if (!docSnap.exists()) {
@@ -383,40 +391,48 @@
                 } else {
                     await updateDoc(statsDocRef, { visits: increment(1) });
                 }
-            } catch (err) { }
+            } catch (err) {
+                console.error("Stats Update Error:", err);
+            }
         }
 
         async function initAuthAndTracking() {
             if (!auth) return;
             try {
+                // RULE 3: Auth Before Queries
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (err) { }
-            onAuthStateChanged(auth, (user) => { if (user) startStatsTracking(user); });
+            } catch (err) {
+                console.error("Auth Error:", err);
+            }
+            onAuthStateChanged(auth, (user) => { 
+                if (user) startStatsTracking(user); 
+            });
         }
 
+        // Global function to increment download count
         window.incrementDownloadCount = async () => {
             if (!auth?.currentUser || !db) return;
             const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'counters');
-            try { await updateDoc(statsDocRef, { downloads: increment(1) }); } catch (e) { }
+            try { 
+                await updateDoc(statsDocRef, { downloads: increment(1) }); 
+            } catch (e) {
+                console.error("Download increment error:", e);
+            }
         };
 
-        window.onload = initAuthAndTracking;
+        window.addEventListener('load', initAuthAndTracking);
     </script>
 
     <script>
-        const apiKey = "";
+        const apiKey = ""; // Gemini API Key will be managed by environment
         
         async function askGemini(query) {
             const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના સ્માર્ટ આસિસ્ટન્ટ છો. તમારી સેવાઓમાં SIP, લમ્પ-સમ ઇન્વેસ્ટમેન્ટ, હેલ્થ ઇન્સ્યુરન્સ અને મેડિક્લેમનો સમાવેશ થાય છે. તમે ગુજરાતીમાં ટૂંકા અને સચોટ જવાબ આપો. જો કોઈ ગ્રાહક રોકાણ માટે પૂછે, તો તેમને સંપર્ક નંબર +91 97372 08108 આપો.";
             
-            if (!apiKey) {
-                return "ક્ષમા કરશો, AI કન્ફિગરેશન અધૂરું છે. કૃપા કરીને ફોન પર સંપર્ક કરો.";
-            }
-
             const payload = {
                 contents: [{ parts: [{ text: query }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] }
@@ -494,7 +510,7 @@
             "BHAGWAN SINGH", "RADHIKABEN JITENDRABHAI BORDA", "JITENDRA VALLABHBHAI BORDA", "BORAD ASHVINBHAI PARSHOTAMBHAI", "PANSURIYA CHANDRESHKUMAR V",
             "TUSHAR MANSUKHBHAI DESAI", "ANJALIBEN JAGRESH GAJERA", "PADSALA KRISH JITUBHAI", "REKHABEN BHARATBHAI VAGHASIYA", "PATEL BHARATKUMAR POPATLAL",
             "RAM JIGAR PARBATBHAI", "NAVINBHAI BHURABHAI CHAUDHARI", "KOLI ARUN MOTILAL", "JIGNESH GOVINDBHAI THOREE", "PAGHADAL KRISHNA MANISHBHAI",
-            "ASHVIN JIVRAJBHAI SAVANI", "DHARMESH PRAVINCHANDRA UPADHYAY", "AKSHAR JAYSHUKHBHAI BALDHA", "CHHAUHAN RUDRA ASHVINBHAI", "CHAUHAN ANERI BHAVESHBHAI",
+            "ASHVIN JIVRAJBHAI SAVANI", "DHARMESH PRAVINCHANDRA UPADHYAY", "AKSHAR JAYSHUKHBHAI BALDHA", "CHHAUHAN RUDRA ASHVINBHAI", "CHHAUHAN ANERI BHAVESHBHAI",
             "BHARATKUMAR JAYANTILAL MALAVIYA", "JIGNESHBHAI RASIKBHAI GAJERA", "DHAKECHA PRAVINBHAI BABUBHAI", "BHALU JAY GOKULBHAI", "RAMANI ASMITA K",
             "RAMANI SEJALBEN NIKUNJBHAI", "BOGHRA VANDANA HITESHBHAI", "LIMBASIYA MANASIBEN SURESHBHAI", "DINESH RAMDAS PATIL", "PATEL MILANKUMAR THAKORBHAI",
             "DAYANI YAGNIK MAGANBHAI", "MULANI ASHISHKUMAR N", "KARAD CHIRAGBHAI ARVINDBHAI", "SAVALIYA KAILASHBEN VIPULBHAI", "TRAPASIYA ANIKET CHANDUBHAI",
@@ -563,7 +579,7 @@
             "HASMUKHBHAI BHIKHABHAI BHIMANI", "RINKALBEN SANDIPKUMAR ANGHAN", "JAYDEEPKUMAR RAMESHBHAI SANGANI", "NIKUNJKUMAR MANUBHAI RADADIYA", "NILESH BABUBHAI PADSALA",
             "NIMUBEN ASHOKBHAI PAGHADAL", "SHILPABEN SHAILESHBHAI SARDHARA", "MANISHABEN CHETANBHAI VEKARIYA", "SANJAY NANUBHAI DUDHAT", "RAMESH MANJIBHAI SAVANI",
             "RAMESHBHAI SHAMJIBHAI GOYANI", "TIRTH BHIKHABHAI PATEL", "VIJAYBHAI SIDHDHAPURA", "VISHVA BHIKHALAL PATEL", "ASH आशीष VAJUBHAI CHOVATIYA",
-            "AXAY RAGHAVBHAI KASODARIYA", "USHABEN VALLABHBHAI FALKIYA", "MALAY MANSUKHBHAI DESAI", "SAGARBHAI VALJIBHAI KOTADIYA", "SURESHBHAI JIVRAJBHAI BHALANI",
+            "AXAY RAGHAVBHAI KASODARIYA", "USHABEN VALLABHBHAI FALKIYA", "MALAY MANSUKHBHAI DESAI", "SAGARBHAI VALJIBHAI KOTADIYA", "SURESHBHAI Jivrajbhai Bhalani",
             "SHYAMBHAI VITHALBHAI BHALU", "NILESH SANJAYBHAI PATIL", "GRUHIT GHANSHYAMBHAI BHALANI", "SANDIP GORDHANBHAI ANGHAN", "GOPIBEN MITULBHAI MANGUKIYA",
             "NITINKUMAR JERAMBHAI VAVLIYA", "PRAVINABEN BHARATBHAI POKAL", "GANESHBHAI PUNJABHAI GAJERA", "DHARABEN KALPESHBHAI GOTHI", "SAGAR MUKESHBHAI MALAVIYA",
             "CHANDUBHAI VITTHALBHAI BHIMANI", "REKHABEN ASHWINBHAI CHAUHAN", "MUKESHBHAI VITHALBHAI BHIMANI", "JITENDRABHAI VITTHALBHAI BHIMANI", "SAGARKUMAR DHANJIBHAI SAVALIYA",
@@ -1562,7 +1578,9 @@
         async function handleDownload(displayName, requiredPassword, pdfFilename) {
             const pass = prompt(displayName + " ની પોલિસી ડાઉનલોડ કરવા માટે પાસવર્ડ દાખલ કરો:");
             if (pass === requiredPassword) {
+                // Increment download count in Firestore
                 if (window.incrementDownloadCount) await window.incrementDownloadCount();
+                
                 const githubUser = "Nareshsojitra";
                 const repo = "VEER";
                 const folder = "POLICY";
