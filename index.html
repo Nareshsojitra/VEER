@@ -328,7 +328,7 @@
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = JSON.parse(__firebase_config);
@@ -337,17 +337,23 @@
         const db = getFirestore(app);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-        async function initTracking() {
-            await signInAnonymously(auth);
-            const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats');
+        // Helper to manage stats logic once authenticated
+        async function startStatsTracking(user) {
+            if (!user) return;
 
+            const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'counters');
+
+            // Success and Error callbacks for real-time listener
             onSnapshot(statsDocRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     document.getElementById('total-visits').innerText = data.visits || 0;
                     document.getElementById('total-downloads').innerText = data.downloads || 0;
                 }
-            }, (error) => console.error("Stats listener error:", error));
+            }, (error) => {
+                // Silently handle or log minimal info to prevent UI disruption
+                console.error("Stats listener error:", error);
+            });
 
             try {
                 const docSnap = await getDoc(statsDocRef);
@@ -356,15 +362,42 @@
                 } else {
                     await updateDoc(statsDocRef, { visits: increment(1) });
                 }
-            } catch (err) { console.error("Tracking error:", err); }
+            } catch (err) {
+                console.error("Tracking error:", err);
+            }
+        }
+
+        async function initAuthAndTracking() {
+            // Rule 3: Auth BEFORE Queries
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth initialization failed:", err);
+            }
+
+            // Track auth state changes to trigger firestore logic
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    startStatsTracking(user);
+                }
+            });
         }
 
         window.incrementDownloadCount = async () => {
-            const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats');
-            await updateDoc(statsDocRef, { downloads: increment(1) });
+            if (!auth.currentUser) return;
+            const statsDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'stats', 'counters');
+            try {
+                await updateDoc(statsDocRef, { downloads: increment(1) });
+            } catch (e) {
+                console.error("Download increment failed:", e);
+            }
         };
 
-        window.onload = initTracking;
+        window.onload = initAuthAndTracking;
     </script>
 
     <script>
@@ -1528,15 +1561,28 @@
             }
         }
 
+        // IMPROVED SEARCH FUNCTIONALITY
         function setupSearch(inputId, listId, originalData, colorClass) {
             const input = document.getElementById(inputId);
             if(!input) return;
             input.addEventListener('input', (e) => {
                 const term = e.target.value.toLowerCase().trim();
+                
+                // If search is empty, show all
+                if (!term) {
+                    renderClients(listId, originalData, colorClass);
+                    return;
+                }
+
+                // Split search term into individual keywords (words)
+                const keywords = term.split(/\s+/).filter(k => k.length > 0);
+
                 const filtered = originalData.filter(c => {
                     const name = (typeof c === 'object' ? c.name : c).toLowerCase();
-                    return name.includes(term);
+                    // Every search keyword must be present in the name (anywhere, any order)
+                    return keywords.every(kw => name.includes(kw));
                 });
+                
                 renderClients(listId, filtered, colorClass);
             });
         }
