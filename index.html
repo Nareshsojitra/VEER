@@ -12,24 +12,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            /* Global Professional Background applied to Body - Adjusted opacity to make image visible/darker */
+            background-image: linear-gradient(rgba(245, 250, 255, 0.60), rgba(245, 250, 255, 0.50)), url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #1e293b; /* Text color changed to Dark Slate for Light Theme */
+        }
         .hover-scale:hover { transform: scale(1.05); transition: transform 0.3s; }
         html { scroll-behavior: smooth; }
         
         .font-royal { font-family: 'Cinzel', serif; }
         .font-elegant { font-family: 'Playfair Display', serif; }
 
-        /* Hero Background */
-        .hero-bg {
-            background-image: linear-gradient(rgba(10, 25, 47, 0.85), rgba(10, 25, 47, 0.7)), url('https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        /* Scrollbar Styling */
+        /* Scrollbar Styling for Light Theme */
         .customer-list::-webkit-scrollbar { width: 6px; }
-        .customer-list::-webkit-scrollbar-track { background: #f1f1f1; }
+        .customer-list::-webkit-scrollbar-track { background: #f1f5f9; }
         .customer-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .customer-list::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
@@ -64,7 +64,7 @@
             100% { transform: translate(var(--tw-x), var(--tw-y)) rotate(var(--tw-rotate)) scale(1.2); opacity: 0; }
         }
 
-        /* AI Chatbot Styles */
+        /* AI Chatbot Styles - Light Theme */
         #ai-chat-window {
             display: none;
             flex-direction: column;
@@ -74,35 +74,43 @@
             width: 350px;
             max-width: 90vw;
             height: 500px;
-            background: white;
+            background: #ffffff; /* White bg */
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             z-index: 1000;
             overflow: hidden;
             border: 2px solid #ef4444;
         }
-        .ai-msg { background: #f1f5f9; padding: 10px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; align-self: flex-start; font-size: 14px; }
+        .ai-msg { background: #f1f5f9; color: #1e293b; padding: 10px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; align-self: flex-start; font-size: 14px; }
         .user-msg { background: #ef4444; color: white; padding: 10px; border-radius: 10px; margin-bottom: 8px; max-width: 85%; align-self: flex-end; font-size: 14px; }
         .typing { font-style: italic; color: #64748b; font-size: 12px; }
         
         /* Floating AI Button Style */
         .ai-btn-text { font-family: sans-serif; font-weight: 900; letter-spacing: -1px; }
+
+        /* Glassmorphism Utilities - Light Version */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="text-slate-800">
 
-    <!-- Header / Navigation Bar -->
-    <nav class="bg-slate-900 text-white shadow-xl fixed w-full z-50 top-0 border-b-4 border-red-600">
+    <!-- Header / Navigation Bar - Light Theme -->
+    <nav class="bg-white/90 backdrop-blur-md text-slate-800 shadow-lg fixed w-full z-50 top-0 border-b-4 border-red-600">
         <div class="w-full px-2 md:px-6 flex justify-between items-center py-2 relative">
             
             <!-- Logo Area -->
             <a href="#home" class="group perspective-1000 cursor-pointer z-10">
                 <div class="flip-inner">
-                    <div class="relative h-11 w-11 md:h-14 md:w-14 bg-white border-2 border-red-600 rounded-full flex items-center justify-center shadow-2xl text-red-600 text-xl md:text-2xl shrink-0">
+                    <div class="relative h-11 w-11 md:h-14 md:w-14 bg-white border-2 border-red-600 rounded-full flex items-center justify-center shadow-md text-red-600 text-xl md:text-2xl shrink-0">
                         <i class="fas fa-heartbeat"></i>
                     </div>
                     <div class="flex flex-col justify-center">
-                        <h1 class="text-lg md:text-3xl font-bold tracking-wide text-red-600 leading-tight drop-shadow-md">
+                        <h1 class="text-lg md:text-3xl font-bold tracking-wide text-red-600 leading-tight drop-shadow-sm">
                             રામાણી <span class="text-red-500">ઇન્સ્યુરન્સ</span>
                         </h1>
                         <span class="text-[9px] md:text-sm text-red-500 font-bold tracking-widest mt-0.5 whitespace-nowrap uppercase">અને મ્યુચ્યુઅલ ફંડ સર્વિસ</span>
@@ -112,7 +120,7 @@
 
             <!-- Central God Photo Section -->
             <div class="flex flex-1 flex-col items-center justify-center px-2 relative" id="photo-container">
-                <div class="photo-lift h-20 w-16 md:h-28 md:w-22 bg-white p-0.5 rounded-xl border-2 border-amber-500 shadow-lg overflow-hidden flex items-center justify-center mt-1 cursor-pointer z-20" 
+                <div class="photo-lift h-20 w-16 md:h-28 md:w-22 bg-white p-0.5 rounded-xl border-2 border-amber-500 shadow-md overflow-hidden flex items-center justify-center mt-1 cursor-pointer z-20" 
                      id="god-photo" onmouseenter="startFlowerShow()" onmousemove="spawnFlower(event)">
                     <img src="harikrushnamaharaj.jpg" alt="Swaminarayan" onerror="this.src='https://placehold.co/200x300/white/orange?text=Maharaj';" class="w-full h-full object-cover">
                 </div>
@@ -122,11 +130,11 @@
             </div>
 
             <!-- Desktop Menu -->
-            <ul class="hidden lg:flex space-x-5 font-medium items-center text-sm uppercase tracking-wider z-10">
-                <li><a href="#home" class="hover:text-red-400 transition">Home</a></li>
-                <li><a href="#services" class="hover:text-red-400 transition">Services</a></li>
-                <li><a href="#clients" class="hover:text-red-400 transition">Clients</a></li>
-                <li><a href="#about" class="hover:text-red-400 transition">About</a></li>
+            <ul class="hidden lg:flex space-x-5 font-medium items-center text-sm uppercase tracking-wider z-10 text-slate-700">
+                <li><a href="#home" class="hover:text-red-600 transition">Home</a></li>
+                <li><a href="#services" class="hover:text-red-600 transition">Services</a></li>
+                <li><a href="#clients" class="hover:text-red-600 transition">Clients</a></li>
+                <li><a href="#about" class="hover:text-red-600 transition">About</a></li>
                 <li><a href="#contact" class="bg-red-600 text-white px-4 py-1.5 rounded hover:bg-red-500 transition font-bold shadow-lg">Contact</a></li>
             </ul>
 
@@ -137,11 +145,11 @@
     </nav>
 
     <!-- Hero Section -->
-    <header id="home" class="hero-bg text-white h-screen flex items-center justify-center text-center px-4 pt-32 md:pt-20">
+    <header id="home" class="h-screen flex items-center justify-center text-center px-4 pt-32 md:pt-20">
         <div class="max-w-5xl relative z-10">
             <div class="mb-6 animate-pulse"><i class="fas fa-chart-line text-6xl text-amber-500"></i></div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-2xl text-white">તમારી સંપત્તિમાં <span class="text-amber-500">વૃદ્ધિ</span> અને <br><span class="text-amber-500">સુરક્ષા</span></h1>
-            <p class="text-xl md:text-2xl mb-10 text-white font-bold max-w-3xl mx-auto border-l-4 border-red-500 pl-4 bg-slate-900/50 py-2 shadow-lg">"રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ" - જ્યાં તમારા નાણાં સુરક્ષિત છે.</p>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight drop-shadow-sm text-slate-900">તમારી સંપત્તિમાં <span class="text-amber-600">વૃદ્ધિ</span> અને <br><span class="text-amber-600">સુરક્ષા</span></h1>
+            <p class="text-xl md:text-2xl mb-10 text-slate-700 font-bold max-w-3xl mx-auto border-l-4 border-red-500 pl-4 bg-white/60 py-2 shadow-lg backdrop-blur-sm rounded-r">"રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ" - જ્યાં તમારા નાણાં સુરક્ષિત છે.</p>
             <div class="flex flex-col md:flex-row gap-6 justify-center">
                 <a href="#clients" class="bg-amber-500 text-slate-900 px-8 py-4 rounded text-lg font-bold hover:bg-amber-400 transition shadow-lg transform hover:-translate-y-1 text-center">અમારા ગ્રાહકો જુઓ</a>
                 <a href="https://wa.me/919737208108" target="_blank" class="bg-amber-500 text-slate-900 px-8 py-4 rounded text-lg font-bold hover:bg-amber-400 transition hover:-translate-y-1 transform shadow-lg flex items-center justify-center gap-2"><i class="fab fa-whatsapp text-2xl"></i> WhatsApp Chat</a>
@@ -150,19 +158,21 @@
     </header>
 
     <!-- Professional Services Section -->
-    <section id="services" class="py-24 container mx-auto px-4 bg-white">
+    <section id="services" class="py-24 container mx-auto px-4">
         <div class="text-center mb-16">
             <h2 class="text-4xl font-bold text-slate-900 mt-2">અમારી પ્રોફેશનલ <span class="text-amber-600">સેવાઓ</span></h2>
             <div class="w-20 h-1.5 bg-slate-900 mx-auto mt-4 rounded"></div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div class="bg-slate-50 p-8 rounded-lg shadow-lg hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition text-center">
-                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-blue-900 text-4xl mx-auto mb-6 shadow-md group-hover:bg-blue-900 group-hover:text-white transition"><i class="fas fa-chart-pie"></i></div>
+            <!-- Glassy Service Card 1 -->
+            <div class="glass-panel p-8 rounded-lg shadow-xl hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition text-center">
+                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-blue-900 text-4xl mx-auto mb-6 shadow-md group-hover:bg-blue-900 group-hover:text-white transition border border-slate-100"><i class="fas fa-chart-pie"></i></div>
                 <h3 class="text-xl font-bold mb-3 text-slate-800">Mutual Funds SIP & Wealth</h3>
                 <p class="text-slate-600 text-sm leading-relaxed">શેરબજારના ઉતાર-ચઢાવમાં પણ શ્રેષ્ઠ વળતર મેળવવા માટે SIP અને લમ્પ-સમ (Lumpsum) રોકાણનું સચોટ પ્લાનિંગ.નાની બચતમાંથી મોટી મૂડી બનાવો. લોંગ ટર્મ વેલ્થ ક્રિએશન માટે એક્સપર્ટ એડવાઈઝ.</p>
             </div>
-            <div class="bg-slate-50 p-8 rounded-lg shadow-lg hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition text-center">
-                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-red-600 text-4xl mx-auto mb-6 shadow-md group-hover:bg-red-600 group-hover:text-white transition"><i class="fas fa-heartbeat"></i></div>
+            <!-- Glassy Service Card 2 -->
+            <div class="glass-panel p-8 rounded-lg shadow-xl hover:shadow-2xl hover-scale border-b-4 border-amber-500 group transition text-center">
+                <div class="bg-white w-20 h-20 rounded-full flex items-center justify-center text-red-600 text-4xl mx-auto mb-6 shadow-md group-hover:bg-red-600 group-hover:text-white transition border border-slate-100"><i class="fas fa-heartbeat"></i></div>
                 <h3 class="text-xl font-bold mb-3 text-slate-800">Health Insurance</h3>
                 <p class="text-slate-600 text-sm leading-relaxed">તમારા અને તમારા પરિવારના સ્વાસ્થ્યની સુરક્ષા. શ્રેષ્ઠ મેડિક્લેમ અને ક્રિટિકલ ઇલનેસ કવર માટે નિષ્ણાત સલાહ.</p>
             </div>
@@ -170,36 +180,40 @@
     </section>
 
     <!-- CUSTOMER LIST SECTION -->
-    <section id="clients" class="py-20 bg-slate-100 px-4">
+    <section id="clients" class="py-20 px-4">
         <div class="container mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-slate-900">અમારા <span class="text-amber-600">સંતુષ્ટ ગ્રાહકો</span> (Valued Clients)</h2>
                 <div class="w-20 h-1 bg-amber-500 mx-auto mt-4 rounded"></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <!-- Mutual Funds -->
-                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
-                    <div class="bg-blue-900 p-4 flex items-center justify-between text-white">
+                <!-- Mutual Funds - Light Glass -->
+                <!-- Added Hover Effect to Entire Box -->
+                <div class="glass-panel rounded-xl shadow-2xl overflow-hidden flex flex-col transition duration-300 hover:-translate-y-2 border border-slate-200">
+                    <div class="bg-blue-900 p-4 flex items-center justify-between text-white border-b border-blue-800">
                         <h3 class="font-bold text-xl"><i class="fas fa-chart-pie mr-2 text-amber-400"></i> Mutual Fund</h3>
-                        <span class="bg-blue-800 text-sm px-3 py-1 rounded-full border border-blue-400 font-bold shadow-sm">Total: <span id="mf-count-display">0</span></span>
+                        <!-- Total Hover Effect -->
+                        <span class="inline-block bg-blue-950 text-sm px-3 py-1 rounded-full border border-blue-400 font-bold shadow-sm transition duration-300 hover:-translate-y-1 cursor-default">Total: <span id="mf-count-display">0</span></span>
                     </div>
                     <div class="p-6">
                         <div class="mb-4 relative">
-                            <input type="text" id="mf-search" placeholder="નામ શોધો..." class="w-full p-2 pl-10 border border-slate-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm transition">
+                            <input type="text" id="mf-search" placeholder="નામ શોધો..." class="w-full p-2 pl-10 bg-white border border-slate-300 text-slate-800 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm transition placeholder-slate-500">
                             <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
                         </div>
                         <ul id="mf-list" class="customer-list space-y-3 h-[400px] overflow-y-auto pr-2"></ul>
                     </div>
                 </div>
-                <!-- Health Insurance -->
-                <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden flex flex-col">
-                    <div class="bg-red-700 p-4 flex items-center justify-between text-white">
+                <!-- Health Insurance - Light Glass -->
+                <!-- Added Hover Effect to Entire Box -->
+                <div class="glass-panel rounded-xl shadow-2xl overflow-hidden flex flex-col transition duration-300 hover:-translate-y-2 border border-slate-200">
+                    <div class="bg-red-800 p-4 flex items-center justify-between text-white border-b border-red-700">
                         <h3 class="font-bold text-xl"><i class="fas fa-heartbeat mr-2 text-white"></i> Health Insurance</h3>
-                        <span class="bg-red-800 text-sm px-3 py-1 rounded-full border border-blue-400 font-bold shadow-sm">Total: <span id="health-count-display">0</span></span>
+                        <!-- Total Hover Effect -->
+                        <span class="inline-block bg-red-950 text-sm px-3 py-1 rounded-full border border-red-400 font-bold shadow-sm transition duration-300 hover:-translate-y-1 cursor-default">Total: <span id="health-count-display">0</span></span>
                     </div>
                     <div class="p-6">
                         <div class="mb-4 relative">
-                            <input type="text" id="health-search" placeholder="નામ શોધો..." class="w-full p-2 pl-10 border border-slate-300 rounded focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 text-sm transition">
+                            <input type="text" id="health-search" placeholder="નામ શોધો..." class="w-full p-2 pl-10 bg-white border border-slate-300 text-slate-800 rounded focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 text-sm transition placeholder-slate-500">
                             <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
                         </div>
                         <ul id="health-list" class="customer-list space-y-3 h-[400px] overflow-y-auto pr-2"></ul>
@@ -210,10 +224,10 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="bg-white py-20 px-4">
+    <section id="about" class="py-20 px-4">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold text-slate-900 mb-8">About <span class="text-blue-900">Ramani Services</span></h2>
-            <div class="max-w-4xl mx-auto bg-slate-50 p-10 rounded-xl shadow-lg border-t-4 border-blue-900">
+            <div class="max-w-4xl mx-auto glass-panel p-10 rounded-xl shadow-lg border-t-4 border-blue-900">
                 <p class="text-lg text-slate-700 leading-relaxed font-medium">
                     <i class="fas fa-quote-left text-amber-500 text-3xl mr-3 align-top"></i>
                     અમે <span class="text-blue-900 font-bold">રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ</span> ખાતે તમને યોગ્ય ફાઈનાન્સિયલ પ્લાનિંગ દ્વારા આર્થિક આઝાદી અપાવવા માટે કટિબદ્ધ છીએ. અમારો મુખ્ય હેતુ ગ્રાહકોને પારદર્શક, ડેટા આધારિત અને સાચી સલાહ આપવાનો છે. ભલે તે મ્યુચ્યુઅલ ફંડ હોય, શેરબજાર હોય કે ઈન્સ્યોરન્સ, અમે તમારા દરેક આર્થિક નિર્ણયમાં તમારા સારથી બનીશું.
@@ -224,92 +238,78 @@
     </section>
 
     <!-- Team Section -->
-    <section id="team" class="py-20 bg-slate-50 px-4 border-t border-slate-200">
+    <section id="team" class="py-20 px-4 border-t border-slate-200">
         <div class="container mx-auto text-center">
             <h2 class="text-3xl font-bold text-slate-900 mb-12">અમારી <span class="text-red-600">ટીમ</span> (Our Team)</h2>
             <div class="flex flex-wrap justify-center gap-12">
                 <div class="flex flex-col items-center group">
-                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white rounded-full border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition">
+                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-amber-500 shadow-xl overflow-hidden group-hover:scale-105 transition">
                         <img src="ashvinbhai.jpg" onerror="this.src='https://placehold.co/200x200?text=Photo';" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="text-xl font-bold">અશ્વિનભાઈ રામાણી</h3>
-                    <p class="text-slate-500 font-medium">Founder & Advisor</p>
+                    <!-- Name and title color changed to match "Ramani Services" in About section (text-blue-900) -->
+                    <h3 class="text-xl font-bold text-blue-900">અશ્વિનભાઈ રામાણી</h3>
+                    <p class="text-blue-900 font-medium">Founder & Advisor</p>
                 </div>
                 <div class="flex flex-col items-center group">
-                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white rounded-full border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition">
+                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-amber-500 shadow-xl overflow-hidden group-hover:scale-105 transition">
                         <img src="naresh.jpg" onerror="this.src='https://placehold.co/200x200?text=Photo';" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="text-xl font-bold">નરેશકુમાર સોજીત્રા</h3>
-                    <p class="text-slate-500 font-medium">Founder & Advisor</p>
+                    <!-- Name and title color changed to match "Ramani Services" in About section (text-blue-900) -->
+                    <h3 class="text-xl font-bold text-blue-900">નરેશકુમાર સોજીત્રા</h3>
+                    <p class="text-blue-900 font-medium">Founder & Advisor</p>
                 </div>
                 <div class="flex flex-col items-center group">
-                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white rounded-full border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition">
+                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-amber-500 shadow-xl overflow-hidden group-hover:scale-105 transition">
                         <img src="punitbhai.jpg" onerror="this.src='https://placehold.co/200x200?text=Photo';" class="w-full h-full object-cover">
                     </div>
-                    <h3 class="text-xl font-bold">પુનિતભાઈ ભાલાળા</h3>
-                    <p class="text-slate-500 font-medium">Founder & Advisor</p>
+                    <!-- Name and title color changed to match "Ramani Services" in About section (text-blue-900) -->
+                    <h3 class="text-xl font-bold text-blue-900">પુનિતભાઈ ભાલાળા</h3>
+                    <p class="text-blue-900 font-medium">Founder & Advisor</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-slate-900 text-white px-4 border-t-4 border-amber-500">
+    <section id="contact" class="py-24 px-4 border-t-4 border-amber-500 backdrop-blur-sm bg-slate-50/80">
         <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-12">અમારો સંપર્ક કરો</h2>
+            <h2 class="text-4xl font-bold mb-12 text-slate-900">અમારો સંપર્ક કરો</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
-                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
-                        <i class="fas fa-phone text-2xl text-amber-500 group-hover:text-slate-900"></i>
+                <div class="glass-panel p-8 rounded-xl hover:bg-white transition group hover:-translate-y-2 duration-300 shadow-xl border border-slate-200">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-phone text-2xl text-white group-hover:text-slate-900"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-4 text-amber-400 group-hover:text-white">Call Us</h3>
-                    <div class="space-y-2 text-slate-300 group-hover:text-white transition text-sm">
-                        <a href="tel:+919737208108" class="block hover:text-amber-500 font-medium">+91 97372 08108</a>
-                        <a href="tel:+919979343593" class="block hover:text-amber-500 font-medium">+91 99793 43593</a>
-                        <a href="tel:+919924545351" class="block hover:text-amber-500 font-medium">+91 99245 45351</a>
-                    </div>
-                </div>
-                <div class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
-                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
-                        <i class="fas fa-envelope text-2xl text-amber-500 group-hover:text-slate-900"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-4 text-amber-400 group-hover:text-white">Email Us</h3>
-                    <div class="space-y-2 text-slate-300 group-hover:text-white transition break-all text-sm">
-                        <a href="mailto:nareshsojitra003@gmail.com" class="block hover:text-amber-400">nareshsojitra003@gmail.com</a>
-                        <a href="mailto:ramanikapil284@yahoo.com" class="block hover:text-amber-400">ramanikapil284@yahoo.com</a>
-                        <a href="mailto:punitmb206@gmail.com" class="block hover:text-amber-400">punitmb206@gmail.com</a>
+                    <h3 class="font-bold text-xl mb-4 text-amber-600 group-hover:text-slate-900">Call Us</h3>
+                    <div class="space-y-2 text-slate-600 group-hover:text-slate-900 transition text-sm">
+                        <a href="tel:+919737208108" class="block hover:text-amber-600 font-medium">+91 97372 08108</a>
+                        <a href="tel:+919979343593" class="block hover:text-amber-600 font-medium">+91 99793 43593</a>
+                        <a href="tel:+919924545351" class="block hover:text-amber-600 font-medium">+91 99245 45351</a>
                     </div>
                 </div>
-                <a href="https://maps.app.goo.gl/32zu4Fcf4eZrU3Fj7" target="_blank" class="bg-slate-800 p-8 rounded-xl border border-slate-700 hover:border-amber-500 transition hover:-translate-y-2 duration-300 shadow-xl group block">
-                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
-                        <i class="fas fa-map-marker-alt text-2xl text-amber-500 group-hover:text-slate-900"></i>
+                <div class="glass-panel p-8 rounded-xl hover:bg-white transition group hover:-translate-y-2 duration-300 shadow-xl border border-slate-200">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-envelope text-2xl text-white group-hover:text-slate-900"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-4 text-amber-400 group-hover:text-white">Visit Office</h3>
-                    <p class="text-slate-300 text-sm leading-relaxed group-hover:text-white transition">૪૦૭, સ્કાયલાર્ક શોપીંગ, બંબાગેટ ની પાછળ,<br> વરાછા રોડ, સુરત.</p>
+                    <h3 class="font-bold text-xl mb-4 text-amber-600 group-hover:text-slate-900">Email Us</h3>
+                    <div class="space-y-2 text-slate-600 group-hover:text-slate-900 transition break-all text-sm">
+                        <a href="mailto:nareshsojitra003@gmail.com" class="block hover:text-amber-600">nareshsojitra003@gmail.com</a>
+                        <a href="mailto:ramanikapil284@yahoo.com" class="block hover:text-amber-600">ramanikapil284@yahoo.com</a>
+                        <a href="mailto:punitmb206@gmail.com" class="block hover:text-amber-600">punitmb206@gmail.com</a>
+                    </div>
+                </div>
+                <a href="https://maps.app.goo.gl/32zu4Fcf4eZrU3Fj7" target="_blank" class="glass-panel p-8 rounded-xl hover:bg-white transition hover:-translate-y-2 duration-300 shadow-xl group block border border-slate-200">
+                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-map-marker-alt text-2xl text-white group-hover:text-slate-900"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-4 text-amber-600 group-hover:text-slate-900">Visit Office</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed group-hover:text-slate-900 transition">૪૦૭, સ્કાયલાર્ક શોપીંગ, બંબાગેટ ની પાછળ,<br> વરાછા રોડ, સુરત.</p>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Ultra-Small Stats Display (Integrated into Footer) -->
-    <div class="bg-slate-950 py-2 border-t border-slate-800">
-        <div class="container mx-auto flex justify-center gap-6 text-[10px] md:text-xs text-slate-400">
-            <div class="flex items-center gap-1.5">
-                <i class="fas fa-users text-amber-500"></i>
-                <span>મુલાકાતીઓ:</span>
-                <span class="text-white font-bold" id="total-visits">0</span>
-            </div>
-            <div class="w-px h-3 bg-slate-800 self-center"></div>
-            <div class="flex items-center gap-1.5">
-                <i class="fas fa-file-download text-red-500"></i>
-                <span>ડાઉનલોડ:</span>
-                <span class="text-white font-bold" id="total-downloads">0</span>
-            </div>
-        </div>
-    </div>
-
     <!-- Footer Copyright -->
-    <footer class="bg-slate-950 pb-8 pt-4 text-center">
+    <footer class="bg-slate-950 pb-8 pt-4 text-center border-t border-slate-800">
         <p class="text-slate-400 text-xs md:text-sm font-medium">
             © 2026 રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ. All Rights Reserved.
         </p>
@@ -335,8 +335,8 @@
         <div id="ai-messages" class="flex-1 overflow-y-auto p-4 flex flex-col">
             <div class="ai-msg">નમસ્તે! હું રામાણી સર્વિસનો AI સહાયક છું. હું તમને ઇન્સ્યુરન્સ કે મ્યુચ્યુઅલ ફંડ વિશે કેવી રીતે મદદ કરી શકું?</div>
         </div>
-        <div class="p-3 border-t flex gap-2">
-            <input type="text" id="ai-input" placeholder="તમારો પ્રશ્ન પૂછો..." class="flex-1 p-2 border rounded focus:outline-none text-sm">
+        <div class="p-3 border-t border-slate-200 flex gap-2">
+            <input type="text" id="ai-input" placeholder="તમારો પ્રશ્ન પૂછો..." class="flex-1 p-2 bg-white border border-slate-300 text-slate-900 rounded focus:outline-none text-sm placeholder-slate-500">
             <button onclick="sendAIMessage()" class="bg-red-600 text-white px-4 py-2 rounded text-sm"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
@@ -376,8 +376,11 @@
             onSnapshot(statsDocRef, (docSnap) => {
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    document.getElementById('total-visits').innerText = data.visits || 0;
-                    document.getElementById('total-downloads').innerText = data.downloads || 0;
+                    // Display elements removed based on user request
+                    const visitEl = document.getElementById('total-visits');
+                    const dlEl = document.getElementById('total-downloads');
+                    if (visitEl) visitEl.innerText = data.visits || 0;
+                    if (dlEl) dlEl.innerText = data.downloads || 0;
                 }
             }, (error) => {
                 console.error("Stats Listen Error:", error);
@@ -1584,7 +1587,8 @@
                 let password = typeof client === 'object' ? client.password : "1111";
                 let pdfFile = typeof client === 'object' ? client.pdf : "";
                 const li = document.createElement("li");
-                li.className = `flex items-center justify-between text-slate-700 p-2 bg-slate-50 rounded border-l-4 ${colorClass} hover:bg-slate-100 transition shadow-sm`;
+                // Updated class for Light Theme & Hover Effect (Slate-200 -> Slate-700, bg-slate-700/50 -> bg-white/60)
+                li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition duration-300 hover:-translate-y-1 shadow-sm backdrop-blur-sm`;
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
                 let content = `<div class="flex items-center flex-1"><i class="fas ${icon} mr-3"></i><span class="font-medium text-xs md:text-sm">${displayName}</span></div>`;
                 if (clientId === "health-list") {
