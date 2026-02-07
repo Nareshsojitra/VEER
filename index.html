@@ -2,7 +2,8 @@
 <html lang="gu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Viewport changed to fixed width (1280px) to enforce Desktop View on Mobile -->
+    <meta name="viewport" content="width=1280">
     <title>Ramani Insurance & Mutual Fund Services - Financial Growth</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,7 +121,8 @@
 
             <!-- Central God Photo Section -->
             <div class="flex flex-1 flex-col items-center justify-center px-2 relative" id="photo-container">
-                <div class="photo-lift h-20 w-16 md:h-28 md:w-22 bg-white p-0.5 rounded-xl border-2 border-amber-500 shadow-md overflow-hidden flex items-center justify-center mt-1 cursor-pointer z-20" 
+                <!-- CHANGED BORDER COLOR FROM AMBER-500 TO WHITE -->
+                <div class="photo-lift h-20 w-16 md:h-28 md:w-22 bg-white p-0.5 rounded-xl border-2 border-white shadow-md overflow-hidden flex items-center justify-center mt-1 cursor-pointer z-20" 
                      id="god-photo" onmouseenter="startFlowerShow()" onmousemove="spawnFlower(event)">
                     <img src="harikrushnamaharaj.jpg" alt="Swaminarayan" onerror="this.src='https://placehold.co/200x300/white/orange?text=Maharaj';" class="w-full h-full object-cover">
                 </div>
@@ -243,7 +245,8 @@
             <h2 class="text-3xl font-bold text-slate-900 mb-12">અમારી <span class="text-red-600">ટીમ</span> (Our Team)</h2>
             <div class="flex flex-wrap justify-center gap-12">
                 <div class="flex flex-col items-center group">
-                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-amber-500 shadow-xl overflow-hidden group-hover:scale-105 transition">
+                    <!-- CHANGED BORDER COLOR FROM AMBER-500 TO WHITE -->
+                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition">
                         <img src="ashvinbhai.jpg" onerror="this.src='https://placehold.co/200x200?text=Photo';" class="w-full h-full object-cover">
                     </div>
                     <!-- Name and title color changed to match "Ramani Services" in About section (text-blue-900) -->
@@ -251,7 +254,8 @@
                     <p class="text-blue-900 font-medium">Founder & Advisor</p>
                 </div>
                 <div class="flex flex-col items-center group">
-                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-amber-500 shadow-xl overflow-hidden group-hover:scale-105 transition">
+                    <!-- CHANGED BORDER COLOR FROM AMBER-500 TO WHITE -->
+                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition">
                         <img src="naresh.jpg" onerror="this.src='https://placehold.co/200x200?text=Photo';" class="w-full h-full object-cover">
                     </div>
                     <!-- Name and title color changed to match "Ramani Services" in About section (text-blue-900) -->
@@ -259,7 +263,8 @@
                     <p class="text-blue-900 font-medium">Founder & Advisor</p>
                 </div>
                 <div class="flex flex-col items-center group">
-                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-amber-500 shadow-xl overflow-hidden group-hover:scale-105 transition">
+                    <!-- CHANGED BORDER COLOR FROM AMBER-500 TO WHITE -->
+                    <div class="w-36 h-36 md:w-44 md:h-44 mb-4 bg-white/50 backdrop-blur rounded-full border-4 border-white shadow-xl overflow-hidden group-hover:scale-105 transition">
                         <img src="punitbhai.jpg" onerror="this.src='https://placehold.co/200x200?text=Photo';" class="w-full h-full object-cover">
                     </div>
                     <!-- Name and title color changed to match "Ramani Services" in About section (text-blue-900) -->
@@ -270,39 +275,39 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 px-4 border-t-4 border-amber-500 backdrop-blur-sm bg-slate-50/80">
+     <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-slate-900 text-white px-4 border-t-4 border-amber-500">
         <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-bold mb-12 text-slate-900">અમારો સંપર્ક કરો</h2>
+            <h2 class="text-4xl font-bold mb-12">અમારો સંપર્ક કરો</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="glass-panel p-8 rounded-xl hover:bg-white transition group hover:-translate-y-2 duration-300 shadow-xl border border-slate-200">
-                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
-                        <i class="fas fa-phone text-2xl text-white group-hover:text-slate-900"></i>
+                <div class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-phone text-2xl text-amber-500 group-hover:text-slate-900"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-4 text-amber-600 group-hover:text-slate-900">Call Us</h3>
-                    <div class="space-y-2 text-slate-600 group-hover:text-slate-900 transition text-sm">
-                        <a href="tel:+919737208108" class="block hover:text-amber-600 font-medium">+91 97372 08108</a>
-                        <a href="tel:+919979343593" class="block hover:text-amber-600 font-medium">+91 99793 43593</a>
-                        <a href="tel:+919924545351" class="block hover:text-amber-600 font-medium">+91 99245 45351</a>
-                    </div>
-                </div>
-                <div class="glass-panel p-8 rounded-xl hover:bg-white transition group hover:-translate-y-2 duration-300 shadow-xl border border-slate-200">
-                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
-                        <i class="fas fa-envelope text-2xl text-white group-hover:text-slate-900"></i>
-                    </div>
-                    <h3 class="font-bold text-xl mb-4 text-amber-600 group-hover:text-slate-900">Email Us</h3>
-                    <div class="space-y-2 text-slate-600 group-hover:text-slate-900 transition break-all text-sm">
-                        <a href="mailto:nareshsojitra003@gmail.com" class="block hover:text-amber-600">nareshsojitra003@gmail.com</a>
-                        <a href="mailto:ramanikapil284@yahoo.com" class="block hover:text-amber-600">ramanikapil284@yahoo.com</a>
-                        <a href="mailto:punitmb206@gmail.com" class="block hover:text-amber-600">punitmb206@gmail.com</a>
+                    <h3 class="font-bold text-xl mb-4 text-amber-400 group-hover:text-white">Call Us</h3>
+                    <div class="space-y-2 text-slate-300 group-hover:text-white transition text-sm">
+                        <a href="tel:+919737208108" class="block hover:text-amber-500 font-medium">+91 97372 08108</a>
+                        <a href="tel:+919979343593" class="block hover:text-amber-500 font-medium">+91 99793 43593</a>
+                        <a href="tel:+919924545351" class="block hover:text-amber-500 font-medium">+91 99245 45351</a>
                     </div>
                 </div>
-                <a href="https://maps.app.goo.gl/32zu4Fcf4eZrU3Fj7" target="_blank" class="glass-panel p-8 rounded-xl hover:bg-white transition hover:-translate-y-2 duration-300 shadow-xl group block border border-slate-200">
-                    <div class="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
-                        <i class="fas fa-map-marker-alt text-2xl text-white group-hover:text-slate-900"></i>
+                <div class="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition group border border-slate-700 hover:border-amber-500 hover:-translate-y-2 duration-300 shadow-xl">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-envelope text-2xl text-amber-500 group-hover:text-slate-900"></i>
                     </div>
-                    <h3 class="font-bold text-xl mb-4 text-amber-600 group-hover:text-slate-900">Visit Office</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed group-hover:text-slate-900 transition">૪૦૭, સ્કાયલાર્ક શોપીંગ, બંબાગેટ ની પાછળ,<br> વરાછા રોડ, સુરત.</p>
+                    <h3 class="font-bold text-xl mb-4 text-amber-400 group-hover:text-white">Email Us</h3>
+                    <div class="space-y-2 text-slate-300 group-hover:text-white transition break-all text-sm">
+                        <a href="mailto:nareshsojitra003@gmail.com" class="block hover:text-amber-400">nareshsojitra003@gmail.com</a>
+                        <a href="mailto:ramanikapil284@yahoo.com" class="block hover:text-amber-400">ramanikapil284@yahoo.com</a>
+                        <a href="mailto:punitmb206@gmail.com" class="block hover:text-amber-400">punitmb206@gmail.com</a>
+                    </div>
+                </div>
+                <a href="https://maps.app.goo.gl/32zu4Fcf4eZrU3Fj7" target="_blank" class="bg-slate-800 p-8 rounded-xl border border-slate-700 hover:border-amber-500 transition hover:-translate-y-2 duration-300 shadow-xl group block">
+                    <div class="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-500 transition shadow-inner">
+                        <i class="fas fa-map-marker-alt text-2xl text-amber-500 group-hover:text-slate-900"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-4 text-amber-400 group-hover:text-white">Visit Office</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed group-hover:text-white transition">૪૦૭, સ્કાયલાર્ક શોપીંગ, બંબાગેટ ની પાછળ,<br> વરાછા રોડ, સુરત.</p>
                 </a>
             </div>
         </div>
