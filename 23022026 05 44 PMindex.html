@@ -265,7 +265,7 @@
             <div class="max-w-4xl mx-auto glass-panel p-10 rounded-xl shadow-lg border-t-4 border-blue-900">
                 <p class="text-lg text-slate-700 leading-relaxed font-medium">
                     <i class="fas fa-quote-left text-amber-500 text-3xl mr-3 align-top"></i>
-                    અમે <span class="text-blue-900 font-bold">રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ</span> ખાતે તમને યોગ્ય ફાઈનાન્સિયલ પ્લાનિંગ દ્વારા આર્થિક આઝાદી અપાવવા માટે કટિબદ્ધ છીએ. અમારો મુખ્ય હેતુ ગ્રાહકોને પારદર્શક, ડેટા આધારિત અને સાચી સલાહ આપવાનો છે. ભલે તે મ્યુચ્યુઅલ ફંડ હોય, શેરબજાર હોય કે ઈન્સ્યોરન્સ, અમે તમારા દરેક આર્થિક નિર્ણયમાં તમારા સારથી બનીશું.
+                    અમે <span class="text-blue-900 font-bold">રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ</span> ખાતે તમને યોગ્ય ફાઈનાન્સિયલ પ્લાનિંગ દ્વારા આર્થિક આઝાદી અપાવવા માટે કટિબદ્ધ છીએ. 
                     <i class="fas fa-quote-right text-amber-500 text-3xl ml-3 align-bottom"></i>
                 </p>
             </div>
@@ -399,12 +399,13 @@
             } catch (err) { console.error("Auth Error:", err); }
         }
 
-        // --- DATABASE LISTENERS ---
+        // --- DATABASE LISTENERS (Ensures data is never 0 if records exist) ---
         function listenToHealthClients(user) {
             if (!user) return;
             const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
             onSnapshot(healthCol, (snapshot) => {
                 dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Merge static and dynamic data
                 const combined = [...healthInsuranceClients, ...dbHealthClients];
                 renderClients("health-list", combined, "border-red-500");
                 setupSearch("health-search", "health-list", combined, "border-red-500");
@@ -416,6 +417,7 @@
             const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
             onSnapshot(mfCol, (snapshot) => {
                 dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Merge static and dynamic data
                 const combined = [...mutualFundClients, ...dbMFClients];
                 renderClients("mf-list", combined, "border-blue-500");
                 setupSearch("mf-search", "mf-list", combined, "border-blue-500");
@@ -438,13 +440,10 @@
                         await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
                         alert("વિગતો અપડેટ થઈ!");
                     } else {
-                        // For hardcoded items being saved to DB for the first time
-                        if(!pdfData && !document.getElementById('save-btn').getAttribute('data-hardcoded')) { 
-                            alert("નવા ગ્રાહક માટે PDF જરૂરી છે!"); return; 
-                        }
+                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF જરૂરી છે!"); return; }
                         clientData.createdAt = new Date().toISOString();
                         await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
-                        alert("ગ્રાહક ડેટાબેઝમાં ઉમેરાઈ ગયા!");
+                        alert("ગ્રાહક ઉમેરાઈ ગયા!");
                     }
                     resetAdminForm();
                 } catch(e) { alert("Error saving data"); }
@@ -463,27 +462,13 @@
         };
 
         window.editHealthClient = (id) => {
-            let client;
-            const isHardcoded = id.startsWith('hc-');
-            
-            if (isHardcoded) {
-                const index = parseInt(id.replace('hc-', ''));
-                client = healthInsuranceClients[index];
-                editingClientId = null; // Saving hardcoded to DB will be a new entry
-                document.getElementById('save-btn').setAttribute('data-hardcoded', 'true');
-            } else {
-                client = dbHealthClients.find(c => c.id === id);
-                editingClientId = id;
-                document.getElementById('save-btn').removeAttribute('data-hardcoded');
-            }
-            
+            const client = dbHealthClients.find(c => c.id === id);
             if (!client) return;
-            
+            editingClientId = id;
             document.getElementById('admin-name').value = client.name;
             document.getElementById('admin-pass').value = client.password;
-            document.getElementById('save-btn').innerText = editingClientId ? "ડેટા અપડેટ કરો" : "ડેટા ક્લાઉડમાં સેવ કરો";
+            document.getElementById('save-btn').innerText = "ડેટા અપડેટ કરો";
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
-            document.getElementById('admin-section').classList.remove('hidden');
             document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
         };
 
@@ -491,7 +476,6 @@
             editingClientId = null;
             document.getElementById('admin-name').value = ""; document.getElementById('admin-pass').value = ""; document.getElementById('admin-file').value = "";
             document.getElementById('save-btn').innerText = "ડેટા સેવ કરો";
-            document.getElementById('save-btn').removeAttribute('data-hardcoded');
             document.getElementById('cancel-edit-btn').classList.add('hidden');
         };
 
@@ -1712,33 +1696,31 @@
             const countId = clientId === "mf-list" ? "mf-count-display" : "health-count-display";
             document.getElementById(countId).innerText = clientData.length;
             listElement.innerHTML = "";
-            clientData.forEach((client, index) => {
+            clientData.forEach(client => {
                 let displayName = typeof client === 'object' ? client.name : client;
                 let password = typeof client === 'object' ? client.password : "1111";
                 let pdfFile = typeof client === 'object' ? (client.pdf || client.fileName) : "";
                 let pdfData = typeof client === 'object' ? client.pdfData : null;
-                let dbId = typeof client === 'object' ? client.id : null;
-                let virtualId = dbId || `hc-${index}`;
+                let id = typeof client === 'object' ? client.id : null;
 
                 const li = document.createElement("li");
-                li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition duration-300 shadow-sm backdrop-blur-sm hover:-translate-y-1 hover:shadow-md cursor-default`;
+                li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition duration-300 shadow-sm backdrop-blur-sm`;
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
                 
                 let adminButtons = '';
-                // Added option to edit both hardcoded and database health clients
-                if (window.isAdminMode && clientId === "health-list") {
+                if (window.isAdminMode && id && clientId === "health-list") {
                     adminButtons = `
                         <div class="flex gap-2 mr-2">
-                            <button onclick="editHealthClient('${virtualId}')" class="text-blue-600 hover:text-blue-800" title="એડિટ કરો"><i class="fas fa-edit"></i></button>
-                            ${dbId ? `<button onclick="deleteHealthClient('${dbId}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700" title="કાઢી નાખો"><i class="fas fa-trash"></i></button>` : ''}
+                            <button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                 }
-                if (window.isAdminModeMF && dbId && clientId === "mf-list") {
+                if (window.isAdminModeMF && id && clientId === "mf-list") {
                     adminButtons = `
                         <div class="flex gap-2 mr-2">
-                            <button onclick="editMFClient('${dbId}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteMFClient('${dbId}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            <button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                 }
