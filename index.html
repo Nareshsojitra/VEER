@@ -363,13 +363,13 @@
         </div>
     </div>
 
-    <!-- Firebase Logic -->
+    <!-- Combined Logic Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Environment Config
+        // Firebase Configuration
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "",
             authDomain: "ramani-insurance.firebaseapp.com",
@@ -384,228 +384,19 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let dbHealthClients = [];
-        let dbMFClients = [];
+        // Global State
+        window.dbHealthClients = [];
+        window.dbMFClients = [];
         let editingClientId = null;
         let editingMFClientId = null;
         let currentUser = null;
 
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (err) { console.error("Auth Error:", err); }
-        }
-
-        // --- DATABASE LISTENERS ---
-        function listenToHealthClients(user) {
-            if (!user) return;
-            const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
-            onSnapshot(healthCol, (snapshot) => {
-                dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const combined = [...healthInsuranceClients, ...dbHealthClients];
-                window.renderClients("health-list", combined, "border-red-500");
-                window.setupSearch("health-search", "health-list", combined, "border-red-500");
-            }, (err) => console.error("Health DB Error:", err));
-        }
-
-        function listenToMFClients(user) {
-            if (!user) return;
-            const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
-            onSnapshot(mfCol, (snapshot) => {
-                dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const combined = [...mutualFundClients, ...dbMFClients];
-                window.renderClients("mf-list", combined, "border-blue-500");
-                window.setupSearch("mf-search", "mf-list", combined, "border-blue-500");
-            }, (err) => console.error("MF DB Error:", err));
-        }
-
-        // --- HEALTH ADMIN (FIXED) ---
-        window.addNewHealthClient = async () => {
-            const name = document.getElementById('admin-name').value.trim();
-            const pass = document.getElementById('admin-pass').value.trim();
-            const fileInput = document.getElementById('admin-file');
-            
-            if (!currentUser) { alert("લોગિન થવા સુધી રાહ જુઓ અથવા પેજ રીફ્રેશ કરો."); return; }
-            if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
-            
-            const processSave = async (pdfData = null, fileName = null) => {
-                try {
-                    const clientData = { 
-                        name: name.toUpperCase(), 
-                        password: pass, 
-                        updatedAt: new Date().toISOString() 
-                    };
-                    
-                    if (pdfData) { 
-                        clientData.pdfData = pdfData; 
-                        clientData.fileName = fileName; 
-                    }
-                    
-                    if (editingClientId) {
-                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
-                        alert("વિગતો અપડેટ થઈ!");
-                    } else {
-                        // PDF validation for new clients
-                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF ફાઇલ પસંદ કરવી જરૂરી છે!"); return; }
-                        clientData.createdAt = new Date().toISOString();
-                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
-                        alert("નવો ગ્રાહક સફળતાપૂર્વક ઉમેરાઈ ગયો!");
-                    }
-                    window.resetAdminForm();
-                } catch(e) { 
-                    console.error(e);
-                    alert("ડેટા સેવ કરવામાં ભૂલ આવી: " + e.message); 
-                }
-            };
-
-            if (fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    // Safety check: 1MB limit for Firestore
-                    if (e.target.result.length > 1300000) { 
-                        alert("PDF ફાઇલ ખૂબ મોટી છે (1MB થી ઓછી ફાઇલ રાખવી)."); 
-                        return; 
-                    }
-                    processSave(e.target.result, fileInput.files[0].name);
-                };
-                reader.onerror = () => alert("ફાઇલ વાંચવામાં ભૂલ આવી.");
-                reader.readAsDataURL(fileInput.files[0]);
-            } else { 
-                processSave(); 
-            }
-        };
-
-        window.deleteHealthClient = async (id, name) => {
-            if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { 
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); 
-                alert("ડેટા ડિલીટ થઈ ગયો.");
-            } catch(e) { alert("ભૂલ: " + e.message); }
-        };
-
-        window.editHealthClient = (id) => {
-            let client;
-            const isHardcoded = id.startsWith('hc-');
-            
-            if (isHardcoded) {
-                const index = parseInt(id.replace('hc-', ''));
-                client = healthInsuranceClients[index];
-                editingClientId = null; 
-                document.getElementById('save-btn').innerText = "ક્લાઉડમાં સેવ કરો";
-            } else {
-                client = dbHealthClients.find(c => c.id === id);
-                editingClientId = id;
-                document.getElementById('save-btn').innerText = "અપડેટ કરો";
-            }
-            
-            if (!client) return;
-            document.getElementById('admin-name').value = client.name;
-            document.getElementById('admin-pass').value = client.password;
-            document.getElementById('cancel-edit-btn').classList.remove('hidden');
-            document.getElementById('admin-section').classList.remove('hidden');
-            document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.resetAdminForm = () => {
-            editingClientId = null;
-            document.getElementById('admin-name').value = ""; 
-            document.getElementById('admin-pass').value = ""; 
-            document.getElementById('admin-file').value = "";
-            document.getElementById('save-btn').innerText = "ડેટા સેવ કરો";
-            document.getElementById('cancel-edit-btn').classList.add('hidden');
-        };
-
-        // --- MF ADMIN ---
-        window.addNewMFClient = async () => {
-            const name = document.getElementById('admin-mf-name').value.trim();
-            if (!name) { alert("નામ લખો!"); return; }
-            try {
-                if (editingMFClientId) {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name: name.toUpperCase(), updatedAt: new Date().toISOString() });
-                    alert("MF નામ અપડેટ થયું!");
-                } else {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mfClients'), { name: name.toUpperCase(), createdAt: new Date().toISOString() });
-                    alert("MF નામ ઉમેરાયું!");
-                }
-                window.resetMFAdminForm();
-            } catch(e) { alert("Error saving MF data"); }
-        };
-
-        window.deleteMFClient = async (id, name) => {
-            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
-        };
-
-        window.editMFClient = (id) => {
-            const client = dbMFClients.find(c => c.id === id);
-            if (!client) return;
-            editingMFClientId = id;
-            document.getElementById('admin-mf-name').value = client.name;
-            document.getElementById('save-mf-btn').innerText = "MF અપડેટ કરો";
-            document.getElementById('cancel-mf-edit-btn').classList.remove('hidden');
-            document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.resetMFAdminForm = () => {
-            editingMFClientId = null;
-            document.getElementById('admin-mf-name').value = "";
-            document.getElementById('save-mf-btn').innerText = "MF ડેટા સેવ કરો";
-            document.getElementById('cancel-mf-edit-btn').classList.add('hidden');
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                listenToHealthClients(user);
-                listenToMFClients(user);
-            }
-        });
-
-        initAuth();
-    </script>
-
-    <script>
+        const MASTER_PASSWORD = "9737208108";
         const apiKey = ""; 
-        window.isAdminMode = false;
-        window.isAdminModeMF = false;
 
-        window.autoFillClientName = (input) => {
-            if (input.files && input.files[0]) {
-                document.getElementById('admin-name').value = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
-            }
-        };
-
-        window.checkAdminAccess = () => {
-            const p = prompt("હેલ્થ એડમિન પાસવર્ડ:");
-            if(p === "395010") {
-                window.isAdminMode = true;
-                document.getElementById('admin-section').classList.remove('hidden');
-                document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-                const combined = [...healthInsuranceClients, ...((window.dbHealthClients) || [])];
-                renderClients("health-list", combined, "border-red-500");
-                alert("હેલ્થ એડમિન લોગિન સફળ!");
-            } else { alert("ખોટો પાસવર્ડ!"); }
-        };
-
-        window.checkMFAdminAccess = () => {
-            const p = prompt("MF એડમિન પાસવર્ડ:");
-            if(p === "5555") {
-                window.isAdminModeMF = true;
-                document.getElementById('mf-admin-section').classList.remove('hidden');
-                document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-                const combined = [...mutualFundClients, ...((window.dbMFClients) || [])];
-                renderClients("mf-list", combined, "border-blue-500");
-                alert("MF એડમિન લોગિન સફળ!");
-            } else { alert("ખોટો પાસવર્ડ!"); }
-        };
-
-        // --- HARDCODED DATA ---
+        // Hardcoded Data
         const mutualFundClients = [
-          "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
+            "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
             "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
             "ASMITABEN ALPESHBHAI MALAVIYA", "BHAVESHBHAI BALUBHAI KOTADIYA", "SUBHASH RANA", "SANJAYKUMAR R JOGANI", "MALANI SANJAYBHAI RASIKBHAI",
             "SAVALIYA CHANDRIKABEN BAVCHANDBHAI", "ASODARIYA MAHESHKUMAR N", "RATANAPARA VIJAY JASMATBHAI", "CHAUHAN BHAVESHBHAI VINUBHAI", "RAMANI VINUBHAI RAVJIBHAI",
@@ -614,6 +405,7 @@
             "MITALBEN NAVINBHAI PATOLIYA", "NITIN DEVSHIBHAI PATOLIYA", "KHUNT SHANTABEN CHANDUBHAI", "BABARIYA JAYDEEP MANHARBHAI", "THUMMAR SAMIR K",
             "RINKALBEN TULSHIBHAI CHOVATIYA", "ASHOKBHAI NARSINHBHAI PAGHADAL", "KHUSHAL BHIKHABHAI JYANI", "SAGARBHAI BHIKHABHAI MALAVIYA"
         ];
+
         const healthInsuranceClients = [
             { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
             { name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
@@ -629,8 +421,48 @@
             { name: "Alpeshbhai Dhirubhai Savaliya 2026", pdf: "Alpeshbhai Dhirubhai Savaliya 2026.pdf", password: "9173765228" }
         ];
 
-        const MASTER_PASSWORD = "9737208108";
+        // --- AUTH & LISTENERS ---
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) { console.error("Auth Error:", err); }
+        }
 
+        function listenToHealthClients(user) {
+            if (!user) return;
+            const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
+            onSnapshot(healthCol, (snapshot) => {
+                window.dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const combined = [...healthInsuranceClients, ...window.dbHealthClients];
+                window.renderClients("health-list", combined, "border-red-500");
+                window.setupSearch("health-search", "health-list", combined, "border-red-500");
+            }, (err) => console.error("Health DB Error:", err));
+        }
+
+        function listenToMFClients(user) {
+            if (!user) return;
+            const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
+            onSnapshot(mfCol, (snapshot) => {
+                window.dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const combined = [...mutualFundClients, ...window.dbMFClients];
+                window.renderClients("mf-list", combined, "border-blue-500");
+                window.setupSearch("mf-search", "mf-list", combined, "border-blue-500");
+            }, (err) => console.error("MF DB Error:", err));
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                listenToHealthClients(user);
+                listenToMFClients(user);
+            }
+        });
+
+        // --- UI FUNCTIONS ---
         window.renderClients = (clientId, clientData, colorClass) => {
             const listElement = document.getElementById(clientId);
             if(!listElement) return;
@@ -682,7 +514,7 @@
         window.handleDownload = (displayName, requiredPassword, pdfFilename, pdfData) => {
             const pass = prompt(displayName + " નો પાસવર્ડ દાખલ કરો:");
             if (pass === requiredPassword || pass === MASTER_PASSWORD) {
-                if (pdfData && pdfData !== 'null') {
+                if (pdfData && pdfData !== 'null' && pdfData !== 'undefined') {
                     const link = document.createElement('a'); link.href = pdfData; link.download = pdfFilename || "policy.pdf"; link.click();
                 } else if (pdfFilename) {
                     const fileUrl = `https://raw.githubusercontent.com/Nareshsojitra/VEER/main/POLICY/${encodeURIComponent(pdfFilename)}`;
@@ -699,11 +531,163 @@
             input.oninput = (e) => {
                 const term = e.target.value.toLowerCase().trim();
                 const filtered = originalData.filter(c => (typeof c === 'object' ? c.name : c).toLowerCase().includes(term));
-                renderClients(listId, filtered, colorClass);
+                window.renderClients(listId, filtered, colorClass);
             };
         };
 
-        // --- AI & OTHERS ---
+        // --- ADMIN ACTIONS ---
+        window.checkAdminAccess = () => {
+            const p = prompt("હેલ્થ એડમિન પાસવર્ડ:");
+            if(p === "395010") {
+                window.isAdminMode = true;
+                document.getElementById('admin-section').classList.remove('hidden');
+                document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
+                const combined = [...healthInsuranceClients, ...window.dbHealthClients];
+                window.renderClients("health-list", combined, "border-red-500");
+                alert("હેલ્થ એડમિન લોગિન સફળ!");
+            } else { alert("ખોટો પાસવર્ડ!"); }
+        };
+
+        window.checkMFAdminAccess = () => {
+            const p = prompt("MF એડમિન પાસવર્ડ:");
+            if(p === "5555") {
+                window.isAdminModeMF = true;
+                document.getElementById('mf-admin-section').classList.remove('hidden');
+                document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
+                const combined = [...mutualFundClients, ...window.dbMFClients];
+                window.renderClients("mf-list", combined, "border-blue-500");
+                alert("MF એડમિન લોગિન સફળ!");
+            } else { alert("ખોટો પાસવર્ડ!"); }
+        };
+
+        window.autoFillClientName = (input) => {
+            if (input.files && input.files[0]) {
+                document.getElementById('admin-name').value = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
+            }
+        };
+
+        window.addNewHealthClient = async () => {
+            const name = document.getElementById('admin-name').value.trim();
+            const pass = document.getElementById('admin-pass').value.trim();
+            const fileInput = document.getElementById('admin-file');
+            
+            if (!currentUser) { alert("લોગિન થવા સુધી રાહ જુઓ..."); return; }
+            if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
+            
+            const processSave = async (pdfData = null, fileName = null) => {
+                try {
+                    const clientData = { 
+                        name: name.toUpperCase(), 
+                        password: pass, 
+                        updatedAt: new Date().toISOString() 
+                    };
+                    
+                    if (pdfData) { 
+                        clientData.pdfData = pdfData; 
+                        clientData.fileName = fileName; 
+                    }
+                    
+                    if (editingClientId) {
+                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
+                        alert("વિગતો અપડેટ થઈ!");
+                    } else {
+                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF ફાઇલ જરૂરી છે!"); return; }
+                        clientData.createdAt = new Date().toISOString();
+                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
+                        alert("નવો ગ્રાહક સફળતાપૂર્વક ઉમેરાઈ ગયો!");
+                    }
+                    window.resetAdminForm();
+                } catch(e) { 
+                    console.error("Save Error:", e);
+                    alert("ડેટા સેવ કરવામાં ભૂલ આવી. ફાઇલ સાઇઝ ચેક કરો."); 
+                }
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target.result.length > 1000000) { 
+                        alert("ફાઇલ ખૂબ મોટી છે (1MB થી ઓછી ફાઇલ રાખો)."); 
+                        return; 
+                    }
+                    processSave(e.target.result, fileInput.files[0].name);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else { 
+                processSave(); 
+            }
+        };
+
+        window.editHealthClient = (id) => {
+            let client;
+            const isHardcoded = id.startsWith('hc-');
+            if (isHardcoded) {
+                const index = parseInt(id.replace('hc-', ''));
+                client = healthInsuranceClients[index];
+                editingClientId = null; 
+            } else {
+                client = window.dbHealthClients.find(c => c.id === id);
+                editingClientId = id;
+            }
+            if (!client) return;
+            document.getElementById('admin-name').value = client.name;
+            document.getElementById('admin-pass').value = client.password;
+            document.getElementById('save-btn').innerText = editingClientId ? "અપડેટ કરો" : "ક્લાઉડમાં સેવ કરો";
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('admin-section').classList.remove('hidden');
+            document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.deleteHealthClient = async (id, name) => {
+            if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch(e) {}
+        };
+
+        window.resetAdminForm = () => {
+            editingClientId = null;
+            document.getElementById('admin-name').value = ""; document.getElementById('admin-pass').value = ""; document.getElementById('admin-file').value = "";
+            document.getElementById('save-btn').innerText = "ડેટા સેવ કરો";
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        };
+
+        window.addNewMFClient = async () => {
+            const name = document.getElementById('admin-mf-name').value.trim();
+            if (!name) { alert("નામ લખો!"); return; }
+            try {
+                if (editingMFClientId) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name: name.toUpperCase(), updatedAt: new Date().toISOString() });
+                    alert("MF નામ અપડેટ થયું!");
+                } else {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mfClients'), { name: name.toUpperCase(), createdAt: new Date().toISOString() });
+                    alert("MF નામ ઉમેરાયું!");
+                }
+                window.resetMFAdminForm();
+            } catch(e) { alert("Error saving MF data"); }
+        };
+
+        window.editMFClient = (id) => {
+            const client = window.dbMFClients.find(c => c.id === id);
+            if (!client) return;
+            editingMFClientId = id;
+            document.getElementById('admin-mf-name').value = client.name;
+            document.getElementById('save-mf-btn').innerText = "MF અપડેટ કરો";
+            document.getElementById('cancel-mf-edit-btn').classList.remove('hidden');
+            document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.deleteMFClient = async (id, name) => {
+            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
+        };
+
+        window.resetMFAdminForm = () => {
+            editingMFClientId = null;
+            document.getElementById('admin-mf-name').value = "";
+            document.getElementById('save-mf-btn').innerText = "MF ડેટા સેવ કરો";
+            document.getElementById('cancel-mf-edit-btn').classList.add('hidden');
+        };
+
+        // --- AI CHAT ---
         async function askGemini(query) {
             const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના આસિસ્ટન્ટ છો. ગુજરાતીમાં જવાબ આપો. સંપર્ક: +91 97372 08108.";
             const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
@@ -713,7 +697,7 @@
                 });
                 const result = await res.json();
                 return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો, હું અત્યારે જવાબ આપી શકતો નથી.";
-            } catch (err) { return "નેટવર્ક સમસ્યા છે. કૃપા કરીને ફરી પ્રયાસ કરો."; }
+            } catch (err) { return "નેટવર્ક સમસ્યા છે."; }
         }
 
         window.sendAIMessage = async () => {
@@ -735,6 +719,7 @@
             w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
         };
 
+        // Flower Show
         window.startFlowerShow = () => { for(let i=0; i<6; i++) setTimeout(() => createFlower(), i * 150); };
         window.spawnFlower = (e) => { if (Math.random() > 0.85) createFlower(e.clientX, e.clientY); };
         function createFlower(cx, cy) {
@@ -750,11 +735,13 @@
             container.appendChild(flower); setTimeout(() => flower.remove(), 1500);
         }
 
+        // Init
         document.addEventListener('DOMContentLoaded', () => {
-            renderClients("mf-list", mutualFundClients, "border-blue-500");
-            renderClients("health-list", healthInsuranceClients, "border-red-500");
-            setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
-            setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
+            window.renderClients("mf-list", mutualFundClients, "border-blue-500");
+            window.renderClients("health-list", healthInsuranceClients, "border-red-500");
+            window.setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
+            window.setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
+            initAuth();
         });
     </script>
 </body>
