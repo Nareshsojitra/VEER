@@ -208,10 +208,10 @@
                 </div>
             </div>
 
-            <!-- MF ADMIN SECTION: ADD/EDIT MF CLIENT (Initially Hidden) -->
+            <!-- MF ADMIN SECTION (Initially Hidden) -->
             <div id="mf-admin-section" class="max-w-4xl mx-auto mt-16 glass-panel p-8 rounded-xl shadow-lg border-2 border-blue-100 hidden">
                 <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <i class="fas fa-chart-line text-blue-600"></i> MF એડમિન પેનલ: ગ્રાહક મેનેજમેન્ટ
+                    <i class="fas fa-chart-line text-blue-600"></i> MF એડમિન પેનલ
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="flex flex-col gap-1">
@@ -224,17 +224,15 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex gap-4 mt-4">
-                    <button id="cancel-mf-edit-btn" onclick="resetMFAdminForm()" class="hidden bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-300 transition flex items-center gap-2">
-                        Cancel Edit
-                    </button>
+                <div class="mt-4 flex gap-4">
+                    <button id="cancel-mf-edit-btn" onclick="resetMFAdminForm()" class="hidden bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-300 transition">Cancel Edit</button>
                 </div>
             </div>
 
-            <!-- HEALTH ADMIN SECTION: ADD/EDIT CLIENT (Initially Hidden) -->
+            <!-- HEALTH ADMIN SECTION (Initially Hidden) -->
             <div id="admin-section" class="max-w-4xl mx-auto mt-16 glass-panel p-8 rounded-xl shadow-lg border-2 border-red-100 hidden">
                 <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <i class="fas fa-user-shield text-red-600"></i> હેલ્થ એડમિન પેનલ: ગ્રાહક મેનેજમેન્ટ
+                    <i class="fas fa-user-shield text-red-600"></i> હેલ્થ એડમિન પેનલ
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="flex flex-col gap-1">
@@ -250,19 +248,11 @@
                         <input type="file" id="admin-file" accept=".pdf" onchange="autoFillClientName(this)" class="p-2.5 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white text-sm">
                     </div>
                 </div>
-                <div class="mt-4 p-4 bg-red-50 rounded border border-red-100 flex items-center gap-3">
-                    <i class="fas fa-info-circle text-red-600 text-xl"></i>
-                    <div class="text-xs text-red-800 leading-tight" id="admin-info-text">
-                        <strong>સૂચના:</strong> ફાઇલનું કદ ૧ MB થી ઓછું હોવું જોઈએ. ગ્રાહકનું નામ ફાઇલ પરથી આપોઆપ ભરાઈ જશે.
-                    </div>
-                </div>
-                <div class="flex gap-4 mt-6">
+                <div class="mt-6 flex gap-4">
                     <button id="save-btn" onclick="addNewHealthClient()" class="flex-1 bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition shadow-md flex items-center justify-center gap-2">
                         <i class="fas fa-save"></i> ડેટા સેવ કરો
                     </button>
-                    <button id="cancel-edit-btn" onclick="resetAdminForm()" class="hidden bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-300 transition flex items-center gap-2">
-                        Cancel
-                    </button>
+                    <button id="cancel-edit-btn" onclick="resetAdminForm()" class="hidden bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-300 transition">Cancel Edit</button>
                 </div>
             </div>
         </div>
@@ -409,15 +399,17 @@
             } catch (err) { console.error("Auth Error:", err); }
         }
 
+        // --- DATABASE LISTENERS (Ensures data is never 0 if records exist) ---
         function listenToHealthClients(user) {
             if (!user) return;
             const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
             onSnapshot(healthCol, (snapshot) => {
                 dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Merge static and dynamic data
                 const combined = [...healthInsuranceClients, ...dbHealthClients];
                 renderClients("health-list", combined, "border-red-500");
                 setupSearch("health-search", "health-list", combined, "border-red-500");
-            }, (err) => console.error("Firestore Health Error:", err));
+            }, (err) => console.error("Health DB Error:", err));
         }
 
         function listenToMFClients(user) {
@@ -425,40 +417,36 @@
             const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
             onSnapshot(mfCol, (snapshot) => {
                 dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Merge static and dynamic data
                 const combined = [...mutualFundClients, ...dbMFClients];
                 renderClients("mf-list", combined, "border-blue-500");
                 setupSearch("mf-search", "mf-list", combined, "border-blue-500");
-            }, (err) => console.error("Firestore MF Error:", err));
+            }, (err) => console.error("MF DB Error:", err));
         }
 
-        // --- HEALTH ADMIN FUNCTIONS ---
+        // --- HEALTH ADMIN ---
         window.addNewHealthClient = async () => {
             const name = document.getElementById('admin-name').value.trim();
             const pass = document.getElementById('admin-pass').value.trim();
             const fileInput = document.getElementById('admin-file');
-            const saveBtn = document.getElementById('save-btn');
-
             if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
-            saveBtn.disabled = true; saveBtn.innerText = "સેવ થઈ રહ્યું છે...";
-
-            const processSave = async (base64Data = null, fileName = null) => {
+            
+            const processSave = async (pdfData = null, fileName = null) => {
                 try {
-                    const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
                     const clientData = { name, password: pass, updatedAt: new Date().toISOString() };
-                    if (base64Data) { clientData.pdfData = base64Data; clientData.fileName = fileName; }
-
+                    if (pdfData) { clientData.pdfData = pdfData; clientData.fileName = fileName; }
+                    
                     if (editingClientId) {
-                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId);
-                        await updateDoc(docRef, clientData);
-                        alert("વિગતો સફળતાપૂર્વક અપડેટ થઈ ગઈ!");
+                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
+                        alert("વિગતો અપડેટ થઈ!");
                     } else {
-                        if (!base64Data) { alert("PDF ફરજીયાત છે!"); saveBtn.disabled = false; saveBtn.innerText = "ડેટા સેવ કરો"; return; }
+                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF જરૂરી છે!"); return; }
                         clientData.createdAt = new Date().toISOString();
-                        await addDoc(healthCol, clientData);
-                        alert("નવો ગ્રાહક સફળતાપૂર્વક ઉમેરાઈ ગયો!");
+                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
+                        alert("ગ્રાહક ઉમેરાઈ ગયા!");
                     }
                     resetAdminForm();
-                } catch (err) { alert("ભૂલ આવી!"); } finally { saveBtn.disabled = false; saveBtn.innerText = editingClientId ? "ડેટા અપડેટ કરો" : "ડેટા સેવ કરો"; }
+                } catch(e) { alert("Error saving data"); }
             };
 
             if (fileInput.files[0]) {
@@ -469,8 +457,8 @@
         };
 
         window.deleteHealthClient = async (id, name) => {
-            if (!confirm(`"${name}" ને કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch (err) {}
+            if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch(e) {}
         };
 
         window.editHealthClient = (id) => {
@@ -491,30 +479,25 @@
             document.getElementById('cancel-edit-btn').classList.add('hidden');
         };
 
-        // --- MF ADMIN FUNCTIONS ---
+        // --- MF ADMIN ---
         window.addNewMFClient = async () => {
             const name = document.getElementById('admin-mf-name').value.trim();
-            const saveBtn = document.getElementById('save-mf-btn');
-            if (!name) { alert("નામ જરૂરી છે!"); return; }
-
-            saveBtn.disabled = true;
+            if (!name) { alert("નામ લખો!"); return; }
             try {
                 if (editingMFClientId) {
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId);
-                    await updateDoc(docRef, { name, updatedAt: new Date().toISOString() });
-                    alert("MF નામ અપડેટ થઈ ગયું!");
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name, updatedAt: new Date().toISOString() });
+                    alert("MF નામ અપડેટ થયું!");
                 } else {
-                    const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
-                    await addDoc(mfCol, { name, createdAt: new Date().toISOString() });
-                    alert("નવું MF નામ ઉમેરાઈ ગયું!");
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mfClients'), { name, createdAt: new Date().toISOString() });
+                    alert("MF નામ ઉમેરાયું!");
                 }
                 resetMFAdminForm();
-            } catch (err) { alert("ભૂલ આવી!"); } finally { saveBtn.disabled = false; }
+            } catch(e) { alert("Error saving MF data"); }
         };
 
         window.deleteMFClient = async (id, name) => {
-            if (!confirm(`શું તમે "${name}" ને MF લિસ્ટમાંથી કાઢી નાખવા માંગો છો?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch (err) {}
+            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
         };
 
         window.editMFClient = (id) => {
@@ -551,64 +534,33 @@
 
         window.autoFillClientName = (input) => {
             if (input.files && input.files[0]) {
-                let cleanName = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
-                document.getElementById('admin-name').value = cleanName;
+                document.getElementById('admin-name').value = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
             }
         };
 
         window.checkAdminAccess = () => {
-            const p = prompt("હેલ્થ એડમિન પાસવર્ડ (Health Admin Password) દાખલ કરો:");
+            const p = prompt("હેલ્થ એડમિન પાસવર્ડ:");
             if(p === "395010") {
                 window.isAdminMode = true;
                 document.getElementById('admin-section').classList.remove('hidden');
                 document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-                renderClients("health-list", [...healthInsuranceClients, ...(typeof dbHealthClients !== 'undefined' ? dbHealthClients : [])], "border-red-500");
+                renderClients("health-list", [...healthInsuranceClients, ...dbHealthClients], "border-red-500");
                 alert("હેલ્થ એડમિન લોગિન સફળ!");
             } else { alert("ખોટો પાસવર્ડ!"); }
         };
 
         window.checkMFAdminAccess = () => {
-            const p = prompt("MF એડમિન પાસવર્ડ (MF Admin Password) દાખલ કરો:");
+            const p = prompt("MF એડમિન પાસવર્ડ:");
             if(p === "5555") {
                 window.isAdminModeMF = true;
                 document.getElementById('mf-admin-section').classList.remove('hidden');
                 document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-                renderClients("mf-list", [...mutualFundClients, ...(typeof dbMFClients !== 'undefined' ? dbMFClients : [])], "border-blue-500");
+                renderClients("mf-list", [...mutualFundClients, ...dbMFClients], "border-blue-500");
                 alert("MF એડમિન લોગિન સફળ!");
             } else { alert("ખોટો પાસવર્ડ!"); }
         };
-        
-        async function askGemini(query) {
-            const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના આસિસ્ટન્ટ છો. ગુજરાતીમાં જવાબ આપો. સંપર્ક: +91 97372 08108.";
-            const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
-            try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-                });
-                const result = await res.json();
-                return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો...";
-            } catch (err) { return "નેટવર્ક સમસ્યા છે."; }
-        }
 
-        async function sendAIMessage() {
-            const input = document.getElementById('ai-input');
-            const container = document.getElementById('ai-messages');
-            const q = input.value.trim();
-            if (!q) return;
-            const uDiv = document.createElement('div'); uDiv.className = 'user-msg'; uDiv.innerText = q;
-            container.appendChild(uDiv); input.value = ""; container.scrollTop = container.scrollHeight;
-            const tDiv = document.createElement('div'); tDiv.className = 'typing mb-2'; tDiv.innerText = "વિચારી રહ્યો છું...";
-            container.appendChild(tDiv);
-            const ans = await askGemini(q); tDiv.remove();
-            const aDiv = document.createElement('div'); aDiv.className = 'ai-msg'; aDiv.innerText = ans;
-            container.appendChild(aDiv); container.scrollTop = container.scrollHeight;
-        }
-
-        function toggleAIChat() {
-            const w = document.getElementById('ai-chat-window');
-            w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
-        }
-
+        // --- HARDCODED DATA ---
         const mutualFundClients = [
           "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
             "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
@@ -726,7 +678,6 @@
             "NILESH VALJIBHAI BHALALA", "CHIRAGBHAI RAMESHBHAI DHAMELIYA", "NITESHBHAI ARVINDBHAI BALAR", "MANSUKHBHAI CHHAGANBHAI SAVALIYA", "JANAKKUMAR GOYANI",
             "RINKALBEN TULSHIBHAI CHOVATIYA", "ASHOKBHAI NARSINHBHAI PAGHADAL", "KHUSHAL BHIKHABHAI JYANI", "SAGARBHAI BHIKHABHAI MALAVIYA"
         ];
-        
         const healthInsuranceClients = [
             { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
 { name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
@@ -1757,33 +1708,28 @@
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
                 
                 let adminButtons = '';
-                // Health Admin Buttons
                 if (window.isAdminMode && id && clientId === "health-list") {
                     adminButtons = `
                         <div class="flex gap-2 mr-2">
-                            <button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800 p-1"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 p-1"><i class="fas fa-trash"></i></button>
+                            <button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                 }
-                // MF Admin Buttons
                 if (window.isAdminModeMF && id && clientId === "mf-list") {
                     adminButtons = `
                         <div class="flex gap-2 mr-2">
-                            <button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800 p-1"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 p-1"><i class="fas fa-trash"></i></button>
+                            <button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                 }
 
                 let content = `
-                    <div class="flex items-center flex-1 overflow-hidden">
-                        <i class="fas ${icon} mr-3 shrink-0"></i>
-                        <span class="font-medium text-xs md:text-sm uppercase truncate">${displayName}</span>
-                    </div>
+                    <div class="flex items-center flex-1 truncate"><i class="fas ${icon} mr-3"></i><span class="font-medium text-xs md:text-sm uppercase">${displayName}</span></div>
                     <div class="flex items-center">
                         ${adminButtons}
-                        ${clientId === "health-list" ? `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}', ${pdfData ? `'${pdfData}'` : 'null'})" class="bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition flex items-center gap-1"><i class="fas fa-download"></i></button>` : ''}
+                        ${clientId === "health-list" ? `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}', ${pdfData ? `'${pdfData}'` : 'null'})" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition flex items-center gap-1"><i class="fas fa-download"></i></button>` : ''}
                     </div>
                 `;
                 li.innerHTML = content;
@@ -1813,6 +1759,38 @@
             };
         }
 
+        // --- AI & OTHERS ---
+        async function askGemini(query) {
+            const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના આસિસ્ટન્ટ છો. ગુજરાતીમાં જવાબ આપો. સંપર્ક: +91 97372 08108.";
+            const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો...";
+            } catch (err) { return "નેટવર્ક સમસ્યા છે."; }
+        }
+
+        async function sendAIMessage() {
+            const input = document.getElementById('ai-input');
+            const container = document.getElementById('ai-messages');
+            const q = input.value.trim();
+            if (!q) return;
+            const uDiv = document.createElement('div'); uDiv.className = 'user-msg'; uDiv.innerText = q;
+            container.appendChild(uDiv); input.value = ""; container.scrollTop = container.scrollHeight;
+            const tDiv = document.createElement('div'); tDiv.className = 'typing mb-2'; tDiv.innerText = "વિચારી રહ્યો છું...";
+            container.appendChild(tDiv);
+            const ans = await askGemini(q); tDiv.remove();
+            const aDiv = document.createElement('div'); aDiv.className = 'ai-msg'; aDiv.innerText = ans;
+            container.appendChild(aDiv); container.scrollTop = container.scrollHeight;
+        }
+
+        function toggleAIChat() {
+            const w = document.getElementById('ai-chat-window');
+            w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
+        }
+
         function startFlowerShow() { for(let i=0; i<6; i++) setTimeout(() => createFlower(), i * 150); }
         function spawnFlower(e) { if (Math.random() > 0.85) createFlower(e.clientX, e.clientY); }
         function createFlower(cx, cy) {
@@ -1830,7 +1808,9 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderClients("mf-list", mutualFundClients, "border-blue-500");
+            renderClients("health-list", healthInsuranceClients, "border-red-500");
             setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
+            setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
         });
     </script>
 </body>
