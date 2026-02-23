@@ -265,7 +265,7 @@
             <div class="max-w-4xl mx-auto glass-panel p-10 rounded-xl shadow-lg border-t-4 border-blue-900">
                 <p class="text-lg text-slate-700 leading-relaxed font-medium">
                     <i class="fas fa-quote-left text-amber-500 text-3xl mr-3 align-top"></i>
-                    અમે <span class="text-blue-900 font-bold">રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ</span> ખાતે તમને યોગ્ય ફાઈનાન્સિયલ પ્લાનિંગ દ્વારા આર્થિક આઝાદી અપાવવા માટે કટિબદ્ધ છીએ. અમારો મુખ્ય હેતુ ગ્રાહકોને પારદર્શક, ડેટા આધારિત અને સાચી સલાહ આપવાનો છે. ભલે તે મ્યુચ્યુઅલ ફંડ હોય, શેરબજાર હોય કે ઈન્સ્યોરન્સ, અમે તમારા દરેક આર્થિક નિર્ણયમાં તમારા સારથી બનીશું.
+                    અમે <span class="text-blue-900 font-bold">રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ</span> ખાતે તમને યોગ્ય ફાઈનાન્સિયલ પ્લાનિંગ દ્વારા આર્થિક આઝાદી અપાવવા માટે કટિબદ્ધ છીએ. 
                     <i class="fas fa-quote-right text-amber-500 text-3xl ml-3 align-bottom"></i>
                 </p>
             </div>
@@ -363,13 +363,12 @@
         </div>
     </div>
 
-    <!-- Combined Logic Script -->
+    <!-- Firebase Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "",
             authDomain: "ramani-insurance.firebaseapp.com",
@@ -380,48 +379,16 @@
         };
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
+        let db, auth;
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        auth = getAuth(app);
+        db = getFirestore(app);
 
-        // Global State
-        window.dbHealthClients = [];
-        window.dbMFClients = [];
+        let dbHealthClients = [];
+        let dbMFClients = [];
         let editingClientId = null;
         let editingMFClientId = null;
-        let currentUser = null;
 
-        const MASTER_PASSWORD = "9737208108";
-        const apiKey = ""; 
-
-        // Hardcoded Data
-        const mutualFundClients = [
-            "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
-            "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
-            "ASMITABEN ALPESHBHAI MALAVIYA", "BHAVESHBHAI BALUBHAI KOTADIYA", "SUBHASH RANA", "SANJAYKUMAR R JOGANI", "MALANI SANJAYBHAI RASIKBHAI",
-            "SAVALIYA CHANDRIKABEN BAVCHANDBHAI", "ASODARIYA MAHESHKUMAR N", "RATANAPARA VIJAY JASMATBHAI", "CHAUHAN BHAVESHBHAI VINUBHAI", "RAMANI VINUBHAI RAVJIBHAI",
-            "GAJERA RAVIKUMAR PRAVINBHAI", "DOBARIYA KAUSHIK RAMESHBHAI", "KAKADIYA BHAVESH DUDABHAI", "AVANI ASHVINBHAI RAMANI", "HARKHANI DIPAK VAJUBHAI",
-            "BARAIYA BHARAT LAKHMANBHAI", "MAKAVANA MAYURBHAI NATHABHAI", "HET JAYSUKHBHAI KUNJADIYA", "TANK NILESH JIVRAJBHAI", "BHUVA VIMALABEN KISHORBHAI",
-            "MITALBEN NAVINBHAI PATOLIYA", "NITIN DEVSHIBHAI PATOLIYA", "KHUNT SHANTABEN CHANDUBHAI", "BABARIYA JAYDEEP MANHARBHAI", "THUMMAR SAMIR K",
-            "RINKALBEN TULSHIBHAI CHOVATIYA", "ASHOKBHAI NARSINHBHAI PAGHADAL", "KHUSHAL BHIKHABHAI JYANI", "SAGARBHAI BHIKHABHAI MALAVIYA"
-        ];
-
-        const healthInsuranceClients = [
-            { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
-            { name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
-            { name: "AJAYKUMAR VINUBHAI DHANANI 2025", pdf: "AJAYKUMAR VINUBHAI DHANANI 2025.pdf", password: "1111" },
-            { name: "MUKESHBHAI ARAJANBHAI DOBARIYA 2025", pdf: "MUKESHBHAI ARAJANBHAI DOBARIYA 2025.pdf", password: "1111" },
-            { name: "MUKESHBHAI B SAVALIYA RITZ 2025", pdf: "MUKESHBHAI B SAVALIYA RITZ 2025.pdf", password: "1111" },
-            { name: "SUNDEEP MUKANCHAND SANKLECHA 2025", pdf: "SUNDEEP MUKANCHAND SANKLECHA 2025.pdf", password: "1111" },
-            { name: "LIMBANI JANAKBHAI CHHAGANBHAI 2026", pdf: "LIMBANI JANAKBHAI CHHAGANBHAI 2026.pdf", password: "9913789121" },
-            { name: "JAYPRAKASH ARUNKUMAR MISHRA 2026", pdf: "JAYPRAKASH ARUNKUMAR MISHRA 2026.pdf", password: "9879170940" },
-            { name: "Ramani Rajeshkumar Babubhai 2026", pdf: "Ramani Rajeshkumar Babubhai 2026.pdf", password: "9913199237" },
-            { name: "GAURAV V GALANI 2026", pdf: "GAURAV V GALANI 2026.pdf", password: "9099153999" },
-            { name: "HITESH RAMESHBHAI DHOLA 2026", pdf: "HITESH RAMESHBHAI DHOLA 2026.pdf", password: "9276849722" },
-            { name: "Alpeshbhai Dhirubhai Savaliya 2026", pdf: "Alpeshbhai Dhirubhai Savaliya 2026.pdf", password: "9173765228" }
-        ];
-
-        // --- AUTH & LISTENERS ---
         async function initAuth() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -432,14 +399,16 @@
             } catch (err) { console.error("Auth Error:", err); }
         }
 
+        // --- DATABASE LISTENERS (Ensures data is never 0 if records exist) ---
         function listenToHealthClients(user) {
             if (!user) return;
             const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
             onSnapshot(healthCol, (snapshot) => {
-                window.dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const combined = [...healthInsuranceClients, ...window.dbHealthClients];
-                window.renderClients("health-list", combined, "border-red-500");
-                window.setupSearch("health-search", "health-list", combined, "border-red-500");
+                dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Merge static and dynamic data
+                const combined = [...healthInsuranceClients, ...dbHealthClients];
+                renderClients("health-list", combined, "border-red-500");
+                setupSearch("health-search", "health-list", combined, "border-red-500");
             }, (err) => console.error("Health DB Error:", err));
         }
 
@@ -447,54 +416,1311 @@
             if (!user) return;
             const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
             onSnapshot(mfCol, (snapshot) => {
-                window.dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const combined = [...mutualFundClients, ...window.dbMFClients];
-                window.renderClients("mf-list", combined, "border-blue-500");
-                window.setupSearch("mf-search", "mf-list", combined, "border-blue-500");
+                dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                // Merge static and dynamic data
+                const combined = [...mutualFundClients, ...dbMFClients];
+                renderClients("mf-list", combined, "border-blue-500");
+                setupSearch("mf-search", "mf-list", combined, "border-blue-500");
             }, (err) => console.error("MF DB Error:", err));
         }
 
+        // --- HEALTH ADMIN ---
+        window.addNewHealthClient = async () => {
+            const name = document.getElementById('admin-name').value.trim();
+            const pass = document.getElementById('admin-pass').value.trim();
+            const fileInput = document.getElementById('admin-file');
+            if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
+            
+            const processSave = async (pdfData = null, fileName = null) => {
+                try {
+                    const clientData = { name, password: pass, updatedAt: new Date().toISOString() };
+                    if (pdfData) { clientData.pdfData = pdfData; clientData.fileName = fileName; }
+                    
+                    if (editingClientId) {
+                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
+                        alert("વિગતો અપડેટ થઈ!");
+                    } else {
+                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF જરૂરી છે!"); return; }
+                        clientData.createdAt = new Date().toISOString();
+                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
+                        alert("ગ્રાહક ઉમેરાઈ ગયા!");
+                    }
+                    resetAdminForm();
+                } catch(e) { alert("Error saving data"); }
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => processSave(e.target.result, fileInput.files[0].name);
+                reader.readAsDataURL(fileInput.files[0]);
+            } else { processSave(); }
+        };
+
+        window.deleteHealthClient = async (id, name) => {
+            if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch(e) {}
+        };
+
+        window.editHealthClient = (id) => {
+            const client = dbHealthClients.find(c => c.id === id);
+            if (!client) return;
+            editingClientId = id;
+            document.getElementById('admin-name').value = client.name;
+            document.getElementById('admin-pass').value = client.password;
+            document.getElementById('save-btn').innerText = "ડેટા અપડેટ કરો";
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.resetAdminForm = () => {
+            editingClientId = null;
+            document.getElementById('admin-name').value = ""; document.getElementById('admin-pass').value = ""; document.getElementById('admin-file').value = "";
+            document.getElementById('save-btn').innerText = "ડેટા સેવ કરો";
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        };
+
+        // --- MF ADMIN ---
+        window.addNewMFClient = async () => {
+            const name = document.getElementById('admin-mf-name').value.trim();
+            if (!name) { alert("નામ લખો!"); return; }
+            try {
+                if (editingMFClientId) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name, updatedAt: new Date().toISOString() });
+                    alert("MF નામ અપડેટ થયું!");
+                } else {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mfClients'), { name, createdAt: new Date().toISOString() });
+                    alert("MF નામ ઉમેરાયું!");
+                }
+                resetMFAdminForm();
+            } catch(e) { alert("Error saving MF data"); }
+        };
+
+        window.deleteMFClient = async (id, name) => {
+            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
+        };
+
+        window.editMFClient = (id) => {
+            const client = dbMFClients.find(c => c.id === id);
+            if (!client) return;
+            editingMFClientId = id;
+            document.getElementById('admin-mf-name').value = client.name;
+            document.getElementById('save-mf-btn').innerText = "MF અપડેટ કરો";
+            document.getElementById('cancel-mf-edit-btn').classList.remove('hidden');
+            document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.resetMFAdminForm = () => {
+            editingMFClientId = null;
+            document.getElementById('admin-mf-name').value = "";
+            document.getElementById('save-mf-btn').innerText = "MF ડેટા સેવ કરો";
+            document.getElementById('cancel-mf-edit-btn').classList.add('hidden');
+        };
+
         onAuthStateChanged(auth, (user) => {
-            currentUser = user;
             if (user) {
                 listenToHealthClients(user);
                 listenToMFClients(user);
             }
         });
 
-        // --- UI FUNCTIONS ---
-        window.renderClients = (clientId, clientData, colorClass) => {
+        initAuth();
+    </script>
+
+    <script>
+        const apiKey = ""; 
+        window.isAdminMode = false;
+        window.isAdminModeMF = false;
+
+        window.autoFillClientName = (input) => {
+            if (input.files && input.files[0]) {
+                document.getElementById('admin-name').value = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
+            }
+        };
+
+        window.checkAdminAccess = () => {
+            const p = prompt("હેલ્થ એડમિન પાસવર્ડ:");
+            if(p === "395010") {
+                window.isAdminMode = true;
+                document.getElementById('admin-section').classList.remove('hidden');
+                document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
+                renderClients("health-list", [...healthInsuranceClients, ...dbHealthClients], "border-red-500");
+                alert("હેલ્થ એડમિન લોગિન સફળ!");
+            } else { alert("ખોટો પાસવર્ડ!"); }
+        };
+
+        window.checkMFAdminAccess = () => {
+            const p = prompt("MF એડમિન પાસવર્ડ:");
+            if(p === "5555") {
+                window.isAdminModeMF = true;
+                document.getElementById('mf-admin-section').classList.remove('hidden');
+                document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
+                renderClients("mf-list", [...mutualFundClients, ...dbMFClients], "border-blue-500");
+                alert("MF એડમિન લોગિન સફળ!");
+            } else { alert("ખોટો પાસવર્ડ!"); }
+        };
+
+        // --- HARDCODED DATA ---
+        const mutualFundClients = [
+          "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
+            "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
+            "ASMITABEN ALPESHBHAI MALAVIYA", "BHAVESHBHAI BALUBHAI KOTADIYA", "SUBHASH RANA", "SANJAYKUMAR R JOGANI", "MALANI SANJAYBHAI RASIKBHAI",
+            "SAVALIYA CHANDRIKABEN BAVCHANDBHAI", "ASODARIYA MAHESHKUMAR N", "RATANAPARA VIJAY JASMATBHAI", "CHAUHAN BHAVESHBHAI VINUBHAI", "RAMANI VINUBHAI RAVJIBHAI",
+            "GAJERA RAVIKUMAR PRAVINBHAI", "DOBARIYA KAUSHIK RAMESHBHAI", "KAKADIYA BHAVESH DUDABHAI", "AVANI ASHVINBHAI RAMANI", "HARKHANI DIPAK VAJUBHAI",
+            "BARAIYA BHARAT LAKHMANBHAI", "MAKAVANA MAYURBHAI NATHABHAI", "HET JAYSUKHBHAI KUNJADIYA", "TANK NILESH JIVRAJBHAI", "BHUVA VIMALABEN KISHORBHAI",
+            "MITALBEN NAVINBHAI PATOLIYA", "NITIN DEVSHIBHAI PATOLIYA", "KHUNT SHANTABEN CHANDUBHAI", "BABARIYA JAYDEEP MANHARBHAI", "THUMMAR SAMIR K",
+            "KUMBHANI SHANTIBHAI VALLABHBHAI", "DIVYAJIVANDASJISWAMI GURU NILKANTHCHARANDASJISWAMI", "RUPAVATIYA JAYDEEPBHAI MANSUKHBHAI", "AJAYKUMAR VINUBHAI DHANANI", "MAKVANA MANISH MANUBHAI",
+            "MANISHA PARESHBHAI RADADIYA", "KRUNAL CHHABILBHAI DHOLARIYA", "HIRPARA VIPUL VITTHALBHAI", "VISHAL M BHALALA", "KALUBHAI ZAVERBHAI KHOKHARIYA HUF",
+            "SAVAJ PINTUBHAI MANSUKHBHAI", "HITESHBHAI R DHOLA", "MD SHAHBAJ ANSARI", "BHAVESHBHAI VINUBHAI DUDHAT", "AKOLIYA HANSABEN VINUBHAI",
+            "CHETAN BABUBHAI SINGALA", "JIRAL HARDIK KANSAGARA", "SATASIA BHARATBHAI D", "SAVANI MAHESHBHAI KALYANBHAI", "AKOLIYA PRASHANT VINUBHAI",
+            "RAJNITESH KUMAR", "PATEL JASHIBEN DASHARATHBHAI", "PUNITBHAI BABUBHAI MULANI", "AISHVARYA BHAGAVAT SONAVANE", "JAYPRAKASH RADHAVJIBHAI PARSANIYA",
+            "VIPULBHAI MANSUKHBHAI BHIMANI", "ARVINDBHAI RAGHAVBHAI PATEL", "BHUPATBHAI K THESIYA", "SAVSAVIYA DIVYA ANKITKUMAR", "RAMANI JAIMINKUMAR BHAGVANDAS",
+            "SADDAM ANSARI", "KEVALKUMAR ASHOKBHAI MULANI", "AYUSHI ARVINDBHAI AMBALIYA", "VEKARIYA HITESHBHAI DHANJIBHAI", "DILIPBHAI BABUBHAI DESAI",
+            "KHATRA DIPAK LALJIBHAI", "TWINKALBEN TRAVELERS INSURANCE", "DARSHITA JAYSUKHBHAI AKABARI", "HARDIKKUMAR J MUNGALA", "MUKESH KARSHANBHAI MULANI",
+            "BHAGWAN SINGH", "RADHIKABEN JITENDRABHAI BORDA", "JITENDRA VALLABHBHAI BORDA", "BORAD ASHVINBHAI PARSHOTAMBHAI", "PANSURIYA CHANDRESHKUMAR V",
+            "TUSHAR MANSUKHBHAI DESAI", "ANJALIBEN JAGRESH GAJERA", "PADSALA KRISH JITUBHAI", "REKHABEN BHARATBHAI VAGHASIYA", "PATEL BHARATKUMAR POPATLAL",
+            "RAM JIGAR PARBATBHAI", "NAVINBHAI BHURABHAI CHAUDHARI", "KOLI ARUN MOTILAL", "JIGNESH GOVINDBHAI THOREE", "PAGHADAL KRISHNA MANISHBHAI",
+            "ASHVIN JIVRAJBHAI SAVANI", "DHARMESH PRAVINCHANDRA UPADHYAY", "AKSHAR JAYSHUKHBHAI BALDHA", "CHHAUHAN RUDRA ASHVINBHAI", "CHHAUHAN ANERI BHAVESHBHAI",
+            "BHARATKUMAR JAYANTILAL MALAVIYA", "JIGNESHBHAI RASIKBHAI GAJERA", "DHAKECHA PRAVINBHAI BABUBHAI", "BHALU JAY GOKULBHAI", "RAMANI ASMITA K",
+            "RAMANI SEJALBEN NIKUNJBHAI", "BOGHRA VANDANA HITESHBHAI", "LIMBASIYA MANASIBEN SURESHBHAI", "DINESH RAMDAS PATIL", "PATEL MILANKUMAR THAKORBHAI",
+            "DAYANI YAGNIK MAGANBHAI", "MULANI ASHISHKUMAR N", "KARAD CHIRAGBHAI ARVINDBHAI", "SAVALIYA KAILASHBEN VIPULBHAI", "TRAPASIYA ANIKET CHANDUBHAI",
+            "ROHITKUMAR BABUBHAI BORAD", "SARDHARA SHWETABEN CHIRAG", "LATHIYA KAJALBEN ALPESHBHAI", "ANKOLIYA DIVYABEN HARDIKKUMAR", "SONALBEN VIPULBHAI KORAT",
+            "MITALBEN AXAY KASODARIYA", "NARESHBHAI JERAMBHAI PALADIYA", "BHIKADIYA NITESH BHIKHABHAI", "VIJAYBHAI N CHOVATIYA", "DHRUV PRAKASHBHAI ZALAVADIYA",
+            "KOMAL CHIRAGBHAI ZAVERI", "NILESHBHAI DAYABHAI MANIYA", "JAYSUKHBHAI ZAVERBHAI NAKRANI", "VAGHASIYA MAHENDRABHAI P", "AKBARI DIVYESHKUMAR PRAVINBHAI",
+            "RANJANBEN KANTILAL GAJERA", "VAGHASIYA NIRAVKUMAR HARJIBHAI", "KRISHNABEN VIPULBHAI SUDANI", "SOJITRA ILABEN SURESHBHAI", "DIPAKBHAI MANSUKHBHAI MANGROLIYA",
+            "PARESH RAMESHBHAI HAPANI", "JAGANI KETANKUMAR NANUBHAI", "MAHENDRA KUMAR NAGAR", "DRASHTI VIMALBHAI SOJITRA", "NAGAR ARUNKUMAR FULCHAND",
+            "MEHUL SURESHBHAI MELKIYA", "DANGODRA ARVINDBHAI LAKHAMANBHAI", "BABARIYA JAGRUTIBEN BHARATBHAI", "DHARMESHBHAI BATUKBHAI SIDHDHPURA", "GEETA PATEL",
+            "BALAR KOMALBEN KALPESHBHAI", "KATHIRIYA PINAL UMESH", "VORA ALPABEN HARESHKUMAR", "GOYANI ASHABEN BHAVESHBHAI", "KALSARIYA RUTVIK JADAVBHAI",
+            "MUKHTAR ANSARI", "VAGHASIYA DHARMI", "KAPOPARA YOGESH NATHABHAI", "REKHABEN PRAKASHBHAI KUKADIYA", "RUPAPARA VASANTIBEN HIRENKUMAR",
+            "BHAVIKKUMAR JAGDISHBHAI GHINAIYA", "GHINAIYA SANDIP JAGADISHBHAI", "DHAMELIYA JAGDISHKUMAR", "RADADIYA KAJALBEN NIKUNJBHAI", "BHADANI VARSHABEN MAHESHBHAI",
+            "VADDORIYA BHAVESH V", "HARKHANI BHAVIK MANSUKHBHAI", "LATABEN JITUBHAI ROKAD", "VAGHANI KISHAN NARESHBHAI", "MULANI REKHABEN ASHISHKUMAR",
+            "VARIYA PARITABEN NATHABHAI", "DAYABEN ANILBHAI THESIYA", "RANACHHODBHAI VASHRAMBHAI DUNGARANI", "PARESH SHASHIKANTBHAI RANA", "DAXABEN ASHOKBHAI GELANI",
+            "ANGHAN PRAVINBHAI HIRABHAI", "HASMUKHBHAI HIRAJIBHAI ANGHAN", "KACHA DHARABEN DHAVALBHAI", "DEEPAK PANCHANI", "HIRAPARA RAMESHBHAI SHAMBHUBHAI",
+            "NANABHAV ARJUNBHAI BAGUL", "JAYSHREE NAYANKUMAR VAGHASIYA", "DONDA KIRANBEN SHAILESHBHAI", "JITESH DEVCHANDBHAI RAMANI", "ANILBHAI DHIRUBHAI THESIYA",
+            "NITA VIJAY GAJERA", "HITESH NANDLALBHAI VARIYA", "MAKVANA ASHVINBHAI NANJIBHAI", "KAKADIYA RAJNIKANTBHAI MADHUBHAI", "DHAMELIYA RUTVIKKUMAR RAJESHBHAI",
+            "BORAD BHARGAV ASHOKBHAI", "KUKADIYA KRUPAL ASHVINBHAI", "SITARAM VENIRAM LASHKRI", "KANANI RANJITBHAI BHAGVANBHAI", "NARESHKUMAR VALJIBHAI RAVANI",
+            "VAGHASIYA KETAN H", "KISHAN VINODBHAI PARMAR", "JYOT MAYURBHAI GONDALIYA", "BHARODIYA NIKHIL MUKESHBHAI", "MUNJAPARA DIPAKKUMAR VAJUBHAI",
+            "DOMADIYA VISHAL RAMESHBHAI", "ITALIYA KIRANBEN ROHITBHAI", "KYADA DEVANG BHAVESHBHAI", "MAHESH KUMAR", "SORATHIYA MAHI JITESHBHAI",
+            "MANISHKUMAR GHANSHYAMBHAI LAKKAD", "NATHANI SEJALBEN MANSUKHLAL", "MINALI MANSUKHBHAI NATHANI", "RAMOLIYA ABHAY SHAMBHUBHAI", "KALPESH GOKULBHAI HARKHANI",
+            "SAGUNABEN MAHENDRABHAI RAJPARA", "THUMMAR LALJIBHAI HARJIBHAI", "DILIP MANSUKHBHAI NATHANI", "BHAYANI RAJESHBHAI RAMJIBHAI", "JITENDRA PADSALA",
+            "KAKADIYA RAVIBHAI BHARATBHAI", "RABADIYA ROHITKUMAR KESHAVBHAI", "LAKHANI PIYUSH VITHALBHAI", "KHUNT RENUKA NARENDRABHAI", "SANKHYYOGI ASHABEN LILABEN",
+            "ASHOKBHAI V DOMADIYA", "JASANI CHINTANKUMAR KISHORBHAI", "SORATHIYA MOKSH JITESHBHAI", "RAJUBHAI DEVJIBHAI RADADIYA", "DOBARIYA VIPULBHAI SHIVLALBHAI",
+            "RAMESHBHAI VALJIBHAI DOMADIYA", "KATHIRIYA JAGDISHBHAI ISHVARBHAI", "UDAY BHIKHUBHAI THUMAR", "KUKADIYA MAANKUMAR ASHVINBHAI", "GODHANI RAJUBHAI MOHANBHAI",
+            "VAGHANI RAVIKUMAR NARESHBHAI", "KANANI VANDANBEN PRAKASHBHAI", "KACHHADIYA KIRAN BHADRESHBHAI", "MAKVANA NITINBHAI BABUBHAI", "JOSHI KISHAN YOGESHBHAI",
+            "GOSWAMI SHIVANGGIRI NARESHGIRI", "DUDHAT RUSHIKA DIPAKBHAI", "HIRENKUMAR KESHAVLAL RUPAPRA", "MANISHKUMAR KALUBHAI PAGHDAL", "MAVANI MITALBEN DHARMESHBHAI",
+            "VIJAY HARIBHAI GOYANI", "KUKADIYA SUNIL TULASIBHAI", "RADADIYA PRITESHBHAI VELJIBHAI", "BHANDERI PARTH HARESHBHAI", "RAMANI JIGNESHKUMAR RAMJIBHAI",
+            "DHANANI RUDRA VINODBHAI", "RADADIYA DIVYANGKUMAR MAHESHBHAI", "LALJIBHAI DEVCHANDBHAI SHELADIYA", "JOGANI KIRANBEN MEHULBHAI", "KISHAN DINESHBHAI VEKARIYA",
+            "PINTU RAMESHBHAI THUMMAR", "PATOLIYA GIRISHBHAI MAGANBHAI", "DARSHAN ASHOKBHAI SHIYAL", "BARVALIYA HARDIKKUMAR J", "DAVARIYA AKSHITA JAYSUKHBHAI",
+            "USHABEN SHAILESHBHAI KUKADIYA", "DHEDHI LALIT VITHALBHAI", "KORAT NIKUNJKUMAR BABUBHAI", "MOHAMMAD SADDAM ANSARI", "RAMABEN MANSUKHBHAI DESAI",
+            "MUKESH KHODABHAI DOMADIYA", "KATARIYA KEVAL", "KARTIKBHAI ARVINDBHAI BALDHA", "CHAUDHARY LILABEN MAHESHBHAI", "VIVEK YOGESHBHAI TRIVEDI",
+            "KAUSHIK ASHOK UGMANA", "RIDDHI RAVI RAMANI", "VIJAYA SAKHARE", "VISHALBHAI CHAGANBHAI TADHA", "RABARI ARAVINDBHAI RAMABHAI",
+            "TUSHARBHAI GORDHANBHAI SUTARIYA", "VIRALKUMAR BHAGVANBHAI TIMBADIYA", "JYOTIBEN JAYESHBHAI DHORIYA PATEL", "JAYDIP RAMESHBHAI SAVLIYA", "HEMANGI MUKESHBHAI VEKARIYA",
+            "SANJAYBHAI LALJIBHAI KUKADIYA", "BEENA JAYESH MANGROLIYA", "RAJESHREEBEN CHANDUBHAI VAVADIYA", "HARISHKUMAR HIMATBHAI BHALALA", "DHANRAJBHAI RASIKBHAI SAKARIYA",
+            "CHANDRAKANT RAMKRISHNA MANDGE", "JAGDISH DHANJIBHAI CHOVATIYA", "HITESHKUMAR DHANJIBHAI CHOVATIYA", "DESAI ANjali MALAYKUMAR", "MANSUKHLAL MOHANBHAI DESAI",
+            "SHAILESHBHAI MANSUKHBHAI BABARIYA", "ASMITABEN SHAILESHBHAI BABARIYA", "MANOJKUMAR ARJANBHAI MANGUKIYA", "NITABEN JITENDRABHAI CHOVATIYA", "HARSHIL JAYSUKHBHAI UKANI",
+            "CHIRAG RAMESHBHAI SARDHARA", "DHARMESHBHAI GHANSHYAMBHAI DUDHAT", "RAHUL PARSHOTAMBHAI VAGHANI", "TUSHAR RAJESHBHAI SONANI", "DAKSHABEN ALPESHBHAI RADADIYA",
+            "KANCHANBEN VALJIBHAI HARKHANI", "ASHABEN JAYSUKHBHAI AKABARI", "VIJAYBHAI HIMATBHAI SOHALIYA", "SANDIPBHAI VALJIBHAI HARKHANI", "CHIRAG JAYSUKHBHAI NAKRANI",
+            "PRATIKKUMAR RAMESHBHAI SONANI", "KOMALBEN ALPESHBHAI FALAKIYA", "KAUSHIKBHAI PRAVINBHAI PANCHANI", "JITUBHAI PUNABHAI AKABARI", "RUTVI SAPRA",
+            "ANILBHAI KUMBHANI", "ALPESH BHOLABHAI RADADIYA", "ASHISHBHAI MANSUKHBHAI KOTADIYA", "HITESHBHAI DHIRUBHAI MORADIYA", "SHAILESHKUMAR RANCHHODBHAI VEKARIYA",
+            "ASHUTOSHBHAI KARAMSHIBHAI SAVALIYA", "VINAY JIVRAJBHAI MAKVANA", "MANSUKHBHAI BHIKHABHAI KAKDIYA", "MANUBHAI NARANBHAI CHUDASAMA", "KAILASHBEN BABUBHAI RAMANI",
+            "DIPAKBHAI MADHUBHAI DUDHAT", "NIRUBEN HARKESHBHAI RAMANI", "BHADRESHBHAI BAGHABHAI NASIT", "ATESH GHANSHYAM BHAI PATEL", "CHANDRAVADAN RAMANBHAI PATEL",
+            "DIVYESH KUMAR BHIMJIBHAI KACHHADIYA", "DHARMESH MANUBHAI PANDAV", "MITUL HARESHBHAI MANGUKIYA", "VILASBEN KISHORBHAI MANDANKA", "NITESHBHAI PARSOTTAMBHAI BHANDERI",
+            "MUKESHKUMAR LAVJIBHAI VEKARIYA", "RASIKBHAI SAVJIBHAI MANGROLIYA", "GHANSHYAMBHAI LABHUBHAI SAVALIYA", "HASMUKHBHAI DEVJIBHAI SOJITRA", "VIJAY DHIRUBHAI PATOLIYA",
+            "SAGARBHAI DHIRUBHAI VADALIYA", "Deepak Kumar Verma", "NIRAJ DILIPBHAI BUHA", "BRIJESH KISMATBHAI SARKHEDI", "RASIKBHAI PARSHOTTAMBHAI KAKADIYA",
+            "KARTIKKUMAR KISHORBHAI DUDHAT", "NITABEN RAJESHBHAI PAGHDAL", "HIREN ULLASKUMAR PAGHADAR", "TEJAS POPATBHAI DAYANI", "SANJAYBHAI DHIRUBHAI SAVALIYA",
+            "DHAVAL POPATBHAI DAYANI", "ANKITA SUBHASHKUMAR BHINGARADIYA", "NAYANABEN LALITBHAI BHINGARADIYA", "DIPIKABEN CHANDRAKANTBHAI BHINGARADIYA", "LALJIBHAI PARSHOTTAMBHAI ZADFIYA",
+            "RAJU RASIKBHAI KAKADIYA", "ALPESHBHAI JAYANTIBHAI MALAVIYA", "KETAN VITHHALBHAI DAYANI", "CHANDRESHBHAI BHIKHABHAI GAJERA", "DHAVAL MUKESHBHAI LAKHANI",
+            "ASHABEN PANKAJBHAI DAYANI", "RAVI SHANTILAL RAMANI", "RAJESHBHAI MANUBHAI SORATHIYA", "BIPINBHAI BHIKHABHAI DONGA", "SURESH PARSHOTAMBHAI KAPADIYA",
+            "KALUBHAI POPATBHAI GELANI", "RAJVIBEN MUKESHBHAI DOMADIYA", "MONABEN VISHALBHAI PATEL", "KISHORBHAI KALUBHAI KYADA", "NITINBHAI DHIRUBHAI AKBARI",
+            "KAUSHIK RASHIKBHAI KAKDIYA", "KISHORBHAI RATIBHAI MANDANKA", "NARESHBHAI NARESHBHAI KUMBHANI", "DHARMESHBHAI GANESHBHAI MAVANI", "HARESH DHANJIBHAI SOJITRA",
+            "JAYSHRIBEN ASVINBHAI KATHIRIYA", "ASHABEN RAKESHBHAI VAGHELA", "ALKESHKUMAR NATUBHAI PATEL", "HARESHBHAI KOLDIYA", "PARITA HIRENBHAI SUDANI",
+            "HIRENKUMAR DINESHBHAI SUDANI", "NIKUL DHANJIBHAI SOJITRA", "VIJAYBHAI HARDASBHAI LIMBACHIYA", "MUKUNDBHAI LAXMANBHAI KHAKHARIYA", "SHAILESH LABHUBHAI DONDA",
+            "PARULBEN UMESHKUMAR NAKRANI", "SHAILESHKUMAR CHATURBHAI SARDHARA", "VIPULBHAI KESHUBHAI NAKARANI", "VAMANBHAI NANUBHAI JAGANI", "CHANDRAKANT BHAGVANBHAI BHINGARADIYA",
+            "ARVINDBHAI SHAMJIBHAI VAGHASIYA", "ANKIT DHIRUBHAI DIHORA", "CHETAN JAGDISHBHAI GAJERA", "SATISH TULSHIBHAI BELADIYA", "JIGNESHKUMAR BABUBHAI MAVANI",
+            "PRINSA YOGESHBHAI RADADIYA", "LALIT BHAGVANBHAI BHINGARADIYA", "DHRUV JITENDRABHAI BHIMANI", "JIGNESHBHAI KABABHAI ZADAFIYA", "NAITIK BABUBHAI DAVRA",
+            "BIREN BHAGAVANBHAI BHINGARADIYA", "RAHULBHAI DHIRUBHAI MAVANI", "PIYUSHBHAI LALJIBHAI SAVALIYA", "KALPESH SAVJIBHAI VAGHASIYA", "NILESHBHAI PETHANI",
+            "ANKITA HARDIKBHAI MANGUKIYA", "LAKHANI SHOBHNABEN BHARATBHAI", "MITUL HIMMATBHAI MANGUKIYA", "HARESHBHAI KANUBHAI KABARIYA", "VIJAYBHAI KANUBHAI KABARIYA",
+            "JITUBHAI DAMJIBHAI KHUNT", "HIRALBEN KALUBHAI KANANI", "ANKITKUMAR GUMANBHAI VASAVA", "UMESHBHAI MANSUKHBHAI JOGANI", "RANJANBEN GHANSHYAMBHAI GOPANI",
+            "ASMITABEN BHAVESHKUMAR KATHIRIYA", "GAURAV MANSUKHBHAI MANGUKIYA", "NARENDRABHAI CHANDUBHAI KHUNT", "JIGNESH BHAGVANJIBHAI GAJERA", "HARESH HASMUKHBHAI DESAI",
+            "GAURAVKUMAR KHODABHAI SAVANI", "ASHVINBHAI SAVJIBHAI KUKADIYA", "KOMALBEN NILESHBHAI BHALALA", "MANISHABEN RIPULBHAI BHIMANI", "VIPULKUMAR BHAGWANBHAI DHOLAKIYA",
+            "DAYABEN SHANTILAL RAMANI", "SHABNAM KHATUN", "RIPULBHAI VALLBHBHAI BHIMANI", "ALPA BHAVESHBHAI RAMANI", "ASHVINKUMAR CHAUHAN",
+            "PAYAL SANDIP DUDHAT", "KINJALBEN BHAVESHKUMAR MULANI", "SANJAYKUMAR BABUBHAI GAJERA", "ASHOKABHAI DHANSUKHABHAI UGMANA", "RATILALBHAI VINUBHAI SAVALIYA",
+            "JANAKBHAI KANTILAL KAKADIYA", "ASHVINKUMAR RAMESHBHAI LIMBANI", "SAVALIYA NANDLAL VINUBHAI", "NIRAVKUMAR JAYESHBHAI IDHATIYA", "RAVI NATVARLAL VANDRA",
+            "HASMUKHBHAI BHIKHABHAI BHIMANI", "RINKALBEN SANDIPKUMAR ANGHAN", "JAYDEEPKUMAR RAMESHBHAI SANGANI", "NIKUNJKUMAR MANUBHAI RADADIYA", "NILESH BABUBHAI PADSALA",
+            "NIMUBEN ASHOKBHAI PAGHADAL", "SHILPABEN SHAILESHBHAI SARDHARA", "MANISHABEN CHETANBHAI VEKARIYA", "SANJAY NANUBHAI DUDHAT", "RAMESH MANJIBHAI SAVANI",
+            "RAMESHBHAI SHAMJIBHAI GOYANI", "TIRTH BHIKHABHAI PATEL", "VIJAYBHAI SIDHDHAPURA", "VISHVA BHIKHALAL PATEL", "ASH आशीष VAJUBHAI CHOVATIYA",
+            "AXAY RAGHAVBHAI KASODARIYA", "USHABEN VALLABHBHAI FALKIYA", "MALAY MANSUKHBHAI DESAI", "SAGARBHAI VALJIBHAI KOTADIYA", "SURESHBHAI Jivrajbhai Bhalani",
+            "SHYAMBHAI VITHALBHAI BHALU", "NILESH SANJAYBHAI PATIL", "GRUHIT GHANSHYAMBHAI BHALANI", "SANDIP GORDHANBHAI ANGHAN", "GOPIBEN MITULBHAI MANGUKIYA",
+            "NITINKUMAR JERAMBHAI VAVLIYA", "PRAVINABEN BHARATBHAI POKAL", "GANESHBHAI PUNJABHAI GAJERA", "DHARABEN KALPESHBHAI GOTHI", "SAGAR MUKESHBHAI MALAVIYA",
+            "CHANDUBHAI VITTHALBHAI BHIMANI", "REKHABEN ASHWINBHAI CHAUHAN", "MUKESHBHAI VITHALBHAI BHIMANI", "JITENDRABHAI VITTHALBHAI BHIMANI", "SAGARKUMAR DHANJIBHAI SAVALIYA",
+            "LALU ANSARI", "RAVI MANSUKHBHAI MANGUKIYA", "DASHARATH KALUBHAI PATEL", "SHILPA SANJAYBHAI BHALALA", "RINABEN VIMALBHAI PARMAR",
+            "MANISHABEN ASHVINBHAI RAMANI", "ALPESH VALLABHBHAI FALAKIYA", "ROHITKUMAR DIPAKBHAI SUKHADIYA", "SANJAYBHAI LABHUBHAI CHEETA", "KINJALBEN BHAVESHBHAI CHAUHAN",
+            "BHAVESHBHAI GABHRUBHAI SOJITRA", "SHAILESHKUMAR KALUBHAI GAJIPARA", "BHAVESHBHAI JAGJIVANBHAI CHAUHAN", "MILANKUMAR BHARATBHAI ITALIYA", "BHAVESH SHANTILAL RAMANI",
+            "JAGUBEN KATHIRIYA", "BHAVANABEN GOKULBHAI BHALU", "VISHAL RAMESHBHAI PATEL", "SHOBHANABEN BHARATKUMAR RAMANI", "PRAKASHBHAI ISHVARBHAI KATHIRIA",
+            "MAYANKKUMAR BIPINBHAI PATEL", "DIVYESHBHAI MANSUKHBHAI DEVANI", "AMOLKUMAR SONI", "ROHITBHAI BHARATBHAI ITALIYA", "BHARAT BHAVANBHAI RIBADIYA",
+            "YOGITA AMOLKUMAR SONI", "KRISHNA BHAGVANBHAI RAMANI", "RAM CHANDRA PRASAD", "SEJAL JAYESHBHAI BAGSARIYA", "MAHESHBHAI DULABHAI UKANI",
+            "JITENDRABHAI BABUBHAI GAJERA", "ANKITKUMAR MADHUBHAI VORA", "VISHAL GAMIT", "MAHESHBHAI AMBABHAI KHUNT", "JENTIBHAI KHODABHAI BHAKHAR",
+            "GITABEN BHAVESHBHAI KOTADIYA", "MANISHABEN BHAVESHBHAI BABARIYA", "DAYABEN KAPILBHAI GAJERA", "BHAVIK HIMMATBHAI PADHIYAR", "GOPALBHAI MAGANBHAI PATOLIYA",
+            "SATYAMBHAI GOVINDBHAI SAVALIYA", "KAPIL BHUPATBHAI GAJERA", "MILAN MANSUKHBHAI JADVANI", "KARUNABEN SANDIPBHAI HARKHANI", "RAHUL ASHOKBHAI DOMADIYA",
+            "JAYESH RASIKBHAI MANGROLIYA", "KAUSHIK PRABHUDAS AKBARI", "JIGNABEN BHARATBHAI VIRADIYA", "SHAILESHBHAI TULSIBHAI KUKADIYA", "ASHWIN KALUBHAI KATHIRIYA",
+            "NITESHKUMAR PARSOTTAMBHAI DHANANI", "DHARA HARESHBHAI DHAMELIYA", "VANITABEN NIMESHABHAI RAMANI", "CHIRAG DINESHBHAI SURANI", "RITABEN SANJAYBHAI GAJERA",
+            "PRAKASHBHAI JAGABHAI KATHROTIYA", "RITESHBHAI BHAYALAL MANGUKIYA", "MEHULBHAI VAJUBHAI VAGHASIYA", "KISHORBHAI NATHABHAI RAMANI", "GITABEN KISHORBHAI RAMANI",
+            "NIKUL LAXMANBHAI KATARIYA", "SATISHKUMAR MATHURBHAI SOJITRA", "ANILBHAI MANJIBHAI CHITRODA", "JIGNESHKUMAR KANTILAL RATHOD", "VIJAYKUMAR DHANJIBHAI AGHERA",
+            "CHANDRESHKUMAR VINUBHAI SAVANI", "SANMUKHKUMAR RAMESHBHAI THUMAR", "AMIT RAMESHBHAI DOMDIYA", "DHARMESHKUMAR BHARATBHAI VAGHANI", "RIDDHI MAYURBHAI GONDALIYA",
+            "VIPULBHAI BABUBHAI VIRADIYA", "SURESHBHAI CHHAGANBHAI VAVADIYA", "SAGARBHAI ARVINDBHAI DHANANI", "SUDHABEN JITESHBHAI SORATHIYA", "UMANG KALUBHAI PATEL",
+            "BHARATBHAI BABUBHAI VIRADIYA", "VIVEKBHAI BHUPATBHAI PALADIYA", "KHUSHBU BHAVANBHAI MULANI", "BHAVESHBHAI DAMJIBHAI VIRADIYA", "BHARATBHAI MOHANBHAI MANGUKIA",
+            "ANKITA BEN GAURANGBHAI BALDHA", "BHADRESH DHIRUBHAI KACHHADIYA", "BHAVYAKUMAR MANSUKHBHAI HARKHANI", "HARDIKKUMAR HIMMATBHAI MANGUKIYA", "JIGNESHBHAI MANJIBHAI DOBARIYA",
+            "JAYESHBHAI KHODABHAI AMIPARA", "NARESHKUMAR DHANJIBHAI SOJITRA", "GITABEN JOGANI", "KAUSHIK GOKALBHAI HOTHI", "DAXABEN PUNITBHAI BHALALA",
+            "DIPAKKUMAR DHIRUBHAI SAVALIYA", "KALPESHBHAI DAHYABHAI VIRANI", "JAYDIP PRAVINBHAI MANIYA", "KRISHNABEN NILESHBHAI SOJITRA", "CHHAYA CHETAN PARMAR",
+            "HITESHBHAI RASIKBHAI AKOLIYA", "ILESHKUMAR NANDLALBHAI MULANI", "JAYSUKHBHAI PUNABHAI AKBARI", "BHAVESHBHAI KALUBHAI KYADA", "KAPILBHAI KANTIBHAI RAMANI",
+            "TULASHIBHAI DHIRUBHAI CHOVATIYA", "ASHVINBHAI KANTIBHAI RAMANI", "MANOJKUMAR BHUDARBHAI DARAJI", "ANILBHAI PARSHOTTAMBHAI BHALALA", "JEETESHBHAI RAMESHBHAI KUKADIYA",
+            "VISHAL D BUHA", "KULDIP HIRABHAI LATHIDADIYA", "MEHUL KANUBHAI GAUDANI", "NIKUNJ BABUBHAI MANGUKIYA", "VIPUL ASHOKBHAI BODARYA",
+            "NILESH VALJIBHAI BHALALA", "CHIRAGBHAI RAMESHBHAI DHAMELIYA", "NITESHBHAI ARVINDBHAI BALAR", "MANSUKHBHAI CHHAGANBHAI SAVALIYA", "JANAKKUMAR GOYANI",
+            "RINKALBEN TULSHIBHAI CHOVATIYA", "ASHOKBHAI NARSINHBHAI PAGHADAL", "KHUSHAL BHIKHABHAI JYANI", "SAGARBHAI BHIKHABHAI MALAVIYA"
+        ];
+        const healthInsuranceClients = [
+            { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
+{ name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
+{ name: "AJAYKUMAR VINUBHAI DHANANI 2025", pdf: "AJAYKUMAR VINUBHAI DHANANI 2025.pdf", password: "1111" },
+{ name: "AKBARI GOVINDBHAI 2025", pdf: "AKBARI GOVINDBHAI 2025.pdf", password: "1111" },
+{ name: "Akolia Rajeshbhai Devrajbhai 2025", pdf: "Akolia Rajeshbhai Devrajbhai 2025.pdf", password: "1111" },
+{ name: "ALAGIYA  BHUPATBHAI  RAMBHAI 2025", pdf: "ALAGIYA  BHUPATBHAI  RAMBHAI 2025.pdf", password: "1111" },
+{ name: "ALPESHBHAI BHOLABHAI RADADIYA 2025", pdf: "ALPESHBHAI BHOLABHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "ALPESHBHAI NANUBHAI BARVALIYA 2025", pdf: "ALPESHBHAI NANUBHAI BARVALIYA 2025.pdf", password: "1111" },
+{ name: "ALPESHBHAI PUNABHAI JODHANI 2025", pdf: "ALPESHBHAI PUNABHAI JODHANI 2025.pdf", password: "1111" },
+{ name: "AMITBHAI DEVCHANDBHAI NAKRANI 2025", pdf: "AMITBHAI DEVCHANDBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "AMITBHAI DHANJIBHAI DHADUK 2025", pdf: "AMITBHAI DHANJIBHAI DHADUK 2025.pdf", password: "1111" },
+{ name: "AMITBHAI LILA 2025", pdf: "AMITBHAI LILA 2025.pdf", password: "1111" },
+{ name: "AMITBHAI RAMJIBHAI THUMMAR 2025", pdf: "AMITBHAI RAMJIBHAI THUMMAR 2025.pdf", password: "1111" },
+{ name: "Amol Rameshbhai Soni 2025", pdf: "Amol Rameshbhai Soni 2025.pdf", password: "1111" },
+{ name: "ANAGHAN KIRITBHAI GORDHANBHAI 2025", pdf: "ANAGHAN KIRITBHAI GORDHANBHAI 2025.pdf", password: "1111" },
+{ name: "ANIL BHAI GANPATBHAI CHODAVDIYA 2025", pdf: "ANIL BHAI GANPATBHAI CHODAVDIYA 2025.pdf", password: "1111" },
+{ name: "ANIL KUMAR MANGABHAI MAKWANA 2025", pdf: "ANIL KUMAR MANGABHAI MAKWANA 2025.pdf", password: "1111" },
+{ name: "ANILBHAI DHANJIBHAI KOLADIYA 2025", pdf: "ANILBHAI DHANJIBHAI KOLADIYA 2025.pdf", password: "1111" },
+{ name: "ANILBHAI DHIRUBHAI VEKARIYA PA  2025", pdf: "ANILBHAI DHIRUBHAI VEKARIYA PA  2025.pdf", password: "1111" },
+{ name: "ANILBHAI DHIRUBHAI VEKARIYA 2025", pdf: "ANILBHAI DHIRUBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "ANILBHAI RAMESHBHAI KUMBHANI 2025", pdf: "ANILBHAI RAMESHBHAI KUMBHANI 2025.pdf", password: "1111" },
+{ name: "ANKESH JITUBHAI VEKARIYA 2025", pdf: "ANKESH JITUBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "ANKIT  MAGANBHAI HAPANI 2025", pdf: "ANKIT  MAGANBHAI HAPANI 2025.pdf", password: "1111" },
+{ name: "ANKIT FULABHAI PAGHADAL 2025", pdf: "ANKIT FULABHAI PAGHADAL 2025.pdf", password: "1111" },
+{ name: "ANKIT GHANSHYAM BHAI VADDORIYA 2025", pdf: "ANKIT GHANSHYAM BHAI VADDORIYA 2025.pdf", password: "1111" },
+{ name: "ANKIT HIMMATBHAI LATHIYA 2025", pdf: "ANKIT HIMMATBHAI LATHIYA 2025.pdf", password: "1111" },
+{ name: "ANKITKUMAR GORDHANBHAI RADADIYA 2025", pdf: "ANKITKUMAR GORDHANBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "ANKUR CHATURBHAI NAKRANI 2025", pdf: "ANKUR CHATURBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "ANKUR JIVANBHAI GAJERA 2025", pdf: "ANKUR JIVANBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "ARUNBHAI JERAMBHAI RADADIA 2025", pdf: "ARUNBHAI JERAMBHAI RADADIA 2025.pdf", password: "1111" },
+{ name: "ARUNBHAI VASANTBHAI SORATHIYA 2025", pdf: "ARUNBHAI VASANTBHAI SORATHIYA 2025.pdf", password: "1111" },
+{ name: "ARUNKUMAR HARILAL VAGHASIA 2025", pdf: "ARUNKUMAR HARILAL VAGHASIA 2025.pdf", password: "1111" },
+{ name: "ARUNKUMAR R MISHRA 2025", pdf: "ARUNKUMAR R MISHRA 2025.pdf", password: "9879170940" },
+{ name: "ARVINDBHAI PARSHOTAMBHAI CHOVATIYA 2025", pdf: "ARVINDBHAI PARSHOTAMBHAI CHOVATIYA 2025.pdf", password: "1111" },
+{ name: "ARVINDBHAI SHAMBHUBHAI MALANI 2025", pdf: "ARVINDBHAI SHAMBHUBHAI MALANI 2025.pdf", password: "1111" },
+{ name: "ASHABEN BHARATBHAI VAGHANI 2025", pdf: "ASHABEN BHARATBHAI VAGHANI 2025.pdf", password: "1111" },
+{ name: "ASHABEN BHAVESHBHAI GOYANI 2025", pdf: "ASHABEN BHAVESHBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "ASHABEN ISAMALIYA 2025", pdf: "ASHABEN ISAMALIYA 2025.pdf", password: "1111" },
+{ name: "ASHABEN RAKESHBHAI VAGHELA 2025", pdf: "ASHABEN RAKESHBHAI VAGHELA 2025.pdf", password: "1111" },
+{ name: "ASHISH PREMJIBHAI GOTI 2025", pdf: "ASHISH PREMJIBHAI GOTI 2025.pdf", password: "1111" },
+{ name: "ASHISH VINUBHAI GAJERA 2025", pdf: "ASHISH VINUBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "ASHISH VITHHALBHAI 2025", pdf: "ASHISH VITHHALBHAI 2025.pdf", password: "1111" },
+{ name: "ASHISHKUMAR MANSUKHLAL JAGANI 2025", pdf: "ASHISHKUMAR MANSUKHLAL JAGANI 2025.pdf", password: "1111" },
+{ name: "ASHOK NANUBHAI RADADIYA 2025", pdf: "ASHOK NANUBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "ASHOKBHAI BHIKHABHAI ANTALIYA 2025", pdf: "ASHOKBHAI BHIKHABHAI ANTALIYA 2025.pdf", password: "1111" },
+{ name: "ASHOKBHAI DHIRUBHAI BHALALA 2025", pdf: "ASHOKBHAI DHIRUBHAI BHALALA 2025.pdf", password: "1111" },
+{ name: "ASHOKBHAI HIRAJIBHAI GORASIYA 2025", pdf: "ASHOKBHAI HIRAJIBHAI GORASIYA 2025.pdf", password: "1111" },
+{ name: "ASHOKBHAI KANUBHAI BODAR 2025", pdf: "ASHOKBHAI KANUBHAI BODAR 2025.pdf", password: "1111" },
+{ name: "ASHOKBHAI MANUBHAI BUHA 2025", pdf: "ASHOKBHAI MANUBHAI BUHA 2025.pdf", password: "1111" },
+{ name: "ASHOKBHAI RAMJIBHAI BOGHARA 2025", pdf: "ASHOKBHAI RAMJIBHAI BOGHARA 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI  BHARATBHAI   SOJITRA 2025", pdf: "ASHVINBHAI  BHARATBHAI   SOJITRA 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI B KATHIRIYA 2025", pdf: "ASHVINBHAI B KATHIRIYA 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI KANTIBHAI RAMANI 2025", pdf: "ASHVINBHAI KANTIBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI KANTIBHAI RAMANI- PA 2025", pdf: "ASHVINBHAI KANTIBHAI RAMANI- PA 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI LAVJIBHAI GAJERA 2025", pdf: "ASHVINBHAI LAVJIBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI MANSUKHBHAI PADHRA 2025", pdf: "ASHVINBHAI MANSUKHBHAI PADHRA 2025.pdf", password: "1111" },
+{ name: "Ashvinbhai Naranbhai Dholariya 2025", pdf: "Ashvinbhai Naranbhai Dholariya 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI PARSHOTAMBHAI BORAD  ENDO 2025", pdf: "ASHVINBHAI PARSHOTAMBHAI BORAD  ENDO 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI PARSHOTAMBHAI BORAD 2025", pdf: "ASHVINBHAI PARSHOTAMBHAI BORAD 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI PARSHOTAMBHAI BORAD endooo 2025", pdf: "ASHVINBHAI PARSHOTAMBHAI BORAD endooo 2025.pdf", password: "1111" },
+{ name: "ASHVINBHAI RAMESHBHAI LIMBANI 2025", pdf: "ASHVINBHAI RAMESHBHAI LIMBANI 2025.pdf", password: "1111" },
+{ name: "ASHWIN MAGANBHAI SAVALIYA 2025", pdf: "ASHWIN MAGANBHAI SAVALIYA 2025.pdf", password: "9824764347" },
+{ name: "ASHWINBHAI DEVRAJBHAI BUHA 2025", pdf: "ASHWINBHAI DEVRAJBHAI BUHA 2025.pdf", password: "1111" },
+{ name: "ASHWINBHAI RANCHODBHAI DAKHARA 2025", pdf: "ASHWINBHAI RANCHODBHAI DAKHARA 2025.pdf", password: "1111" },
+{ name: "ASODARIYA ASHVIN  VALJIBHAI 2025", pdf: "ASODARIYA ASHVIN  VALJIBHAI 2025.pdf", password: "1111" },
+{ name: "Atulbhai Maganbhai Sheladiya 2025", pdf: "Atulbhai Maganbhai Sheladiya 2025.pdf", password: "1111" },
+{ name: "ATULKUMAR MADHUBHAI SARADHARA 2025", pdf: "ATULKUMAR MADHUBHAI SARADHARA 2025.pdf", password: "1111" },
+{ name: "AVINASH PRAVINBHAI LILA 2025", pdf: "AVINASH PRAVINBHAI LILA 2025.pdf", password: "1111" },
+{ name: "BABARIYA BHARATBHAI PRAGJIBHAI 2025", pdf: "BABARIYA BHARATBHAI PRAGJIBHAI 2025.pdf", password: "1111" },
+{ name: "BABARIYA SHAILESHBHAI MANSUKHBHAI 2025", pdf: "BABARIYA SHAILESHBHAI MANSUKHBHAI 2025.pdf", password: "1111" },
+{ name: "BABUBHAI SHAMBHUBHAI BALLAR 2025", pdf: "BABUBHAI SHAMBHUBHAI BALLAR 2025.pdf", password: "1111" },
+{ name: "BABUBHAI SUBHASHBHAI RAUT 2025", pdf: "BABUBHAI SUBHASHBHAI RAUT 2025.pdf", password: "1111" },
+{ name: "BABULAL S SHAH 2025", pdf: "BABULAL S SHAH 2025.pdf", password: "1111" },
+{ name: "BALDHA GAURANGKUMAR BAVCHANDBHAI 2025", pdf: "BALDHA GAURANGKUMAR BAVCHANDBHAI 2025.pdf", password: "1111" },
+{ name: "Balvantbhai Dharamshibhai Mavani 2025", pdf: "Balvantbhai Dharamshibhai Mavani 2025.pdf", password: "1111" },
+{ name: "BARVALIYA JIVANBHAI MOHANBHAI 2025", pdf: "BARVALIYA JIVANBHAI MOHANBHAI 2025.pdf", password: "1111" },
+{ name: "BARVALIYA JIVANBHAI MOHANBHAI....PA", pdf: "BARVALIYA JIVANBHAI MOHANBHAI....PA.pdf", password: "1111" },
+{ name: "BARVALIYA RAJESHBHAI SHAMBHUBHAI 2025", pdf: "BARVALIYA RAJESHBHAI SHAMBHUBHAI 2025.pdf", password: "1111" },
+{ name: "Bavchandbhai Narshibhai Kanani 2025", pdf: "Bavchandbhai Narshibhai Kanani 2025.pdf", password: "1111" },
+{ name: "BAVISHI ASHVINBHAI HARIBHAI 2025", pdf: "BAVISHI ASHVINBHAI HARIBHAI 2025.pdf", password: "1111" },
+{ name: "BHADRESH ABHALBHAI MAKVANA 2025", pdf: "BHADRESH ABHALBHAI MAKVANA 2025.pdf", password: "1111" },
+{ name: "BHADRESHKUMAR HIMMATBHAI JASANI 2025", pdf: "BHADRESHKUMAR HIMMATBHAI JASANI 2025.pdf", password: "1111" },
+{ name: "BHADRESHKUMAR JAYSUKHBHAI VEKARIYA  ENDO 2025", pdf: "BHADRESHKUMAR JAYSUKHBHAI VEKARIYA  ENDO 2025.pdf", password: "1111" },
+{ name: "BHADRESHKUMAR JAYSUKHBHAI VEKARIYA  ENDO2 2025", pdf: "BHADRESHKUMAR JAYSUKHBHAI VEKARIYA  ENDO2 2025.pdf", password: "1111" },
+{ name: "BHADRESHKUMAR JAYSUKHBHAI VEKARIYA 2025", pdf: "BHADRESHKUMAR JAYSUKHBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "BHALALA SAVITABEN MADHUBHAI 2025", pdf: "BHALALA SAVITABEN MADHUBHAI 2025.pdf", password: "1111" },
+{ name: "BHALANI RAJENDRA BHAGVANBHAI 2025", pdf: "BHALANI RAJENDRA BHAGVANBHAI 2025.pdf", password: "1111" },
+{ name: "BHANDARI GANPATLAL 2025", pdf: "BHANDARI GANPATLAL 2025.pdf", password: "1111" },
+{ name: "BHARAT BHAI MADHUBHAI HIRPARA 2025", pdf: "BHARAT BHAI MADHUBHAI HIRPARA 2025.pdf", password: "1111" },
+{ name: "BHARAT CHATURBHAI DHOLARIYA 2025", pdf: "BHARAT CHATURBHAI DHOLARIYA 2025.pdf", password: "1111" },
+{ name: "Bharat Haribhai Chavda 2025", pdf: "Bharat Haribhai Chavda 2025.pdf", password: "1111" },
+{ name: "Bharat Vallabhbhai Vadadoriya 2025", pdf: "Bharat Vallabhbhai Vadadoriya 2025.pdf", password: "1111" },
+{ name: "BHARATBHAI LAKHABHAI RABADIYA 2025", pdf: "BHARATBHAI LAKHABHAI RABADIYA 2025.pdf", password: "1111" },
+{ name: "Bharatbhai Laljibhai Davra 2025", pdf: "Bharatbhai Laljibhai Davra 2025.pdf", password: "1111" },
+{ name: "BHARATBHAI MOHANBHAI MANGUKIA 2025", pdf: "BHARATBHAI MOHANBHAI MANGUKIA 2025.pdf", password: "1111" },
+{ name: "BHARATBHAI RAMESHBHAI NAGANI 2025", pdf: "BHARATBHAI RAMESHBHAI NAGANI 2025.pdf", password: "1111" },
+{ name: "BHARATBHAI RAMJIBHAI PATEL ALIAS BOGHARA 2025", pdf: "BHARATBHAI RAMJIBHAI PATEL ALIAS BOGHARA 2025.pdf", password: "1111" },
+{ name: "Bhargav Valjibhai Donga 2025", pdf: "Bhargav Valjibhai Donga 2025.pdf", password: "1111" },
+{ name: "BHAUTIK VINUBHAI GAJERA 2025", pdf: "BHAUTIK VINUBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "BHAVANABEN KISHORBHAI KUMBHANI 2025", pdf: "BHAVANABEN KISHORBHAI KUMBHANI 2025.pdf", password: "1111" },
+{ name: "BHAVDEEP R KUMBHANI 2025", pdf: "BHAVDEEP R KUMBHANI 2025.pdf", password: "1111" },
+{ name: "BHAVDIP  BABUBHAI VIRANI 2025", pdf: "BHAVDIP  BABUBHAI VIRANI 2025.pdf", password: "1111" },
+{ name: "BHAVESH JIVRAJBHAI RUPANI 2025", pdf: "BHAVESH JIVRAJBHAI RUPANI 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI 2025", pdf: "BHAVESHBHAI 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI CHHAGANBHAI VAVADIYA 2025", pdf: "BHAVESHBHAI CHHAGANBHAI VAVADIYA 2025.pdf", password: "1111" },
+{ name: "Bhaveshbhai Gordhanbhai Savsaviya 2025", pdf: "Bhaveshbhai Gordhanbhai Savsaviya 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI HIMMATBHAI BALAR 2025", pdf: "BHAVESHBHAI HIMMATBHAI BALAR 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI HIMMATBHAI KATHIRIYA   HITPA  TPA 2025", pdf: "BHAVESHBHAI HIMMATBHAI KATHIRIYA   HITPA  TPA 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI JAYANITBHAI VEKARIYA 2025", pdf: "BHAVESHBHAI JAYANITBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI JAYSUKHBHAI VEKARIYA 2025", pdf: "BHAVESHBHAI JAYSUKHBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI JIVANBHAI GAJERA 2025", pdf: "BHAVESHBHAI JIVANBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI KALUBHAI KYADA 2025", pdf: "BHAVESHBHAI KALUBHAI KYADA 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI KARSHANBHAI RADADIYA 2025", pdf: "BHAVESHBHAI KARSHANBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI MANUBHAI RAMANI 2025", pdf: "BHAVESHBHAI MANUBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI RAMESHBHAI GOYANI 2025", pdf: "BHAVESHBHAI RAMESHBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "Bhaveshbhai Vallabhbhai Vadadoriya 2025", pdf: "Bhaveshbhai Vallabhbhai Vadadoriya 2025.pdf", password: "1111" },
+{ name: "BHAVESHBHAI PRAGJI BHAI BABARIYA 2025", pdf: "BHAVESHBHAI PRAGJI BHAI BABARIYA 2025.pdf", password: "1111" },
+{ name: "BHAVIK JASUBHAI UKANI 2025", pdf: "BHAVIK JASUBHAI UKANI 2025.pdf", password: "1111" },
+{ name: "Bhavik Nareshbhai Kathiriya 2025", pdf: "Bhavik Nareshbhai Kathiriya 2025.pdf", password: "1111" },
+{ name: "BHAVIN POPATBHAI SAVANI 2025", pdf: "BHAVIN POPATBHAI SAVANI 2025.pdf", password: "1111" },
+{ name: "Bhavinkumar Chandulal Balar irss 2025", pdf: "Bhavinkumar Chandulal Balar irss 2025.pdf", password: "1111" },
+{ name: "BHAWNA SILK MILLS 2025", pdf: "BHAWNA SILK MILLS 2025.pdf", password: "1111" },
+{ name: "BHIMANI CHANDUBHAI VITTHALBHAI 2025", pdf: "BHIMANI CHANDUBHAI VITTHALBHAI 2025.pdf", password: "1111" },
+{ name: "BHIMANI DIPAKBHAI V 2025", pdf: "BHIMANI DIPAKBHAI V 2025.pdf", password: "1111" },
+{ name: "BHIMANI GIRISHBHAI V 2025", pdf: "BHIMANI GIRISHBHAI V 2025.pdf", password: "1111" },
+{ name: "BHIMANI JITENDRA VITTHALBHAI 2025", pdf: "BHIMANI JITENDRA VITTHALBHAI 2025.pdf", password: "1111" },
+{ name: "BHIMANI SHAILESHBHAI V 2025", pdf: "BHIMANI SHAILESHBHAI V 2025.pdf", password: "1111" },
+{ name: "BHIMJIBHAI PREMJIBHAI MALAVIYA 2025", pdf: "BHIMJIBHAI PREMJIBHAI MALAVIYA 2025.pdf", password: "1111" },
+{ name: "BHUPATBHAI V 2025", pdf: "BHUPATBHAI V 2025.pdf", password: "1111" },
+{ name: "BHUPENDRABHAI ASHVINBHAI KACHCHHI 2025", pdf: "BHUPENDRABHAI ASHVINBHAI KACHCHHI 2025.pdf", password: "1111" },
+{ name: "BIPINBHAI MULJIBHAI GANGANI 2025", pdf: "BIPINBHAI MULJIBHAI GANGANI 2025.pdf", password: "1111" },
+{ name: "BIPINBHAI RASIKBHAI SUTARIYA 2025", pdf: "BIPINBHAI RASIKBHAI SUTARIYA 2025.pdf", password: "1111" },
+{ name: "BIRENBHAI KURJIBHAI GOTI 2025", pdf: "BIRENBHAI KURJIBHAI GOTI 2025.pdf", password: "1111" },
+{ name: "BODA BHAVESH D 2025", pdf: "BODA BHAVESH D 2025.pdf", password: "1111" },
+{ name: "Bodar Ishvarbhai Karmashibhai 2025", pdf: "Bodar Ishvarbhai Karmashibhai 2025.pdf", password: "1111" },
+{ name: "BOGHANI DILIPBHAI 2025", pdf: "BOGHANI DILIPBHAI 2025.pdf", password: "1111" },
+{ name: "BOGHANI MAHESHBHAI PRAVINBHAI 2025", pdf: "BOGHANI MAHESHBHAI PRAVINBHAI 2025.pdf", password: "1111" },
+{ name: "BOGHANI NARESHBHHAI PRAVINBHAI 2025", pdf: "BOGHANI NARESHBHHAI PRAVINBHAI 2025.pdf", password: "1111" },
+{ name: "BRIJESH RAMNIKBHAI SAPARIYA 2025", pdf: "BRIJESH RAMNIKBHAI SAPARIYA 2025.pdf", password: "1111" },
+{ name: "CHANDRESH ARVINDBHAI MALANI 2025", pdf: "CHANDRESH ARVINDBHAI MALANI 2025.pdf", password: "1111" },
+{ name: "CHANDRESH KANUBHAI VEKARIYA 2025", pdf: "CHANDRESH KANUBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "CHANDUBHAI P GAJERA 2025", pdf: "CHANDUBHAI P GAJERA 2025.pdf", password: "1111" },
+{ name: "CHATRABHUJDAS HASMUKHBHAI BALDHA 2025", pdf: "CHATRABHUJDAS HASMUKHBHAI BALDHA 2025.pdf", password: "1111" },
+{ name: "CHATURBHAI HARIBHAI BAVISHI 2025", pdf: "CHATURBHAI HARIBHAI BAVISHI 2025.pdf", password: "1111" },
+{ name: "Chaturbhai Karashanbhai Vaddoriya 2025", pdf: "Chaturbhai Karashanbhai Vaddoriya 2025.pdf", password: "1111" },
+{ name: "CHATURBHAI MADHUBHAI HIRPARA 2025", pdf: "CHATURBHAI MADHUBHAI HIRPARA 2025.pdf", password: "1111" },
+{ name: "CHATURBHAI NAKRANI 2025", pdf: "CHATURBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "CHATURBHAI NANJIBHAI SHIROYA 2025", pdf: "CHATURBHAI NANJIBHAI SHIROYA 2025.pdf", password: "1111" },
+{ name: "CHATURBHAI PATOLIYA 2025", pdf: "CHATURBHAI PATOLIYA 2025.pdf", password: "1111" },
+{ name: "CHETAN VINUBHAI GAJERA 2025", pdf: "CHETAN VINUBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "CHETANBHAI DILIPBHAI BHUVA 2025", pdf: "CHETANBHAI DILIPBHAI BHUVA 2025.pdf", password: "1111" },
+{ name: "CHETANBHAI JAGDISHBHAI GAJERA 2025", pdf: "CHETANBHAI JAGDISHBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "CHETANKUMAR BHAILAL  GAJERA 2025", pdf: "CHETANKUMAR BHAILAL  GAJERA 2025.pdf", password: "1111" },
+{ name: "CHETANKUMAR D 2025", pdf: "CHETANKUMAR D 2025.pdf", password: "1111" },
+{ name: "CHHAGANRAJ NEMICHAND CHHAJER 2025", pdf: "CHHAGANRAJ NEMICHAND CHHAJER 2025.pdf", password: "1111" },
+{ name: "CHIMANBHAI GABHRUBHAI MAKRUBIA 2025", pdf: "CHIMANBHAI GABHRUBHAI MAKRUBIA 2025.pdf", password: "1111" },
+{ name: "CHIMANKUMAR DIPAKBHAI SUKHADIYA 2025", pdf: "CHIMANKUMAR DIPAKBHAI SUKHADIYA 2025.pdf", password: "8347808419" },
+{ name: "CHINTANKUMAR RAMESHBHAI SARDHARA 2025", pdf: "CHINTANKUMAR RAMESHBHAI SARDHARA 2025.pdf", password: "1111" },
+{ name: "CHIRAG    VITHALBHAI   CHOVATIYA 2025", pdf: "CHIRAG    VITHALBHAI   CHOVATIYA 2025.pdf", password: "1111" },
+{ name: "CHIRAG ARVIND MALANI 2025", pdf: "CHIRAG ARVIND MALANI 2025.pdf", password: "1111" },
+{ name: "CHIRAG ASHOKBHAI TRAPASIYA 2025", pdf: "CHIRAG ASHOKBHAI TRAPASIYA 2025.pdf", password: "1111" },
+{ name: "CHIRAG DINESHBHAI MANGROLA 2025", pdf: "CHIRAG DINESHBHAI MANGROLA 2025.pdf", password: "1111" },
+{ name: "Chirag Himmatbhai Dhanani 2025", pdf: "Chirag Himmatbhai Dhanani 2025.pdf", password: "1111" },
+{ name: "CHIRAG JAYSUKHBHAI SOJITRA 2025", pdf: "CHIRAG JAYSUKHBHAI SOJITRA 2025.pdf", password: "1111" },
+{ name: "CHIRAG MANASUKHBHAI GEVARIYA 2025", pdf: "CHIRAG MANASUKHBHAI GEVARIYA 2025.pdf", password: "1111" },
+{ name: "CHIRAG VALJIBHAI CHODVADIYA 2025", pdf: "CHIRAG VALJIBHAI CHODVADIYA 2025.pdf", password: "1111" },
+{ name: "CHIRAGKUMAR DURLABHBHAI PATOLIYA 2025", pdf: "CHIRAGKUMAR DURLABHBHAI PATOLIYA 2025.pdf", password: "1111" },
+{ name: "CHIRAGKUMAR VAJUBHAI GALANI 2025", pdf: "CHIRAGKUMAR VAJUBHAI GALANI 2025.pdf", password: "9099153999" },
+{ name: "CHITALIYA HARJIBHAI BHIMJIBHAI 2025", pdf: "CHITALIYA HARJIBHAI BHIMJIBHAI 2025.pdf", password: "1111" },
+{ name: "CHITALIYA SHAILESHBHAI HARIBHAI 2025", pdf: "CHITALIYA SHAILESHBHAI HARIBHAI 2025.pdf", password: "1111" },
+{ name: "CHITLIYA JAGDISHBHAI HARIBHAI 2025", pdf: "CHITLIYA JAGDISHBHAI HARIBHAI 2025.pdf", password: "1111" },
+{ name: "CHODAVADIYA SURESHBHAI GANPATBHAI 2025", pdf: "CHODAVADIYA SURESHBHAI GANPATBHAI 2025.pdf", password: "1111" },
+{ name: "CHOTHANI ASHVINBHAI SHIVABHAI 2025", pdf: "CHOTHANI ASHVINBHAI SHIVABHAI 2025.pdf", password: "1111" },
+{ name: "CHOTHANI GHANSHYAMBHAI 2025", pdf: "CHOTHANI GHANSHYAMBHAI 2025.pdf", password: "1111" },
+{ name: "DAKHARA BHAVESHBHAI JERAMBHAI 2025", pdf: "DAKHARA BHAVESHBHAI JERAMBHAI 2025.pdf", password: "1111" },
+{ name: "DANKHARA NISHIT CHANDUBHAI 2025", pdf: "DANKHARA NISHIT CHANDUBHAI 2025.pdf", password: "1111" },
+{ name: "DARSHILKUMAR KAMLESHBHAI 2025", pdf: "DARSHILKUMAR KAMLESHBHAI 2025.pdf", password: "1111" },
+{ name: "DESAI KETANBHAI KANAIYALAL 2025", pdf: "DESAI KETANBHAI KANAIYALAL 2025.pdf", password: "1111" },
+{ name: "DESAI KETANKUMAR HIMATBHAI 2025", pdf: "DESAI KETANKUMAR HIMATBHAI 2025.pdf", password: "1111" },
+{ name: "DESAI RAJESHBHAI M 2025", pdf: "DESAI RAJESHBHAI M 2025.pdf", password: "1111" },
+{ name: "DEVANI DIPAK JASUBHAI 2025", pdf: "DEVANI DIPAK JASUBHAI 2025.pdf", password: "1111" },
+{ name: "DEVCHANDBHAI MADHUBHAI PATOLIYA 2025", pdf: "DEVCHANDBHAI MADHUBHAI PATOLIYA 2025.pdf", password: "1111" },
+{ name: "DEVRAJBHAI MULJIBHAI ITALIYA 2025", pdf: "DEVRAJBHAI MULJIBHAI ITALIYA 2025.pdf", password: "1111" },
+{ name: "DHAMELIA DHIRUBHAI 2025", pdf: "DHAMELIA DHIRUBHAI 2025.pdf", password: "1111" },
+{ name: "DHAMELIYA NEMUBEN VIRJIBHAI 2025", pdf: "DHAMELIYA NEMUBEN VIRJIBHAI 2025.pdf", password: "1111" },
+{ name: "DHARMANANDAN FASHION 2025", pdf: "DHARMANANDAN FASHION 2025.pdf", password: "1111" },
+{ name: "DHARMANANDAN FASHION NAYANABEN 2025", pdf: "DHARMANANDAN FASHION NAYANABEN 2025.pdf", password: "1111" },
+{ name: "DHARMESH D KUMBHANI 2025", pdf: "DHARMESH D KUMBHANI 2025.pdf", password: "1111" },
+{ name: "DHARMESH GHANSHYAMBHAI PALADIYA 2025", pdf: "DHARMESH GHANSHYAMBHAI PALADIYA 2025.pdf", password: "1111" },
+{ name: "DHARMESH VIRANI 2025", pdf: "DHARMESH VIRANI 2025.pdf", password: "1111" },
+{ name: "DHARMESHBHAI JAGDISHBHAI GAJERA 2025", pdf: "DHARMESHBHAI JAGDISHBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "DHARMESHBHAI JAGDISHBHAI GAJERA ENDO 2025", pdf: "DHARMESHBHAI JAGDISHBHAI GAJERA ENDO 2025.pdf", password: "1111" },
+{ name: "DHARMESHBHAI JENTIBHAI SAVALIYA 2025", pdf: "DHARMESHBHAI JENTIBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "DHARMESHBHAI MOHANBHAI MANGUKIYA 2025", pdf: "DHARMESHBHAI MOHANBHAI MANGUKIYA 2025.pdf", password: "1111" },
+{ name: "DHARMNANDAN TEXTILES PROP  PRAVINBHAI UKABHAI DEVANI 2025", pdf: "DHARMNANDAN TEXTILES PROP  PRAVINBHAI UKABHAI DEVANI 2025.pdf", password: "1111" },
+{ name: "DHAVAL HIMMATBHAI VADADORIYA 2025", pdf: "DHAVAL HIMMATBHAI VADADORIYA 2025.pdf", password: "1111" },
+{ name: "DHAVALBHAI POPATBHAI DAYANI 2025", pdf: "DHAVALBHAI POPATBHAI DAYANI 2025.pdf", password: "1111" },
+{ name: "DHAVALKUMAR KANUBHAI PATEL 2025", pdf: "DHAVALKUMAR KANUBHAI PATEL 2025.pdf", password: "1111" },
+{ name: "DHIRUBHAI POPATBHAI GONDALIYA 2025", pdf: "DHIRUBHAI POPATBHAI GONDALIYA 2025.pdf", password: "1111" },
+{ name: "DHIRUBHAI VEKARIYA 2025", pdf: "DHIRUBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "DHOLAKIYA KALPESHBHAI POPATBHAI 2025", pdf: "DHOLAKIYA KALPESHBHAI POPATBHAI 2025.pdf", password: "1111" },
+{ name: "DHOLARIYA MAHENDRA B 2025", pdf: "DHOLARIYA MAHENDRA B 2025.pdf", password: "1111" },
+{ name: "DHRUVBHAI DAMJIBHAI GODHANI 2025", pdf: "DHRUVBHAI DAMJIBHAI GODHANI 2025.pdf", password: "1111" },
+{ name: "DHRUVINKUMAR ASHWINBHAI GAJERA 2025", pdf: "DHRUVINKUMAR ASHWINBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "Dienshchandra Mohanlal Savani 2025", pdf: "Dienshchandra Mohanlal Savani 2025.pdf", password: "1111" },
+{ name: "DIKESHBHAI RAMESH CHANDRA KAKADIYA 2025", pdf: "DIKESHBHAI RAMESH CHANDRA KAKADIYA 2025.pdf", password: "1111" },
+{ name: "Dilip Babubhai Surani 2025", pdf: "Dilip Babubhai Surani 2025.pdf", password: "1111" },
+{ name: "DILIPBHAI BABUBHAI DESAI 2025", pdf: "DILIPBHAI BABUBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "DILIPBHAI GIRDHARBHAI SAVALIYA 2025", pdf: "DILIPBHAI GIRDHARBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "DILIPBHAI RAMNIKBHAI HIRPARA 2025", pdf: "DILIPBHAI RAMNIKBHAI HIRPARA 2025.pdf", password: "1111" },
+{ name: "DINESHBHAI ARVINDBHAI MAKWANA 2025", pdf: "DINESHBHAI ARVINDBHAI MAKWANA 2025.pdf", password: "1111" },
+{ name: "DINESHBHAI DHIRUBHAI MANGROLA 2025", pdf: "DINESHBHAI DHIRUBHAI MANGROLA 2025.pdf", password: "1111" },
+{ name: "DINESHBHAI JAGABHAI LAKKAD 2025", pdf: "DINESHBHAI JAGABHAI LAKKAD 2025.pdf", password: "1111" },
+{ name: "DINESHBHAI KALUBHAI GOYANI 2025", pdf: "DINESHBHAI KALUBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "DINESHBHAI LAKHMANBHAI VASTARPARA 2025", pdf: "DINESHBHAI LAKHMANBHAI VASTARPARA 2025.pdf", password: "1111" },
+{ name: "DINESHBHAI M VAGHASIYA 2025", pdf: "DINESHBHAI M VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "Dipak Jivrajbhai Donda 2025", pdf: "Dipak Jivrajbhai Donda 2025.pdf", password: "1111" },
+{ name: "DIPAKBHAI BHIMANI(PATEL) 2025", pdf: "DIPAKBHAI BHIMANI(PATEL) 2025.pdf", password: "1111" },
+{ name: "DIPAKBHAI HIMMATBHAI PANSERIYA 2025", pdf: "DIPAKBHAI HIMMATBHAI PANSERIYA 2025.pdf", password: "1111" },
+{ name: "DIPAKBHAI MANSUKHBHAI MALAVIYA 2025", pdf: "DIPAKBHAI MANSUKHBHAI MALAVIYA 2025.pdf", password: "1111" },
+{ name: "DIPAKBHAI VINUBHAI BORAD 2025", pdf: "DIPAKBHAI VINUBHAI BORAD 2025.pdf", password: "1111" },
+{ name: "DIVYA MAYUR RANA 2025", pdf: "DIVYA MAYUR RANA 2025.pdf", password: "1111" },
+{ name: "DIVYESH BABUBHAI DOBARIYA 2025", pdf: "DIVYESH BABUBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "DIVYESH BHARATBHAI VIRADIYA 2025", pdf: "DIVYESH BHARATBHAI VIRADIYA 2025.pdf", password: "1111" },
+{ name: "DIVYESHKUMAR DEVCHANDBHAI NAKRANI 2025", pdf: "DIVYESHKUMAR DEVCHANDBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "DOBARIYA JIGNESHBHAI M 2025", pdf: "DOBARIYA JIGNESHBHAI M 2025.pdf", password: "1111" },
+{ name: "Dobariya Manjulaben Manshukhbhai 2025", pdf: "Dobariya Manjulaben Manshukhbhai 2025.pdf", password: "1111" },
+{ name: "DOBARIYA SANJAYBHAI MANAJIBHAI 2025", pdf: "DOBARIYA SANJAYBHAI MANAJIBHAI 2025.pdf", password: "1111" },
+{ name: "DOBARIYA VIPULBHAI JAYANTIBHAI 2025", pdf: "DOBARIYA VIPULBHAI JAYANTIBHAI 2025.pdf", password: "1111" },
+{ name: "Donga Bhargav Valjibhai 2025", pdf: "Donga Bhargav Valjibhai 2025.pdf", password: "1111" },
+{ name: "DONGA PRASHANTBHAI BHAGVANJIBHAI 2025", pdf: "DONGA PRASHANTBHAI BHAGVANJIBHAI 2025.pdf", password: "1111" },
+{ name: "DOODARAM HEERARAM CHOUDHARY 2025", pdf: "DOODARAM HEERARAM CHOUDHARY 2025.pdf", password: "1111" },
+{ name: "DUDHAT KENIL BATUKBHAI 2025", pdf: "DUDHAT KENIL BATUKBHAI 2025.pdf", password: "1111" },
+{ name: "DURLABHBHAI JERAMBHAI VAGHASIYA 2025", pdf: "DURLABHBHAI JERAMBHAI VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "FALDU  KISHORBHAI  HARIBHAI 2025", pdf: "FALDU  KISHORBHAI  HARIBHAI 2025.pdf", password: "1111" },
+{ name: "FALDU KISHORBHAI HARIBHAI 2025", pdf: "FALDU KISHORBHAI HARIBHAI 2025.pdf", password: "1111" },
+{ name: "GABHARUBHAI S JODHANI 2025", pdf: "GABHARUBHAI S JODHANI 2025.pdf", password: "1111" },
+{ name: "GAJERA ASHOKBHAI P 2025", pdf: "GAJERA ASHOKBHAI P 2025.pdf", password: "1111" },
+{ name: "GAJERA DIPAKBHAI NATHABHAI 2025", pdf: "GAJERA DIPAKBHAI NATHABHAI 2025.pdf", password: "1111" },
+{ name: "GAJERA HIRENBHAI CHANDUBHAI 2025", pdf: "GAJERA HIRENBHAI CHANDUBHAI 2025.pdf", password: "1111" },
+{ name: "GAJERA JAGRESHBHAI BHUPATBHAI 2025", pdf: "GAJERA JAGRESHBHAI BHUPATBHAI 2025.pdf", password: "1111" },
+{ name: "GAJERA KAPILBHAI B 2025", pdf: "GAJERA KAPILBHAI B 2025.pdf", password: "9228232102" },
+{ name: "GAJERA MUKESHBHAI V 2025", pdf: "GAJERA MUKESHBHAI V 2025.pdf", password: "1111" },
+{ name: "GAJERA SANDIPBHAI NATHABHAI 2025", pdf: "GAJERA SANDIPBHAI NATHABHAI 2025.pdf", password: "1111" },
+{ name: "GAJERA SHARDABEN V 2025", pdf: "GAJERA SHARDABEN V 2025.pdf", password: "1111" },
+{ name: "Gandhani Mamta Jayshankar 2025", pdf: "Gandhani Mamta Jayshankar 2025.pdf", password: "1111" },
+{ name: "Gaurav A Vadaliya 2025", pdf: "Gaurav A Vadaliya 2025.pdf", password: "1111" },
+{ name: "GAURAV V GALANI  2025", pdf: "GAURAV V GALANI  2025.pdf", password: "9099153999" },
+{ name: "Gautam Chhaganbhai Katrodiya 2025", pdf: "Gautam Chhaganbhai Katrodiya 2025.pdf", password: "1111" },
+{ name: "GAUTAMCHAND 2025", pdf: "GAUTAMCHAND 2025.pdf", password: "8690998283" },
+{ name: "GEETABEN ASHVINBHAI RUPAVATIYA 2025", pdf: "GEETABEN ASHVINBHAI RUPAVATIYA 2025.pdf", password: "1111" },
+{ name: "GEVARIYA CHIRAG MANSUKHBHAI MEDI 2025", pdf: "GEVARIYA CHIRAG MANSUKHBHAI MEDI 2025.pdf", password: "1111" },
+{ name: "GHANSHYAM RAMNIKLAL  SAVALIYA 2025", pdf: "GHANSHYAM RAMNIKLAL  SAVALIYA 2025.pdf", password: "1111" },
+{ name: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2025", pdf: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2025.pdf", password: "1111" },
+{ name: "GHANSHYAMBHAI HARIBHAI GONDALIYA 2025", pdf: "GHANSHYAMBHAI HARIBHAI GONDALIYA 2025.pdf", password: "1111" },
+{ name: "Ghanshyambhai Jagabhai Zalavadiya 2025", pdf: "Ghanshyambhai Jagabhai Zalavadiya 2025.pdf", password: "1111" },
+{ name: "GHANSHYAMBHAI NATHABHAI DHAKECHA 2025", pdf: "GHANSHYAMBHAI NATHABHAI DHAKECHA 2025.pdf", password: "1111" },
+{ name: "GHANSHYAMBHAI PUNABHAI JODHANI 2025", pdf: "GHANSHYAMBHAI PUNABHAI JODHANI 2025.pdf", password: "1111" },
+{ name: "GHANSHYAMBHAI VASANTBHAI SORATHIYA 2025", pdf: "GHANSHYAMBHAI VASANTBHAI SORATHIYA 2025.pdf", password: "1111" },
+{ name: "GIRISHBHAI BHANUBHAI RAMANI 2025", pdf: "GIRISHBHAI BHANUBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "GNYANBHAI PREMJIBHAI LADUMOR 2025", pdf: "GNYANBHAI PREMJIBHAI LADUMOR 2025.pdf", password: "1111" },
+{ name: "GODHANI KALPESH B 2025", pdf: "GODHANI KALPESH B 2025.pdf", password: "1111" },
+{ name: "GOLAKIYA NIKUNJKUMAR  M 2025", pdf: "GOLAKIYA NIKUNJKUMAR  M 2025.pdf", password: "1111" },
+{ name: "GONDALIYA VIMALBHAI PARBATBHAI 2025", pdf: "GONDALIYA VIMALBHAI PARBATBHAI 2025.pdf", password: "1111" },
+{ name: "GOPAL RAGHUBHAI SAKARIYA 2025", pdf: "GOPAL RAGHUBHAI SAKARIYA 2025.pdf", password: "1111" },
+{ name: "Gopalbhai Mansukhbhai Dobariya 2025", pdf: "Gopalbhai Mansukhbhai Dobariya 2025.pdf", password: "1111" },
+{ name: "GOPALBHAI RAGHAVBHAI GELANI 2025", pdf: "GOPALBHAI RAGHAVBHAI GELANI 2025.pdf", password: "1111" },
+{ name: "GORASIYA HITESHBHAI BABUBHAI 2025", pdf: "GORASIYA HITESHBHAI BABUBHAI 2025.pdf", password: "1111" },
+{ name: "Gordhanbhai Ghughabhai Anghan 2025", pdf: "Gordhanbhai Ghughabhai Anghan 2025.pdf", password: "1111" },
+{ name: "GOVIND GULABBHAI GUPTA 2025", pdf: "GOVIND GULABBHAI GUPTA 2025.pdf", password: "1111" },
+{ name: "GOYANI PANKAJBHAI NARANBHAI 2025", pdf: "GOYANI PANKAJBHAI NARANBHAI 2025.pdf", password: "1111" },
+{ name: "GREEJESH VINUBHAI GAJERA 2025", pdf: "GREEJESH VINUBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "Hansaben  Vallabhabhai  Vadadoriya 2025", pdf: "Hansaben  Vallabhabhai  Vadadoriya 2025.pdf", password: "1111" },
+{ name: "HANSABEN DULABHAI VAGHASIYA  TOP UP 2025", pdf: "HANSABEN DULABHAI VAGHASIYA  TOP UP 2025.pdf", password: "1111" },
+{ name: "HANSABEN K RAMANI 2025", pdf: "HANSABEN K RAMANI 2025.pdf", password: "1111" },
+{ name: "HAPANI VAITULBHAI KARSHANBHAI 2025", pdf: "HAPANI VAITULBHAI KARSHANBHAI 2025.pdf", password: "1111" },
+{ name: "HARASODA GHANSHYAMBHAI POPATBHAI 2025", pdf: "HARASODA GHANSHYAMBHAI POPATBHAI 2025.pdf", password: "1111" },
+{ name: "HARDIK KISHORBHAI RAJPARA 2025", pdf: "HARDIK KISHORBHAI RAJPARA 2025.pdf", password: "1111" },
+{ name: "HARDIK MANHARBHAI SUTARIYA 2025", pdf: "HARDIK MANHARBHAI SUTARIYA 2025.pdf", password: "1111" },
+{ name: "HARDIKBHAI DEVACHANDBHAI PATOLIYA 2025", pdf: "HARDIKBHAI DEVACHANDBHAI PATOLIYA 2025.pdf", password: "1111" },
+{ name: "HARDIKBHAI HIMMATBHAI MANGUKIYA 2025", pdf: "HARDIKBHAI HIMMATBHAI MANGUKIYA 2025.pdf", password: "1111" },
+{ name: "Hardikkumar Babubhai Ramani 2025", pdf: "Hardikkumar Babubhai Ramani 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI BATUKBHAI SAVALIYA 2025", pdf: "HARESHBHAI BATUKBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI CHATURBHAI AKBARI 2025", pdf: "HARESHBHAI CHATURBHAI AKBARI 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI DAKHARA 2025", pdf: "HARESHBHAI DAKHARA 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI DHANJIBHAI SOJITRA 2025", pdf: "HARESHBHAI DHANJIBHAI SOJITRA 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI LAVJIBHAI MAKVANA 2025", pdf: "HARESHBHAI LAVJIBHAI MAKVANA 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI N GOYANI 2025", pdf: "HARESHBHAI N GOYANI 2025.pdf", password: "1111" },
+{ name: "Hareshbhai Pachabhai Gadhiya 2025", pdf: "Hareshbhai Pachabhai Gadhiya 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI POPATBHAI SHELADIYA 2025", pdf: "HARESHBHAI POPATBHAI SHELADIYA 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI RAMJIBHAI RANK 2025", pdf: "HARESHBHAI RAMJIBHAI RANK 2025.pdf", password: "1111" },
+{ name: "HARESHBHAI V 2025", pdf: "HARESHBHAI V 2025.pdf", password: "1111" },
+{ name: "HARKESHBHAI BALUBHAI  RAMANI 2025", pdf: "HARKESHBHAI BALUBHAI  RAMANI 2025.pdf", password: "1111" },
+{ name: "HARKHANI BHAVYAKUMAR MANSUKHBHAI 2025", pdf: "HARKHANI BHAVYAKUMAR MANSUKHBHAI 2025.pdf", password: "1111" },
+{ name: "HARSHIL BIPINBHAI DESAI 2025", pdf: "HARSHIL BIPINBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "HARSHIN ATULBHAI BUTANI 2025", pdf: "HARSHIN ATULBHAI BUTANI 2025.pdf", password: "1111" },
+{ name: "HASMUKH RAMESHBHAI GOYANI 2025", pdf: "HASMUKH RAMESHBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "HASMUKHBHAI DAMJIBHAI PANSHERIA 2025", pdf: "HASMUKHBHAI DAMJIBHAI PANSHERIA 2025.pdf", password: "1111" },
+{ name: "HASMUKHBHAI DURLABHBHAI PATOLIYA 2025", pdf: "HASMUKHBHAI DURLABHBHAI PATOLIYA 2025.pdf", password: "1111" },
+{ name: "Hasmukhbhai Himatbhai Chodvadiya 2025", pdf: "Hasmukhbhai Himatbhai Chodvadiya 2025.pdf", password: "1111" },
+{ name: "HASMUKHBHAI KURJIBHAI GOTI 2025", pdf: "HASMUKHBHAI KURJIBHAI GOTI 2025.pdf", password: "1111" },
+{ name: "HETALBEN VIJAYKUMAR DHAMELIYA 2025", pdf: "HETALBEN VIJAYKUMAR DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "Himmatbhai Babubhai Desai 2025", pdf: "Himmatbhai Babubhai Desai 2025.pdf", password: "1111" },
+{ name: "HIMMATBHAI MOHANBHAI KACHHADIYA 2025", pdf: "HIMMATBHAI MOHANBHAI KACHHADIYA 2025.pdf", password: "1111" },
+{ name: "Himmatbhai Nanjibhai Ramani 2025", pdf: "Himmatbhai Nanjibhai Ramani 2025.pdf", password: "1111" },
+{ name: "Himmatbhai Parshottambhai Mangukiya 2025", pdf: "Himmatbhai Parshottambhai Mangukiya 2025.pdf", password: "1111" },
+{ name: "HINABEN BHARATBHAI ISAMALIYA 2025", pdf: "HINABEN BHARATBHAI ISAMALIYA 2025.pdf", password: "1111" },
+{ name: "HIRABHAI SAMJIBHAI DANKHARA ( FIRE ) 2025", pdf: "HIRABHAI SAMJIBHAI DANKHARA ( FIRE ) 2025.pdf", password: "1111" },
+{ name: "HIREN BABUBHAI THUMMAR 2025", pdf: "HIREN BABUBHAI THUMMAR 2025.pdf", password: "1111" },
+{ name: "HIREN CHHAGANBHAI KATRODIYA 2025", pdf: "HIREN CHHAGANBHAI KATRODIYA 2025.pdf", password: "7069388190" },
+{ name: "Hiren Kishorbhai Chavda 2025", pdf: "Hiren Kishorbhai Chavda 2025.pdf", password: "8866266812" },
+{ name: "HIREN SHAMJIBHAI NAKRANI 2025", pdf: "HIREN SHAMJIBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "HITESH RAMESHBHAI DHOLA ( FAMILY ) 2025", pdf: "HITESH RAMESHBHAI DHOLA ( FAMILY ) 2025.pdf", password: "927689722" },
+{ name: "HITESHBHAI BALUBHAI BAVISHI 2025", pdf: "HITESHBHAI BALUBHAI BAVISHI 2025.pdf", password: "1111" },
+{ name: "HITESHBHAI BHIKHABHAI RADADIYA 2025", pdf: "HITESHBHAI BHIKHABHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "HITESHBHAI BHUPATBHAI HIRPARA 2025", pdf: "HITESHBHAI BHUPATBHAI HIRPARA 2025.pdf", password: "1111" },
+{ name: "HITESHBHAI JINABHAI MAKANI 2025", pdf: "HITESHBHAI JINABHAI MAKANI 2025.pdf", password: "1111" },
+{ name: "HITESHBHAI RAGHAVJIBHAI PARSANIYA 2025", pdf: "HITESHBHAI RAGHAVJIBHAI PARSANIYA 2025.pdf", password: "1111" },
+{ name: "Hiteshbhai Vinubhai Kalathiya 2025", pdf: "Hiteshbhai Vinubhai Kalathiya 2025.pdf", password: "1111" },
+{ name: "JAGDISH BHAI RANCHOD BHAI GADHIYA 2025", pdf: "JAGDISH BHAI RANCHOD BHAI GADHIYA 2025.pdf", password: "1111" },
+{ name: "JAGDISHBHAI BABUBHAI THAKKAR 2025", pdf: "JAGDISHBHAI BABUBHAI THAKKAR 2025.pdf", password: "1111" },
+{ name: "Jagdishbhai Fulchandbhai Olpadia 2025", pdf: "Jagdishbhai Fulchandbhai Olpadia 2025.pdf", password: "1111" },
+{ name: "JAGDISHBHAI KISHORBHAI VAGHASIYA 2025", pdf: "JAGDISHBHAI KISHORBHAI VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "Jagdishbhai Laljibhai Vekariya 2025", pdf: "Jagdishbhai Laljibhai Vekariya 2025.pdf", password: "1111" },
+{ name: "JAGDISHBHAI MAVJIBHAI MALANI 2025", pdf: "JAGDISHBHAI MAVJIBHAI MALANI 2025.pdf", password: "1111" },
+{ name: "JAGDISHBHAI S VEKARIYA 2025", pdf: "JAGDISHBHAI S VEKARIYA 2025.pdf", password: "1111" },
+{ name: "JAGDISHBHAI V KOLADIYA 2025", pdf: "JAGDISHBHAI V KOLADIYA 2025.pdf", password: "1111" },
+{ name: "Jagdishkumar Manubhai Vaghasiya 2025", pdf: "Jagdishkumar Manubhai Vaghasiya 2025.pdf", password: "1111" },
+{ name: "JAGDISHKUMAR PARSHOTAMBHAI DHAMELIYA 2025", pdf: "JAGDISHKUMAR PARSHOTAMBHAI DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "JAIN  GAUTAMCHAND  HITPA TPA 2025", pdf: "JAIN  GAUTAMCHAND  HITPA TPA 2025.pdf", password: "1111" },
+{ name: "JANAKBHAI JIVRAJBHAI MALANI 2025", pdf: "JANAKBHAI JIVRAJBHAI MALANI 2025.pdf", password: "1111" },
+{ name: "JATIN PRAVINBHAI  SIDAPARA 2025", pdf: "JATIN PRAVINBHAI  SIDAPARA 2025.pdf", password: "1111" },
+{ name: "JATINKUMAR DALSUKHBHAI GAMI 2025", pdf: "JATINKUMAR DALSUKHBHAI GAMI 2025.pdf", password: "1111" },
+{ name: "JATISH ASHOKBHAI MULANI 2025", pdf: "JATISH ASHOKBHAI MULANI 2025.pdf", password: "1111" },
+{ name: "JAY MATAJI CREATION 2 2025", pdf: "JAY MATAJI CREATION 2 2025.pdf", password: "1111" },
+{ name: "JAY MATAJI CREATION 2025", pdf: "JAY MATAJI CREATION 2025.pdf", password: "1111" },
+{ name: "JAYANI KALUBHAI G 2025", pdf: "JAYANI KALUBHAI G 2025.pdf", password: "1111" },
+{ name: "JAYANT LAKSHMANBHAI VARTAK HITPA TPA 2025", pdf: "JAYANT LAKSHMANBHAI VARTAK HITPA TPA 2025.pdf", password: "1111" },
+{ name: "JAYANTIBHAI HANSRAJBHAI LALAKIYA  PA 2025", pdf: "JAYANTIBHAI HANSRAJBHAI LALAKIYA  PA 2025.pdf", password: "1111" },
+{ name: "Jayantibhai Hansrajbhai Lalakiya 2025", pdf: "Jayantibhai Hansrajbhai Lalakiya 2025.pdf", password: "1111" },
+{ name: "JAYANTIBHAI VALLABHBHAI JODHANI  i10 2025", pdf: "JAYANTIBHAI VALLABHBHAI JODHANI  i10 2025.pdf", password: "1111" },
+{ name: "Jaydeep Babubhai Kakadiya 2025", pdf: "Jaydeep Babubhai Kakadiya 2025.pdf", password: "1111" },
+{ name: "JAYDEEP MATHURBHAI RADADIYA 2025", pdf: "JAYDEEP MATHURBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "JAYDIP SHAMBHUBHAI CHABHADIYA 2025", pdf: "JAYDIP SHAMBHUBHAI CHABHADIYA 2025.pdf", password: "1111" },
+{ name: "JAYESHBHAI BABUBHAI MANGUKIYA 2025", pdf: "JAYESHBHAI BABUBHAI MANGUKIYA 2025.pdf", password: "1111" },
+{ name: "JAYESHBHAI DALSUKHBHAI ISAMALIYA 2025", pdf: "JAYESHBHAI DALSUKHBHAI ISAMALIYA 2025.pdf", password: "1111" },
+{ name: "JAYESHBHAI HIMMATBHAI DOBARIYA 2025", pdf: "JAYESHBHAI HIMMATBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "JAYESHBHAI JAYANTIBHAI MERULIYA 2025", pdf: "JAYESHBHAI JAYANTIBHAI MERULIYA 2025.pdf", password: "1111" },
+{ name: "JAYESHKUMAR KARSHANBHAI DUNGRANI 2025", pdf: "JAYESHKUMAR KARSHANBHAI DUNGRANI 2025.pdf", password: "1111" },
+{ name: "JAYMIN BIPINBHAI DESAI 2025", pdf: "JAYMIN BIPINBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "JAYPAL NANUBHAI MENDPARA 2025", pdf: "JAYPAL NANUBHAI MENDPARA 2025.pdf", password: "1111" },
+{ name: "JAYSHREEBEN VIPULBHAI GAJERA 2025", pdf: "JAYSHREEBEN VIPULBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "JAYSUKHBHAI VALLABHBHAI LATHIYA 2025", pdf: "JAYSUKHBHAI VALLABHBHAI LATHIYA 2025.pdf", password: "1111" },
+{ name: "Jeet Raghavbhai Vaghani 2025", pdf: "Jeet Raghavbhai Vaghani 2025.pdf", password: "1111" },
+{ name: "JENIL KALUBHAI DESAI 2025", pdf: "JENIL KALUBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "JENISH 2025", pdf: "JENISH 2025.pdf", password: "1111" },
+{ name: "JETHA RAM DEVI LAL PANWAR 2025", pdf: "JETHA RAM DEVI LAL PANWAR 2025.pdf", password: "1111" },
+{ name: "JIGAR MAHESHBHAI VEKARIYA 2025", pdf: "JIGAR MAHESHBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "JIGNESH DEVCHANDBHAI PANCHANI 2025", pdf: "JIGNESH DEVCHANDBHAI PANCHANI 2025.pdf", password: "1111" },
+{ name: "JIGNESH DHIRUBHAI DHAMELIYA 2025", pdf: "JIGNESH DHIRUBHAI DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "JIGNESH H SAVSAVIYA 2025", pdf: "JIGNESH H SAVSAVIYA 2025.pdf", password: "1111" },
+{ name: "JIGNESH JAYANTIBHAI DOBARIYA 2025", pdf: "JIGNESH JAYANTIBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "JIGNESHBHAI SHAMJIBHAI ASODARIYA 2025", pdf: "JIGNESHBHAI SHAMJIBHAI ASODARIYA 2025.pdf", password: "1111" },
+{ name: "JIGNESHBHAI SUDHIRBHAI ISAMALIA 2025", pdf: "JIGNESHBHAI SUDHIRBHAI ISAMALIA 2025.pdf", password: "1111" },
+{ name: "Jitendra Bhai Bavsiya 2025", pdf: "Jitendra Bhai Bavsiya 2025.pdf", password: "1111" },
+{ name: "JITENDRA KALUBHAI VAGHASIYA 2025", pdf: "JITENDRA KALUBHAI VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "Jitendra Parsotambhai Malani 2025", pdf: "Jitendra Parsotambhai Malani 2025.pdf", password: "1111" },
+{ name: "JITENDRABHAI LALJIBHAI LATHIA 2025", pdf: "JITENDRABHAI LALJIBHAI LATHIA 2025.pdf", password: "1111" },
+{ name: "JODHANI SHANTIBHAI VELJIBHAI 2025", pdf: "JODHANI SHANTIBHAI VELJIBHAI 2025.pdf", password: "1111" },
+{ name: "JOSHI  MANOJBHAI ASHVINBHAI 2025", pdf: "JOSHI  MANOJBHAI ASHVINBHAI 2025.pdf", password: "1111" },
+{ name: "JYANI ALPESH RAMESHBHAI 2025", pdf: "JYANI ALPESH RAMESHBHAI 2025.pdf", password: "1111" },
+{ name: "JYOTI FASHION    PROPRIETOR   BHIMANISHAILESHBHAI VITTHALBH 2025", pdf: "JYOTI FASHION    PROPRIETOR   BHIMANISHAILESHBHAI VITTHALBH 2025.pdf", password: "1111" },
+{ name: "JYOTI FASHION PROPRIETOR 2025", pdf: "JYOTI FASHION PROPRIETOR 2025.pdf", password: "1111" },
+{ name: "KAILASHBEN JASMATBHAI  KHUNT 2025", pdf: "KAILASHBEN JASMATBHAI  KHUNT 2025.pdf", password: "1111" },
+{ name: "Kailashbhai Dilipbhai Bhilare 2025", pdf: "Kailashbhai Dilipbhai Bhilare 2025.pdf", password: "1111" },
+{ name: "Kakadiya Bhavesh Dudabha 2025", pdf: "Kakadiya Bhavesh Dudabha 2025.pdf", password: "1111" },
+{ name: "Kalathiya Rajubhai Ravjibhai 2025", pdf: "Kalathiya Rajubhai Ravjibhai 2025.pdf", password: "1111" },
+{ name: "KALPESH BALUBHAI THUMAR 2025", pdf: "KALPESH BALUBHAI THUMAR 2025.pdf", password: "1111" },
+{ name: "KALPESH HIMMATBHAI SOLANKI 2025", pdf: "KALPESH HIMMATBHAI SOLANKI 2025.pdf", password: "1111" },
+{ name: "KALPESH SHAMBHUBHAI BARVALIYA 2025", pdf: "KALPESH SHAMBHUBHAI BARVALIYA 2025.pdf", password: "1111" },
+{ name: "KALPESHBHAI JUGALBHAI DOBARIYA 2025", pdf: "KALPESHBHAI JUGALBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "KALPESHKUMAR KANJIBHAI SHIHORA 2025", pdf: "KALPESHKUMAR KANJIBHAI SHIHORA 2025.pdf", password: "1111" },
+{ name: "KALPESHKUMAR MUKESHBHAI LEELA 2025", pdf: "KALPESHKUMAR MUKESHBHAI LEELA 2025.pdf", password: "1111" },
+{ name: "KALUBHAI BHAVANBHAI DESAI 2025", pdf: "KALUBHAI BHAVANBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "KALUBHAI MANUBHAI KANANI 2025", pdf: "KALUBHAI MANUBHAI KANANI 2025.pdf", password: "1111" },
+{ name: "KAMANI MAHESHBHAI DEVSHIBHAI 2025", pdf: "KAMANI MAHESHBHAI DEVSHIBHAI 2025.pdf", password: "1111" },
+{ name: "KAMLESH CHATURBHAI DHOLARIYA 2025", pdf: "KAMLESH CHATURBHAI DHOLARIYA 2025.pdf", password: "1111" },
+{ name: "KAMLESH D JAIN 2025", pdf: "KAMLESH D JAIN 2025.pdf", password: "1111" },
+{ name: "Kamlesh Mansukhbhai Khunt 2025", pdf: "Kamlesh Mansukhbhai Khunt 2025.pdf", password: "1111" },
+{ name: "KAMLESHBHAI MULJIBHAI BUHA 2025", pdf: "KAMLESHBHAI MULJIBHAI BUHA 2025.pdf", password: "1111" },
+{ name: "KAMLESHBHAI POPATBHAI  PATEL 2025", pdf: "KAMLESHBHAI POPATBHAI  PATEL 2025.pdf", password: "1111" },
+{ name: "KAMLESHKUMAR MANGILAL BOKADIYA 2025", pdf: "KAMLESHKUMAR MANGILAL BOKADIYA 2025.pdf", password: "1111" },
+{ name: "Kanani Manish Vithalbhai 2025", pdf: "Kanani Manish Vithalbhai 2025.pdf", password: "1111" },
+{ name: "KANTILALJI S BANTHIYA JAIN 2025", pdf: "KANTILALJI S BANTHIYA JAIN 2025.pdf", password: "1111" },
+{ name: "KAPADIYA DINESHBHAI PARSOTAMBHAI 2025", pdf: "KAPADIYA DINESHBHAI PARSOTAMBHAI 2025.pdf", password: "1111" },
+{ name: "KAPADIYA MADHAVBHAI PARSHOTTAMBHAI 2025", pdf: "KAPADIYA MADHAVBHAI PARSHOTTAMBHAI 2025.pdf", password: "1111" },
+{ name: "KAPILBHAI K RAMANI  ( CANCER ) 2025", pdf: "KAPILBHAI K RAMANI  ( CANCER ) 2025.pdf", password: "9277504513" },
+{ name: "KARTIK BHIKHABHAI DHAMELIYA 2025", pdf: "KARTIK BHIKHABHAI DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "KAUSHIK KANUBHAI KAPADIYA 2025", pdf: "KAUSHIK KANUBHAI KAPADIYA 2025.pdf", password: "1111" },
+{ name: "KAUSHIKBHAI BHAILALBHAI BAVASIYA 2025", pdf: "KAUSHIKBHAI BHAILALBHAI BAVASIYA 2025.pdf", password: "1111" },
+{ name: "KAUSHIKBHAI RAMESHBHAI DOBARIYA 2025", pdf: "KAUSHIKBHAI RAMESHBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "KESHAV CREATION 2025", pdf: "KESHAV CREATION 2025.pdf", password: "1111" },
+{ name: "KETAN ASHOKBHAI GAJERA 2025", pdf: "KETAN ASHOKBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "KETAN ASHOKBHAI TRAPASIYA 2025", pdf: "KETAN ASHOKBHAI TRAPASIYA 2025.pdf", password: "1111" },
+{ name: "KETAN ASHOKBHAI TRAPASIYA endo 2025", pdf: "KETAN ASHOKBHAI TRAPASIYA endo 2025.pdf", password: "1111" },
+{ name: "KETAN BHUPATBHAI PALADIYA 2025", pdf: "KETAN BHUPATBHAI PALADIYA 2025.pdf", password: "1111" },
+{ name: "KETAN DHIRUBHAI DUDHAT 2025", pdf: "KETAN DHIRUBHAI DUDHAT 2025.pdf", password: "1111" },
+{ name: "KETANBHAI K TAVETHIYA 2025", pdf: "KETANBHAI K TAVETHIYA 2025.pdf", password: "1111" },
+{ name: "KETANBHAI VASHRAMBHAI DHADUK 2025", pdf: "KETANBHAI VASHRAMBHAI DHADUK 2025.pdf", password: "1111" },
+{ name: "KETANBHAI VITHHALBHAI DAYANI 2025", pdf: "KETANBHAI VITHHALBHAI DAYANI 2025.pdf", password: "1111" },
+{ name: "Ketankumar Babubhai Surani 2025", pdf: "Ketankumar Babubhai Surani 2025.pdf", password: "1111" },
+{ name: "KETANKUMAR VASHARAMBHAI KATHIRIYA 2025", pdf: "KETANKUMAR VASHARAMBHAI KATHIRIYA 2025.pdf", password: "1111" },
+{ name: "KEVADIYA PRATIKKUMAR JITENDRAKUMAR 2025", pdf: "KEVADIYA PRATIKKUMAR JITENDRAKUMAR 2025.pdf", password: "1111" },
+{ name: "KEVAL BALVANTBHAI MAVANI 2025", pdf: "KEVAL BALVANTBHAI MAVANI 2025.pdf", password: "1111" },
+{ name: "Keyur Rajendra Soni 2025", pdf: "Keyur Rajendra Soni 2025.pdf", password: "1111" },
+{ name: "KEYURBHAI RAMESHBHAI ZALAVADIYA 2025", pdf: "KEYURBHAI RAMESHBHAI ZALAVADIYA 2025.pdf", password: "9428710311" },
+{ name: "KHADKA DEEPAKBHAI CHANDRASINGH 2025", pdf: "KHADKA DEEPAKBHAI CHANDRASINGH 2025.pdf", password: "1111" },
+{ name: "KHUSHALBHAI BHIKHABHAI JYANI 2025", pdf: "KHUSHALBHAI BHIKHABHAI JYANI 2025.pdf", password: "1111" },
+{ name: "KIRANBEN VIPULBHAI DESAI 2025", pdf: "KIRANBEN VIPULBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "KIRITBHAI DAMJIBHAI UKANI 2025", pdf: "KIRITBHAI DAMJIBHAI UKANI 2025.pdf", password: "1111" },
+{ name: "KISHAN ASHWINBHAI KATHIRIYA 2025", pdf: "KISHAN ASHWINBHAI KATHIRIYA 2025.pdf", password: "1111" },
+{ name: "KISHANBHAI KALUBHAI KANAK 2025", pdf: "KISHANBHAI KALUBHAI KANAK 2025.pdf", password: "1111" },
+{ name: "KISHANBHAI N 2025", pdf: "KISHANBHAI N 2025.pdf", password: "1111" },
+{ name: "KISHOR MANJIBHAI ZADAFIYA 2025", pdf: "KISHOR MANJIBHAI ZADAFIYA 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI BHIKHABHAI BHIKADIYA 2025", pdf: "KISHORBHAI BHIKHABHAI BHIKADIYA 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI BHUPATBHAI HIRPARA 2025", pdf: "KISHORBHAI BHUPATBHAI HIRPARA 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI CHHAGANBHAI GODHANI Cancer Guard 2025", pdf: "KISHORBHAI CHHAGANBHAI GODHANI Cancer Guard 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI DHANJIBHAI GORASIYA 2025", pdf: "KISHORBHAI DHANJIBHAI GORASIYA 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI KALUBHAI CHOVATIYA 2025", pdf: "KISHORBHAI KALUBHAI CHOVATIYA 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI KARSHANBHAI  LIMBASIYA 2025", pdf: "KISHORBHAI KARSHANBHAI  LIMBASIYA 2025.pdf", password: "1111" },
+{ name: "KISHORBHAI NATHABHAI RAMANI 2025", pdf: "KISHORBHAI NATHABHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "KORAT RAVINDRAKUMAR HIMMATBHAI 2025", pdf: "KORAT RAVINDRAKUMAR HIMMATBHAI 2025.pdf", password: "1111" },
+{ name: "KOTADIYA VIJAYBHAI VITTHALBHAI 2025", pdf: "KOTADIYA VIJAYBHAI VITTHALBHAI 2025.pdf", password: "1111" },
+{ name: "KOTHARI VIRALBHAI BHARATBHAI 2025", pdf: "KOTHARI VIRALBHAI BHARATBHAI 2025.pdf", password: "1111" },
+{ name: "KRUNAL MUKESHBHAI MAIYANI 2025", pdf: "KRUNAL MUKESHBHAI MAIYANI 2025.pdf", password: "1111" },
+{ name: "Kukadiya Prakashbhai Khimjibhai endo 2025", pdf: "Kukadiya Prakashbhai Khimjibhai endo 2025.pdf", password: "1111" },
+{ name: "KUMBHANI ASHISH KISHORBHAI 2025", pdf: "KUMBHANI ASHISH KISHORBHAI 2025.pdf", password: "1111" },
+{ name: "Lalitbhai Nanubhai Savsaviya 2025", pdf: "Lalitbhai Nanubhai Savsaviya 2025.pdf", password: "1111" },
+{ name: "Laljibhai Nagajibhai Shiyani 2025", pdf: "Laljibhai Nagajibhai Shiyani 2025.pdf", password: "1111" },
+{ name: "LALJIBHAI RAMESHBHAI VAGHASIYA 2025", pdf: "LALJIBHAI RAMESHBHAI VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "LALJIBHAI VINUBHAI ALAGIYA 2025", pdf: "LALJIBHAI VINUBHAI ALAGIYA 2025.pdf", password: "1111" },
+{ name: "LATHIYA JIVRAJBHAI K 2025", pdf: "LATHIYA JIVRAJBHAI K 2025.pdf", password: "1111" },
+{ name: "LATHIYA PRAGJIBHAI K 2025", pdf: "LATHIYA PRAGJIBHAI K 2025.pdf", password: "1111" },
+{ name: "LATHIYA VALLABHBHAI K 2025", pdf: "LATHIYA VALLABHBHAI K 2025.pdf", password: "1111" },
+{ name: "LAXMANBHAI 2025", pdf: "LAXMANBHAI 2025.pdf", password: "1111" },
+{ name: "Limbani Arun 2025", pdf: "Limbani Arun 2025.pdf", password: "1111" },
+{ name: "LIMBANI JANAKBHAI CAGANBHAI 2025", pdf: "LIMBANI JANAKBHAI CAGANBHAI 2025.pdf", password: "1111" },
+{ name: "LIMBANI PARESH KANUBHAI 2025", pdf: "LIMBANI PARESH KANUBHAI 2025.pdf", password: "1111" },
+{ name: "MADHUBEN NEMUBHAI DHAMELIYA 2025", pdf: "MADHUBEN NEMUBHAI DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "MADHUBHAI MOHANBHAI BHALALA 2025", pdf: "MADHUBHAI MOHANBHAI BHALALA 2025.pdf", password: "1111" },
+{ name: "MAGANBHAI HIMMATBHAI CHODVADIYA 2025", pdf: "MAGANBHAI HIMMATBHAI CHODVADIYA 2025.pdf", password: "1111" },
+{ name: "MAGNUM PACKSOL 2025", pdf: "MAGNUM PACKSOL 2025.pdf", password: "1111" },
+{ name: "MAGNUM PACKSOL endo 2025", pdf: "MAGNUM PACKSOL endo 2025.pdf", password: "1111" },
+{ name: "MAHENDRA SAVAJIBHAI PALADIYA 2025", pdf: "MAHENDRA SAVAJIBHAI PALADIYA 2025.pdf", password: "1111" },
+{ name: "MAHENDRABHAI DAMJIBHAI GODHANI 2025", pdf: "MAHENDRABHAI DAMJIBHAI GODHANI 2025.pdf", password: "1111" },
+{ name: "MAHENDRABHAI PRAVINBHAI LUNAGARIYA 2025", pdf: "MAHENDRABHAI PRAVINBHAI LUNAGARIYA 2025.pdf", password: "1111" },
+{ name: "MAHENDRAKUMAR MAVJIBHAI SABHAYA 2025", pdf: "MAHENDRAKUMAR MAVJIBHAI SABHAYA 2025.pdf", password: "1111" },
+{ name: "MAHESH BHAI LALJI BHAI ISAMALIYA 2025", pdf: "MAHESH BHAI LALJI BHAI ISAMALIYA 2025.pdf", password: "1111" },
+{ name: "MAHESHBHAI CHATURBHAI SHIROYA 2025", pdf: "MAHESHBHAI CHATURBHAI SHIROYA 2025.pdf", password: "1111" },
+{ name: "Maheshbhai Chhaganbhai Godhani, 2025", pdf: "Maheshbhai Chhaganbhai Godhani, 2025.pdf", password: "1111" },
+{ name: "MAHESHBHAI GANESHBHAI GOYANI 2025", pdf: "MAHESHBHAI GANESHBHAI GOYANI 2025.pdf", password: "9879882743" },
+{ name: "MAHESHBHAI HIMMATBHAI  KATHIRIYA  HITPA  TPA 2025", pdf: "MAHESHBHAI HIMMATBHAI  KATHIRIYA  HITPA  TPA 2025.pdf", password: "1111" },
+{ name: "MAHESHBHAI KACHHADIYA 2025", pdf: "MAHESHBHAI KACHHADIYA 2025.pdf", password: "1111" },
+{ name: "MAHESHBHAI LALJIBHAI VEKARIYA 2025", pdf: "MAHESHBHAI LALJIBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "MAHESHBHAI PRAFULBHAI VEKARIYA 2025", pdf: "MAHESHBHAI PRAFULBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "MAHESHBHAI VINUBHAI GOTI 2025", pdf: "MAHESHBHAI VINUBHAI GOTI 2025.pdf", password: "1111" },
+{ name: "MAHESHKUMAR NAGJIBHAI NAROLA 2025", pdf: "MAHESHKUMAR NAGJIBHAI NAROLA 2025.pdf", password: "1111" },
+{ name: "MAIYANI LADHABHAI ODHAVJIBHAI 2025", pdf: "MAIYANI LADHABHAI ODHAVJIBHAI 2025.pdf", password: "1111" },
+{ name: "MAKWANA MAHESH MAGANBHAI 2025", pdf: "MAKWANA MAHESH MAGANBHAI 2025.pdf", password: "1111" },
+{ name: "MALANI MEHULBHAI BHANUBHAI 2025", pdf: "MALANI MEHULBHAI BHANUBHAI 2025.pdf", password: "1111" },
+{ name: "MALANI NARESHBHAI HANSRAJBHAI 2025", pdf: "MALANI NARESHBHAI HANSRAJBHAI 2025.pdf", password: "1111" },
+{ name: "MALANI SURESHBHAI DULABHAI 2025", pdf: "MALANI SURESHBHAI DULABHAI 2025.pdf", password: "1111" },
+{ name: "MALAY MANSUKHBHAI DESAI  ENDO 2025", pdf: "MALAY MANSUKHBHAI DESAI  ENDO 2025.pdf", password: "1111" },
+{ name: "MALAY MANSUKHBHAI DESAI 2025", pdf: "MALAY MANSUKHBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "MANHAR RAGHAVBHAI GELANI 2025", pdf: "MANHAR RAGHAVBHAI GELANI 2025.pdf", password: "1111" },
+{ name: "MANHARBHAI B KARKAR 2025", pdf: "MANHARBHAI B KARKAR 2025.pdf", password: "1111" },
+{ name: "MANISH PREMJIBHAI PARAKHIYA 2025", pdf: "MANISH PREMJIBHAI PARAKHIYA 2025.pdf", password: "1111" },
+{ name: "MANISHKUMAR BHARATBHAI GOTI 2025", pdf: "MANISHKUMAR BHARATBHAI GOTI 2025.pdf", password: "1111" },
+{ name: "MANISHKUMAR KALUBHAI PAGHDAL TOP UP  2025", pdf: "MANISHKUMAR KALUBHAI PAGHDAL TOP UP  2025.pdf", password: "1111" },
+{ name: "MANISHKUMAR KALUBHAI PAGHDAL 2025", pdf: "MANISHKUMAR KALUBHAI PAGHDAL 2025.pdf", password: "1111" },
+{ name: "MANIYA NAYANBHAI 2025", pdf: "MANIYA NAYANBHAI 2025.pdf", password: "1111" },
+{ name: "Manjibhai B Zadfiya 2025", pdf: "Manjibhai B Zadfiya 2025.pdf", password: "1111" },
+{ name: "Manjulaben Vallabhbhai Savaliya 2025", pdf: "Manjulaben Vallabhbhai Savaliya 2025.pdf", password: "1111" },
+{ name: "MANOJBHAI DHANJIBHAI DHADUK 2025", pdf: "MANOJBHAI DHANJIBHAI DHADUK 2025.pdf", password: "1111" },
+{ name: "MANOJKUMAR BABUBHAI THUMAR 2025", pdf: "MANOJKUMAR BABUBHAI THUMAR 2025.pdf", password: "1111" },
+{ name: "MANOJKUMAR BAVCHANDBHAI VAGHASIYA 2025", pdf: "MANOJKUMAR BAVCHANDBHAI VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "MANOJKUMAR KANTILAL JOGANI 2025", pdf: "MANOJKUMAR KANTILAL JOGANI 2025.pdf", password: "1111" },
+{ name: "MANSUKH BHAI VINU BHAI SATANI 2025", pdf: "MANSUKH BHAI VINU BHAI SATANI 2025.pdf", password: "1111" },
+{ name: "MATHURBHAI VALLABHBHAI RADADIYA 2025", pdf: "MATHURBHAI VALLABHBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "MATHURBHAI VALLABHBHAI RADADIYA  PA  2025.PDF", pdf: "MATHURBHAI VALLABHBHAI RADADIYA  PA  2025.PDF", password: "1111" },
+{ name: "MAULIKBHAI NATHABHAI GONDALIYA 2025", pdf: "MAULIKBHAI NATHABHAI GONDALIYA 2025.pdf", password: "1111" },
+{ name: "MAYANK J MANGROLIYA 2025", pdf: "MAYANK J MANGROLIYA 2025.pdf", password: "1111" },
+{ name: "Mayank Jayantibhai Mangroliya 2025", pdf: "Mayank Jayantibhai Mangroliya 2025.pdf", password: "1111" },
+{ name: "MAYUR DULABHAI KACHHADIYA 2025", pdf: "MAYUR DULABHAI KACHHADIYA 2025.pdf", password: "1111" },
+{ name: "MAYUR GABHARUBHAI JODHANI 2025", pdf: "MAYUR GABHARUBHAI JODHANI 2025.pdf", password: "1111" },
+{ name: "MAYURBHAI GORDHANBHAI SAVSAVIYA 2025", pdf: "MAYURBHAI GORDHANBHAI SAVSAVIYA 2025.pdf", password: "1111" },
+{ name: "MEENA NARESHKUMAR ABBANI 2025", pdf: "MEENA NARESHKUMAR ABBANI 2025.pdf", password: "1111" },
+{ name: "MEERABEN GAURAVKUMAR VADALIYA 2025", pdf: "MEERABEN GAURAVKUMAR VADALIYA 2025.pdf", password: "1111" },
+{ name: "MEHUL DULABHAI KACHHADIYA 2025", pdf: "MEHUL DULABHAI KACHHADIYA 2025.pdf", password: "1111" },
+{ name: "MEHUL PRAFULBHAI VEKARIYA 2025", pdf: "MEHUL PRAFULBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "Mehulkumar Ramjibhai Gajera 2025", pdf: "Mehulkumar Ramjibhai Gajera 2025.pdf", password: "1111" },
+{ name: "MENDAPARA TUSHARBHAI POPATBHAI 2025", pdf: "MENDAPARA TUSHARBHAI POPATBHAI 2025.pdf", password: "1111" },
+{ name: "MEPANI LAXMANBHAI THAKARSHIBHAI 2025", pdf: "MEPANI LAXMANBHAI THAKARSHIBHAI 2025.pdf", password: "1111" },
+{ name: "MEPANI SAVANKUMAR LAXMANBHAI 2025", pdf: "MEPANI SAVANKUMAR LAXMANBHAI 2025.pdf", password: "1111" },
+{ name: "MILAN FULABHAI PAGHADAL 2025", pdf: "MILAN FULABHAI PAGHADAL 2025.pdf", password: "1111" },
+{ name: "MITUL HARESHBHAI MANGUKIYA 2025", pdf: "MITUL HARESHBHAI MANGUKIYA 2025.pdf", password: "1111" },
+{ name: "MITULBHAI HIMMATBHAI MANGUKIYA 2025", pdf: "MITULBHAI HIMMATBHAI MANGUKIYA 2025.pdf", password: "1111" },
+{ name: "MUKESH B 2025", pdf: "MUKESH B 2025.pdf", password: "1111" },
+{ name: "Mukesh B Vasoya 2025", pdf: "Mukesh B Vasoya 2025.pdf", password: "1111" },
+{ name: "MUKESH BHAI 2025", pdf: "MUKESH BHAI 2025.pdf", password: "1111" },
+{ name: "MUKESH RANKA  2025", pdf: "MUKESH RANKA  2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI ARAJANBHAI DOBARIYA 2025", pdf: "MUKESHBHAI ARAJANBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI B SAVALIYA RITZ 2025", pdf: "MUKESHBHAI B SAVALIYA RITZ 2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI CHAGANBHAI VASANI 2025", pdf: "MUKESHBHAI CHAGANBHAI VASANI 2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI CHHAGANBHAI GODHANI  Cancer Guard 2025", pdf: "MUKESHBHAI CHHAGANBHAI GODHANI  Cancer Guard 2025.pdf", password: "1111" },
+{ name: "Mukeshbhai Chhaganbhai Godhani 2025", pdf: "Mukeshbhai Chhaganbhai Godhani 2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI GHUSABHAI MALANI 2025", pdf: "MUKESHBHAI GHUSABHAI MALANI 2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI V GAJERA 2025", pdf: "MUKESHBHAI V GAJERA 2025.pdf", password: "1111" },
+{ name: "MUKESHBHAI VINUBHAI ALAGIYA 2025", pdf: "MUKESHBHAI VINUBHAI ALAGIYA 2025.pdf", password: "1111" },
+{ name: "MUKESHKUMAR LADHABHAI MAIYANI 2025", pdf: "MUKESHKUMAR LADHABHAI MAIYANI 2025.pdf", password: "1111" },
+{ name: "NADIYADARA GOVINDBHAI 2025", pdf: "NADIYADARA GOVINDBHAI 2025.pdf", password: "1111" },
+{ name: "NADIYADARA GOVINDBHAI  PA 2025", pdf: "NADIYADARA GOVINDBHAI  PA 2025.pdf", password: "1111" },
+{ name: "NAKRANI CHATURBHAI 2025", pdf: "NAKRANI CHATURBHAI 2025.pdf", password: "1111" },
+{ name: "Nandlal Haribhai Mulani ALTO GJ 14 AA 5424 2025", pdf: "Nandlal Haribhai Mulani ALTO GJ 14 AA 5424 2025.pdf", password: "1111" },
+{ name: "NARAYAN TEXTILES PROPRIETOR  ASHVINBHAI HIRABHAI DANKHRA 2025", pdf: "NARAYAN TEXTILES PROPRIETOR  ASHVINBHAI HIRABHAI DANKHRA 2025.pdf", password: "1111" },
+{ name: "NARENDRABHAI HARIBHAI  DOBARIYA 2025", pdf: "NARENDRABHAI HARIBHAI  DOBARIYA 2025.pdf", password: "1111" },
+{ name: "NARENDRABHAI MOHANBHAI KAVA 2025", pdf: "NARENDRABHAI MOHANBHAI KAVA 2025.pdf", password: "1111" },
+{ name: "NARESH KUMAR ABBANI 2025", pdf: "NARESH KUMAR ABBANI 2025.pdf", password: "1111" },
+{ name: "Nareshbhai  Laljibhai  Vekariya 2025", pdf: "Nareshbhai  Laljibhai  Vekariya 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI BHOLABHAI CHODVADIYA 2025", pdf: "NARESHBHAI BHOLABHAI CHODVADIYA 2025.pdf", password: "1111" },
+{ name: "NARESHKUMAR DHANJIBHAI SOJITRA 2025", pdf: "NARESHKUMAR DHANJIBHAI SOJITRA 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI DHANJIBHAI SOJITRA TP 2025", pdf: "NARESHBHAI DHANJIBHAI SOJITRA TP 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI HIMMATBHAI KACHHADIYA 2025", pdf: "NARESHBHAI HIMMATBHAI KACHHADIYA 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI PRAGJIBHAI BHUVA 2025", pdf: "NARESHBHAI PRAGJIBHAI BHUVA 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI RAMESHBHAI NAKRANI 2025", pdf: "NARESHBHAI RAMESHBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI RANCHHODBHAI DANKHARA  ACCENT 2025", pdf: "NARESHBHAI RANCHHODBHAI DANKHARA  ACCENT 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI RANCHODBHAI DAKHARA 2025", pdf: "NARESHBHAI RANCHODBHAI DAKHARA 2025.pdf", password: "1111" },
+{ name: "NARESHBHAI VINUBHAI BORAD 2025", pdf: "NARESHBHAI VINUBHAI BORAD 2025.pdf", password: "1111" },
+{ name: "NARMADABEN RAMESHBHAI SONI 2025", pdf: "NARMADABEN RAMESHBHAI SONI 2025.pdf", password: "1111" },
+{ name: "NASIT HARESHBHAI PARSHOTAMBHAI 2025", pdf: "NASIT HARESHBHAI PARSHOTAMBHAI 2025.pdf", password: "1111" },
+{ name: "NAVINBHAI BABUBHAI PANSURIYA 2025", pdf: "NAVINBHAI BABUBHAI PANSURIYA 2025.pdf", password: "1111" },
+{ name: "NAYANABEN DINESHBHAI RAMANI 2025", pdf: "NAYANABEN DINESHBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "NAYANBHAI BHOLABHAI RAMANI 2025", pdf: "NAYANBHAI BHOLABHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "NAYANKUMAR RAMNIKBHAI KALANI 2025", pdf: "NAYANKUMAR RAMNIKBHAI KALANI 2025.pdf", password: "1111" },
+{ name: "Nikhilkumar Narandas Kotak 2025", pdf: "Nikhilkumar Narandas Kotak 2025.pdf", password: "1111" },
+{ name: "NIKUL DHANJIBHAI SOJITRA TP  2025", pdf: "NIKUL DHANJIBHAI SOJITRA TP  2025.pdf", password: "1111" },
+{ name: "NIKUL DHANJIBHAI SOJITRA 2025", pdf: "NIKUL DHANJIBHAI SOJITRA 2025.pdf", password: "1111" },
+{ name: "NIKULBHAI LAXMANBHAI KATARIYA 2025", pdf: "NIKULBHAI LAXMANBHAI KATARIYA 2025.pdf", password: "1111" },
+{ name: "NIKUNJ BHAVESHBHAI BABARIYA 2025", pdf: "NIKUNJ BHAVESHBHAI BABARIYA 2025.pdf", password: "1111" },
+{ name: "NIKUNJ DHIRUBHAI DHAMELIA 2025", pdf: "NIKUNJ DHIRUBHAI DHAMELIA 2025.pdf", password: "1111" },
+{ name: "NIKUNJ JAYANTIBHAI GONDALIYA 2025", pdf: "NIKUNJ JAYANTIBHAI GONDALIYA 2025.pdf", password: "1111" },
+{ name: "NIKUNJBHAI BABUBHAI KORAT 2025", pdf: "NIKUNJBHAI BABUBHAI KORAT 2025.pdf", password: "1111" },
+{ name: "NIKUNJBHAI BAVCHANDBHAI HIRPARA 2025", pdf: "NIKUNJBHAI BAVCHANDBHAI HIRPARA 2025.pdf", password: "1111" },
+{ name: "NIKUNJBHAI GUNVANTBHAI ZALAVADIYA 2025", pdf: "NIKUNJBHAI GUNVANTBHAI ZALAVADIYA 2025.pdf", password: "1111" },
+{ name: "NILAM RAMESHBHAI GOYANI 2025", pdf: "NILAM RAMESHBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "NILESH KUMAR RASIKBHAI LATHIYA 2025", pdf: "NILESH KUMAR RASIKBHAI LATHIYA 2025.pdf", password: "1111" },
+{ name: "NILESH MANSUKHBHAI DOBARIYA 2025", pdf: "NILESH MANSUKHBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI CHAGANBHAI BHIMANI 2025", pdf: "NILESHBHAI CHAGANBHAI BHIMANI 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI CHATURBHAI NAKRANI 2025", pdf: "NILESHBHAI CHATURBHAI NAKRANI 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI CHHAGANBHAI BHIMANI [ CANCER 2025", pdf: "NILESHBHAI CHHAGANBHAI BHIMANI [ CANCER 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI DAYALBHAI PANSURIYA 2025", pdf: "NILESHBHAI DAYALBHAI PANSURIYA 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI MADHAVAJIBHAI RUPANI 2025", pdf: "NILESHBHAI MADHAVAJIBHAI RUPANI 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI MAGANBHAI ZALAVADIYA 2025", pdf: "NILESHBHAI MAGANBHAI ZALAVADIYA 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI NARENDRABHAI GAJERA 2025", pdf: "NILESHBHAI NARENDRABHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI RAVJIBHAI RAMANI 2025", pdf: "NILESHBHAI RAVJIBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "Nileshbhai Ravjibhai Savaliya 2025", pdf: "Nileshbhai Ravjibhai Savaliya 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI VINUBHAI GAJERA 2025", pdf: "NILESHBHAI VINUBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "NILESHBHAI VINUBHAI GAJERA [ fire 2025", pdf: "NILESHBHAI VINUBHAI GAJERA [ fire 2025.pdf", password: "1111" },
+{ name: "NILESHKUMAR BACHUBHAI PATEL 2025", pdf: "NILESHKUMAR BACHUBHAI PATEL 2025.pdf", password: "1111" },
+{ name: "Nileshkumar Vinubhai Kalathiya 2025", pdf: "Nileshkumar Vinubhai Kalathiya 2025.pdf", password: "1111" },
+{ name: "NISHANT MANUBHAI DOBARIYA 2025", pdf: "NISHANT MANUBHAI DOBARIYA 2025.pdf", password: "1111" },
+{ name: "NITABEN SURESHBHAI CHODAVADIYA 2025", pdf: "NITABEN SURESHBHAI CHODAVADIYA 2025.pdf", password: "1111" },
+{ name: "Nitesh B Bhikadiya 2025", pdf: "Nitesh B Bhikadiya 2025.pdf", password: "1111" },
+{ name: "NITESHBHAI BALAR 2025", pdf: "NITESHBHAI BALAR 2025.pdf", password: "1111" },
+{ name: "NITESHBHAI KARSHANBHAI BHALU 2025", pdf: "NITESHBHAI KARSHANBHAI BHALU 2025.pdf", password: "1111" },
+{ name: "NITIN DEVSHIBHAI PATOLIYA 2025", pdf: "NITIN DEVSHIBHAI PATOLIYA 2025.pdf", password: "1111" },
+{ name: "Olpadiya Krishna Jagdishbhai 2025", pdf: "Olpadiya Krishna Jagdishbhai 2025.pdf", password: "1111" },
+{ name: "PADSALA JITUBHAI MANJIBHAI 2025", pdf: "PADSALA JITUBHAI MANJIBHAI 2025.pdf", password: "1111" },
+{ name: "PADSALA VIMALBHAI RAMANIKBHAI 2025", pdf: "PADSALA VIMALBHAI RAMANIKBHAI 2025.pdf", password: "1111" },
+{ name: "PALADIYA JAYESHBHAI GOPALBHAI 2025", pdf: "PALADIYA JAYESHBHAI GOPALBHAI 2025.pdf", password: "1111" },
+{ name: "PALADIYA SHAILESHBHAI SAVJIBHAI 2025", pdf: "PALADIYA SHAILESHBHAI SAVJIBHAI 2025.pdf", password: "1111" },
+{ name: "PALADIYA UMESHBHAI GOPALBHAI 2025", pdf: "PALADIYA UMESHBHAI GOPALBHAI 2025.pdf", password: "1111" },
+{ name: "PANCHANI DHIRUBHAI N 2025", pdf: "PANCHANI DHIRUBHAI N 2025.pdf", password: "1111" },
+{ name: "Pankaj Ramnikbhai Bhesaniya 2025", pdf: "Pankaj Ramnikbhai Bhesaniya 2025.pdf", password: "1111" },
+{ name: "PANKAJ RAMNIKBHAI BHESANIYA gadi 2025", pdf: "PANKAJ RAMNIKBHAI BHESANIYA gadi 2025.pdf", password: "1111" },
+{ name: "PANKAJBHAI RAMESHBHAI DAYANI 2025", pdf: "PANKAJBHAI RAMESHBHAI DAYANI 2025.pdf", password: "1111" },
+{ name: "PANKAJKUMAR KALUBHAI  KASVALA 2025", pdf: "PANKAJKUMAR KALUBHAI  KASVALA 2025.pdf", password: "9979268729" },
+{ name: "PANKIT ARVINDBHAI RAMANI 2025", pdf: "PANKIT ARVINDBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "PARAGBHAI GORDHANBHAI VAGDIYA 2025", pdf: "PARAGBHAI GORDHANBHAI VAGDIYA 2025.pdf", password: "1111" },
+{ name: "PARAS HIMMATBHAI VADADORIYA 2025", pdf: "PARAS HIMMATBHAI VADADORIYA 2025.pdf", password: "1111" },
+{ name: "PARESH ARVINDBHAI  RADADIYA 2025", pdf: "PARESH ARVINDBHAI  RADADIYA 2025.pdf", password: "1111" },
+{ name: "Paresh Laljibhai Ramani 2025", pdf: "Paresh Laljibhai Ramani 2025.pdf", password: "9879120015" },
+{ name: "PARESH RAVJIBHAI GAJERA  ( HITESHBHAI ) 2025", pdf: "PARESH RAVJIBHAI GAJERA  ( HITESHBHAI ) 2025.pdf", password: "1111" },
+{ name: "PARESHBHAI DHANJIBHAI DHOLAKIYA 2025", pdf: "PARESHBHAI DHANJIBHAI DHOLAKIYA 2025.pdf", password: "1111" },
+{ name: "Pareshbhai Ghanshyambhai Rokad 2025", pdf: "Pareshbhai Ghanshyambhai Rokad 2025.pdf", password: "1111" },
+{ name: "PARESHBHAI LAVJIBHAI  LUKHI 2025", pdf: "PARESHBHAI LAVJIBHAI  LUKHI 2025.pdf", password: "1111" },
+{ name: "PARMAR HIRENBHAI RAMESHBHAI 2025", pdf: "PARMAR HIRENBHAI RAMESHBHAI 2025.pdf", password: "1111" },
+{ name: "PARMAR VIMALBHAI RAMESHBHAI 2025", pdf: "PARMAR VIMALBHAI RAMESHBHAI 2025.pdf", password: "1111" },
+{ name: "PARMESHWAR TEXTILES 2025", pdf: "PARMESHWAR TEXTILES 2025.pdf", password: "1111" },
+{ name: "PARSANIYA JAYPRAKASH RADHAVJIBHAI 2025", pdf: "PARSANIYA JAYPRAKASH RADHAVJIBHAI 2025.pdf", password: "1111" },
+{ name: "Parshottambhai Shambhubhai Malani 2025", pdf: "Parshottambhai Shambhubhai Malani 2025.pdf", password: "1111" },
+{ name: "PARTHIV RANCHHODBHAI MONPARA 2025", pdf: "PARTHIV RANCHHODBHAI MONPARA 2025.pdf", password: "1111" },
+{ name: "PARTHKUMAR RAJESHBHAI MORADIYA 2025", pdf: "PARTHKUMAR RAJESHBHAI MORADIYA 2025.pdf", password: "1111" },
+{ name: "PATEL ANILKUMAR RAVJIBHAI 2025", pdf: "PATEL ANILKUMAR RAVJIBHAI 2025.pdf", password: "1111" },
+{ name: "PAYALBEN M VORA 2025", pdf: "PAYALBEN M VORA 2025.pdf", password: "1111" },
+{ name: "PINTUBHAI MANUBHAI LAKHANI 2025", pdf: "PINTUBHAI MANUBHAI LAKHANI 2025.pdf", password: "1111" },
+{ name: "PIYUSH KHODABHAI KASWALA 2025", pdf: "PIYUSH KHODABHAI KASWALA 2025.pdf", password: "1111" },
+{ name: "PIYUSH V GALANI 2025", pdf: "PIYUSH V GALANI 2025.pdf", password: "9099153999" },
+{ name: "PIYUSHBHAI JIVANBHAI MALANI 2025", pdf: "PIYUSHBHAI JIVANBHAI MALANI 2025.pdf", password: "1111" },
+{ name: "PIYUSHBHAI MANSUKHBHAI KUMBHANI 2025", pdf: "PIYUSHBHAI MANSUKHBHAI KUMBHANI 2025.pdf", password: "9726545244" },
+{ name: "PRADIPBHAI K 2025", pdf: "PRADIPBHAI K 2025.pdf", password: "1111" },
+{ name: "PRAFULBHAI DAHYABHAI DESAI 2025", pdf: "PRAFULBHAI DAHYABHAI DESAI 2025.pdf", password: "1111" },
+{ name: "PRAFULBHAI DEVJIBHAI KIKANI 2025", pdf: "PRAFULBHAI DEVJIBHAI KIKANI 2025.pdf", password: "1111" },
+{ name: "PRAFULBHAI DHANJIBHAI SHELADIYA 2025", pdf: "PRAFULBHAI DHANJIBHAI SHELADIYA 2025.pdf", password: "1111" },
+{ name: "PRAFULKUMAR SHANKARBHAI CHAUDHARI 2025", pdf: "PRAFULKUMAR SHANKARBHAI CHAUDHARI 2025.pdf", password: "1111" },
+{ name: "PRAKASH KUMAR CHIMANARAM CHAUDHARI 2025", pdf: "PRAKASH KUMAR CHIMANARAM CHAUDHARI 2025.pdf", password: "1111" },
+{ name: "PRAKASHBHAI KANUBHAI RAVAL   TPA HITPA 2025", pdf: "PRAKASHBHAI KANUBHAI RAVAL   TPA HITPA 2025.pdf", password: "9106092378" },
+{ name: "PRASHANTKUMAR BATUKBHAI DUDHAT 2025", pdf: "PRASHANTKUMAR BATUKBHAI DUDHAT 2025.pdf", password: "1111" },
+{ name: "PRATIK DINESHBHAI BHADANI 2025", pdf: "PRATIK DINESHBHAI BHADANI 2025.pdf", password: "1111" },
+{ name: "Pravin Babubhai Lila 2025", pdf: "Pravin Babubhai Lila 2025.pdf", password: "1111" },
+{ name: "PRAVINBHAI BABUBHAI POLARA 2025", pdf: "PRAVINBHAI BABUBHAI POLARA 2025.pdf", password: "1111" },
+{ name: "PRAVINBHAI KESHUBHAI DEVANI 2025", pdf: "PRAVINBHAI KESHUBHAI DEVANI 2025.pdf", password: "1111" },
+{ name: "PREMANANDBHAI NILKANTHBHAI PUHAN 2025", pdf: "PREMANANDBHAI NILKANTHBHAI PUHAN 2025.pdf", password: "1111" },
+{ name: "Punit Madhubhai Bhalala 2025", pdf: "Punit Madhubhai Bhalala 2025.pdf", password: "1111" },
+{ name: "PUNITBHAI BABUBHAI BALLAR 2025", pdf: "PUNITBHAI BABUBHAI BALLAR 2025.pdf", password: "1111" },
+{ name: "PUNITBHAI BHAVANBHAI SHINGALA 2025", pdf: "PUNITBHAI BHAVANBHAI SHINGALA 2025.pdf", password: "1111" },
+{ name: "RABADIYA RAMESHBHAI LAKHABHAI 2025", pdf: "RABADIYA RAMESHBHAI LAKHABHAI 2025.pdf", password: "1111" },
+{ name: "RACHANABEN KALUBHAI BABARIYA 2025", pdf: "RACHANABEN KALUBHAI BABARIYA 2025.pdf", password: "1111" },
+{ name: "RADADIYA PATEL BABUBHAI VALLABHBHAI 2025", pdf: "RADADIYA PATEL BABUBHAI VALLABHBHAI 2025.pdf", password: "1111" },
+{ name: "RADADIYA ROSHAN VINUBHAI 2025", pdf: "RADADIYA ROSHAN VINUBHAI 2025.pdf", password: "1111" },
+{ name: "RADHE FASHION 2025", pdf: "RADHE FASHION 2025.pdf", password: "1111" },
+{ name: "RADHE FASHION1 2025", pdf: "RADHE FASHION1 2025.pdf", password: "1111" },
+{ name: "Rafaliya Maheshbhai Pragjibhai 2025", pdf: "Rafaliya Maheshbhai Pragjibhai 2025.pdf", password: "1111" },
+{ name: "Raghvbhai V Gelani 2025", pdf: "Raghvbhai V Gelani 2025.pdf", password: "1111" },
+{ name: "RAHUL ASHOKBHAI RADADIYA 2025", pdf: "RAHUL ASHOKBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "RAHUL RAMESHBHAI BUHA 2025", pdf: "RAHUL RAMESHBHAI BUHA 2025.pdf", password: "1111" },
+{ name: "RAJ DINESHBHAI MANGROLA 2025", pdf: "RAJ DINESHBHAI MANGROLA 2025.pdf", password: "1111" },
+{ name: "RAJANIBHAI NAGJIBHAI RADADIYA 2025", pdf: "RAJANIBHAI NAGJIBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "RAJANIKANT MADHUBHAI KAKADIYA 2025", pdf: "RAJANIKANT MADHUBHAI KAKADIYA 2025.pdf", password: "1111" },
+{ name: "RAJANIKANT VAJUBHAI SABALPARA 2025", pdf: "RAJANIKANT VAJUBHAI SABALPARA 2025.pdf", password: "1111" },
+{ name: "RAJESH A JAIN 2025", pdf: "RAJESH A JAIN 2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI DEVARAJBHAI KUMBHANI 2025", pdf: "RAJESHBHAI DEVARAJBHAI KUMBHANI 2025.pdf", password: "1111" },
+{ name: "Rajeshbhai Ghanshyambhai Bhanderi 2025", pdf: "Rajeshbhai Ghanshyambhai Bhanderi 2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI HARIBHAI BAVISHI 2025", pdf: "RAJESHBHAI HARIBHAI BAVISHI 2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI HARIBHAI GAJERA 2025", pdf: "RAJESHBHAI HARIBHAI GAJERA 2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI M MALAVIYA 2025", pdf: "RAJESHBHAI M MALAVIYA 2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI RAVJIBHAI PAGHADAL 2025", pdf: "RAJESHBHAI RAVJIBHAI PAGHADAL 2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI RAVJIBHAI PAGHDAL  2025", pdf: "RAJESHBHAI RAVJIBHAI PAGHDAL  2025.pdf", password: "1111" },
+{ name: "RAJESHBHAI VAJUBHAI SUVAGIA 2025", pdf: "RAJESHBHAI VAJUBHAI SUVAGIA 2025.pdf", password: "9429230383" },
+{ name: "RAJNIKANT BHOLABHAI ZALAVADIYA 2025", pdf: "RAJNIKANT BHOLABHAI ZALAVADIYA 2025.pdf", password: "1111" },
+{ name: "RAJNIKANT MANSUKHBHAI DOBRIA 2025", pdf: "RAJNIKANT MANSUKHBHAI DOBRIA 2025.pdf", password: "1111" },
+{ name: "Rajnikant Pravinbhai Lunagariya 2025", pdf: "Rajnikant Pravinbhai Lunagariya 2025.pdf", password: "1111" },
+{ name: "RAJNIKBHAI VINUBHAI SAVALIYA 2025", pdf: "RAJNIKBHAI VINUBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "RAJPARA PANKAJ HIMMATBHAI 2025", pdf: "RAJPARA PANKAJ HIMMATBHAI 2025.pdf", password: "1111" },
+{ name: "Rajubhai G Kheni 2025", pdf: "Rajubhai G Kheni 2025.pdf", password: "1111" },
+{ name: "RAJUBHAI MULJIBHAI BUHA 2025", pdf: "RAJUBHAI MULJIBHAI BUHA 2025.pdf", password: "1111" },
+{ name: "RAKESH B DHAMELIYA 2025", pdf: "RAKESH B DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "RAKESH KANTIBHAI VASOYA 2025", pdf: "RAKESH KANTIBHAI VASOYA 2025.pdf", password: "1111" },
+{ name: "RAKESHBHAI GORDHANBHAI ANAGHAN 2025", pdf: "RAKESHBHAI GORDHANBHAI ANAGHAN 2025.pdf", password: "1111" },
+{ name: "RAKESHBHAI HARJIBHAI VITHANI 2025", pdf: "RAKESHBHAI HARJIBHAI VITHANI 2025.pdf", password: "1111" },
+{ name: "RAKESHBHAI L SHINGALA 2025", pdf: "RAKESHBHAI L SHINGALA 2025.pdf", password: "1111" },
+{ name: "Rakeshbhai Vinubhai Boghra 2025", pdf: "Rakeshbhai Vinubhai Boghra 2025.pdf", password: "1111" },
+{ name: "RAMANI HARSH GHANSHYAMBHAI 2025", pdf: "RAMANI HARSH GHANSHYAMBHAI 2025.pdf", password: "1111" },
+{ name: "RAMANI JITENDRABHAI KHODABHAI 2025", pdf: "RAMANI JITENDRABHAI KHODABHAI 2025.pdf", password: "1111" },
+{ name: "RAMANI KAPIL KANTIBHAI 2025", pdf: "RAMANI KAPIL KANTIBHAI 2025.pdf", password: "1111" },
+{ name: "RAMANI KAPILBHAI KANTIBHAI i20 8990 2025", pdf: "RAMANI KAPILBHAI KANTIBHAI i20 8990 2025.pdf", password: "9277504513" },
+{ name: "RAMANI NIKUNJ BABUBHAI 2025", pdf: "RAMANI NIKUNJ BABUBHAI 2025.pdf", password: "1111" },
+{ name: "Ramani Rajeshkumar Babubhai 2025", pdf: "Ramani Rajeshkumar Babubhai 2025.pdf", password: "9913199237" },
+{ name: "RAMANI VINODBHAI BAVCHANDBHAI 2025", pdf: "RAMANI VINODBHAI BAVCHANDBHAI 2025.pdf", password: "1111" },
+{ name: "RAMANI VITTHALBHAI  LALJIBHAI 2025", pdf: "RAMANI VITTHALBHAI  LALJIBHAI 2025.pdf", password: "1111" },
+{ name: "RAMANI VITTHALBHAI LALJIBHAI 2025", pdf: "RAMANI VITTHALBHAI LALJIBHAI 2025.pdf", password: "1111" },
+{ name: "RAMANIKBHAI CHHAGANBHAI VAGHASIYA 2025", pdf: "RAMANIKBHAI CHHAGANBHAI VAGHASIYA 2025.pdf", password: "1111" },
+{ name: "Rameshbhai Babulal Lila 2025", pdf: "Rameshbhai Babulal Lila 2025.pdf", password: "1111" },
+{ name: "RAMESHBHAI BALUBHAI LIMBANI 2025", pdf: "RAMESHBHAI BALUBHAI LIMBANI 2025.pdf", password: "1111" },
+{ name: "RAMESHBHAI DANKHARA 2025", pdf: "RAMESHBHAI DANKHARA 2025.pdf", password: "1111" },
+{ name: "RAMESHBHAI DANKHARA   PA  2025", pdf: "RAMESHBHAI DANKHARA   PA  2025.pdf", password: "1111" },
+{ name: "RAMESHBHAI HARIBHAI BHALALA 2025", pdf: "RAMESHBHAI HARIBHAI BHALALA 2025.pdf", password: "1111" },
+{ name: "Rameshbhai Laljibhai Kukadiya 2025", pdf: "Rameshbhai Laljibhai Kukadiya 2025.pdf", password: "1111" },
+{ name: "Rameshbhai P Gadhiya 2025", pdf: "Rameshbhai P Gadhiya 2025.pdf", password: "1111" },
+{ name: "Rameshbhai Radadiya 2025", pdf: "Rameshbhai Radadiya 2025.pdf", password: "1111" },
+{ name: "RAMESHBHAI SHAMBHUBHAI LATHIYA 2025", pdf: "RAMESHBHAI SHAMBHUBHAI LATHIYA 2025.pdf", password: "1111" },
+{ name: "RAMESHBHAI VINUBHAI GOTI 2025", pdf: "RAMESHBHAI VINUBHAI GOTI 2025.pdf", password: "1111" },
+{ name: "RAMESHKUMAR HANUMANCHAND JAIN 2025", pdf: "RAMESHKUMAR HANUMANCHAND JAIN 2025.pdf", password: "1111" },
+{ name: "RAMJIBHAI BABUBHAI RADADIYA 2025", pdf: "RAMJIBHAI BABUBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "Ramoliya Abhay Shambhubhai 2025", pdf: "Ramoliya Abhay Shambhubhai 2025.pdf", password: "1111" },
+{ name: "RAMOLIYA SHAMBHUBHAI L  PA 2025", pdf: "RAMOLIYA SHAMBHUBHAI L  PA 2025.pdf", password: "1111" },
+{ name: "RAMOLIYA SHAMBHUBHAI L   MEDI  2025", pdf: "RAMOLIYA SHAMBHUBHAI L   MEDI  2025.pdf", password: "1111" },
+{ name: "RASIKBHAI BHIKHABHAI POLARA 2025", pdf: "RASIKBHAI BHIKHABHAI POLARA 2025.pdf", password: "1111" },
+{ name: "RASIKBHAI LALJIBHAI RAMANI 2025", pdf: "RASIKBHAI LALJIBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "RASIKBHAI PRAGJIBHAI THESIYA 2025", pdf: "RASIKBHAI PRAGJIBHAI THESIYA 2025.pdf", password: "1111" },
+{ name: "RASIKLAL RAVJIBHAI KATHIRIYA 2025", pdf: "RASIKLAL RAVJIBHAI KATHIRIYA 2025.pdf", password: "1111" },
+{ name: "RAVAL MAYUR ARVINDBHAI 2025", pdf: "RAVAL MAYUR ARVINDBHAI 2025.pdf", password: "1111" },
+{ name: "Ravikumar Balubhai Dobariya  ( HITESHBHAI ITALIYA ) 2025", pdf: "Ravikumar Balubhai Dobariya  ( HITESHBHAI ITALIYA ) 2025.pdf", password: "1111" },
+{ name: "RIPUL BHAI VALLABH BHAI BHIMANI 2025", pdf: "RIPUL BHAI VALLABH BHAI BHIMANI 2025.pdf", password: "1111" },
+{ name: "RIPULBHAI DHANJIBHAI KHANT 2025", pdf: "RIPULBHAI DHANJIBHAI KHANT 2025.pdf", password: "1111" },
+{ name: "ROHIT BHAI VALLABH BHAI BHUVA 2025", pdf: "ROHIT BHAI VALLABH BHAI BHUVA 2025.pdf", password: "1111" },
+{ name: "ROHIT BHAI VINUBHAI 2025", pdf: "ROHIT BHAI VINUBHAI 2025.pdf", password: "1111" },
+{ name: "ROHIT BHAVESHBHAI SANGANI 2025", pdf: "ROHIT BHAVESHBHAI SANGANI 2025.pdf", password: "1111" },
+{ name: "ROHIT JAYSUKHBHAI SOJITRA 2025", pdf: "ROHIT JAYSUKHBHAI SOJITRA 2025.pdf", password: "1111" },
+{ name: "ROHITKUMAR DIPAKBHAI SUKHADIYA 2025", pdf: "ROHITKUMAR DIPAKBHAI SUKHADIYA 2025.pdf", password: "9714711564" },
+{ name: "RONAK BHUPATBHAI VIRADIYA 2025", pdf: "RONAK BHUPATBHAI VIRADIYA 2025.pdf", password: "1111" },
+{ name: "RUCHITA RAMESHBHAI GOYANI 2025", pdf: "RUCHITA RAMESHBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "RUPEN CHANDUBHAI DANKHARA 2025", pdf: "RUPEN CHANDUBHAI DANKHARA 2025.pdf", password: "1111" },
+{ name: "S VEER TWISTERS PROPRIETOR 2025", pdf: "S VEER TWISTERS PROPRIETOR 2025.pdf", password: "1111" },
+{ name: "S VEER TWISTERS solar 2025", pdf: "S VEER TWISTERS solar 2025.pdf", password: "1111" },
+{ name: "SACHIN CHAGANRAJ CHHAJER 2025", pdf: "SACHIN CHAGANRAJ CHHAJER 2025.pdf", password: "1111" },
+{ name: "SAGAR BALVANTBHAI MAVANI 2025", pdf: "SAGAR BALVANTBHAI MAVANI 2025.pdf", password: "1111" },
+{ name: "SAGAR DHIRUBHAI SANGHANI 2025", pdf: "SAGAR DHIRUBHAI SANGHANI 2025.pdf", password: "1111" },
+{ name: "SAGAR GHANSHYAMBHAI SARDHARA 2025", pdf: "SAGAR GHANSHYAMBHAI SARDHARA 2025.pdf", password: "1111" },
+{ name: "SAGAR JAGDISHBHAI VEKARIYA 2025", pdf: "SAGAR JAGDISHBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "SAGARBHAI B KHOKHAR  ( family ) 2025", pdf: "SAGARBHAI B KHOKHAR  ( family ) 2025.pdf", password: "1111" },
+{ name: "SAHIL BHUPATBHAI VIRADIYA 2025", pdf: "SAHIL BHUPATBHAI VIRADIYA 2025.pdf", password: "1111" },
+{ name: "SAMART FASHION 2 2025", pdf: "SAMART FASHION 2 2025.pdf", password: "1111" },
+{ name: "SAMART FASHION 2025", pdf: "SAMART FASHION 2025.pdf", password: "1111" },
+{ name: "SAMIRBHAI VALLBHBHAI SAVALIYA 2025", pdf: "SAMIRBHAI VALLBHBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "Sandip Babubhai Kakadiya 2025", pdf: "Sandip Babubhai Kakadiya 2025.pdf", password: "1111" },
+{ name: "SANDIP BHAI 2025", pdf: "SANDIP BHAI 2025.pdf", password: "1111" },
+{ name: "SANDIP DEVCHANDBHAI SAVALIYA 2025", pdf: "SANDIP DEVCHANDBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "SANDIPBHAI C GAJERA 2025", pdf: "SANDIPBHAI C GAJERA 2025.pdf", password: "1111" },
+{ name: "SANDIPBHAI GANESHBHAI GOYANI 2025", pdf: "SANDIPBHAI GANESHBHAI GOYANI 2025.pdf", password: "9879728813" },
+{ name: "SANDIPKUMAR GORDHANBHAI ANGHAN 2025", pdf: "SANDIPKUMAR GORDHANBHAI ANGHAN 2025.pdf", password: "1111" },
+{ name: "SANJAY BHAGWANJI DEDANIYA 2025", pdf: "SANJAY BHAGWANJI DEDANIYA 2025.pdf", password: "1111" },
+{ name: "SANJAY G 2025", pdf: "SANJAY G 2025.pdf", password: "1111" },
+{ name: "SANJAY NARNABHAI PARAMAR 2025", pdf: "SANJAY NARNABHAI PARAMAR 2025.pdf", password: "1111" },
+{ name: "SANJAYBHAI BHOLABHAI RADADIYA 2025", pdf: "SANJAYBHAI BHOLABHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "SANJAYBHAI HIMMATBHAI JASANI 2025", pdf: "SANJAYBHAI HIMMATBHAI JASANI 2025.pdf", password: "1111" },
+{ name: "SANJAYBHAI MAGANBHAI MAKHESNA 2025", pdf: "SANJAYBHAI MAGANBHAI MAKHESNA 2025.pdf", password: "1111" },
+{ name: "SANJAYBHAI MAVJIBHAI SABHAYA 2025", pdf: "SANJAYBHAI MAVJIBHAI SABHAYA 2025.pdf", password: "1111" },
+{ name: "SANJAYBHAI VITHALBHAI DESAI 2025", pdf: "SANJAYBHAI VITHALBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "SANJAYKUMAR RAMESHBHAI JOGANI 2025", pdf: "SANJAYKUMAR RAMESHBHAI JOGANI 2025.pdf", password: "1111" },
+{ name: "SANJAYKUMAR SHAMBHUBHAI LATHIYA 2025", pdf: "SANJAYKUMAR SHAMBHUBHAI LATHIYA 2025.pdf", password: "1111" },
+{ name: "SANJAYKUMAR VINODBHAI PATEL 2025", pdf: "SANJAYKUMAR VINODBHAI PATEL 2025.pdf", password: "1111" },
+{ name: "SANYAMKUMAR CHAGANRAJ CHHAJER 2025", pdf: "SANYAMKUMAR CHAGANRAJ CHHAJER 2025.pdf", password: "1111" },
+{ name: "SARADHARA BRIJESH  G 2025", pdf: "SARADHARA BRIJESH  G 2025.pdf", password: "1111" },
+{ name: "SATANI ALPESHBHAI 2025", pdf: "SATANI ALPESHBHAI 2025.pdf", password: "9712025803" },
+{ name: "SATANI GORDHANBHAI ARJANBHAI 2025", pdf: "SATANI GORDHANBHAI ARJANBHAI 2025.pdf", password: "1111" },
+{ name: "SATANI SANDIPBHAI VINUBHAI 2025", pdf: "SATANI SANDIPBHAI VINUBHAI 2025.pdf", password: "1111" },
+{ name: "Savaliya Dharamshibhai Jinabhai 2025", pdf: "Savaliya Dharamshibhai Jinabhai 2025.pdf", password: "1111" },
+{ name: "Savaliya Hardikkumar Dharamshibhai 2025", pdf: "Savaliya Hardikkumar Dharamshibhai 2025.pdf", password: "1111" },
+{ name: "SAVALIYA JENTIBHAI 2025", pdf: "SAVALIYA JENTIBHAI 2025.pdf", password: "1111" },
+{ name: "Savaliya Pankajbhai Jentibhai 2025", pdf: "Savaliya Pankajbhai Jentibhai 2025.pdf", password: "1111" },
+{ name: "SAVAN BALUBHAI JOGANI 2025", pdf: "SAVAN BALUBHAI JOGANI 2025.pdf", password: "1111" },
+{ name: "SAVAN PARSHOTTAMBHAI HIHORIYA 2025", pdf: "SAVAN PARSHOTTAMBHAI HIHORIYA 2025.pdf", password: "1111" },
+{ name: "SAVASVIYA VINUBHAI DAYALBHAI 2025", pdf: "SAVASVIYA VINUBHAI DAYALBHAI 2025.pdf", password: "1111" },
+{ name: "SAVITABEN DINESHBHAI KUMBHANI 2025", pdf: "SAVITABEN DINESHBHAI KUMBHANI 2025.pdf", password: "1111" },
+{ name: "SAVITABEN DINESHBHAI KUMBHANI2 2025", pdf: "SAVITABEN DINESHBHAI KUMBHANI2 2025.pdf", password: "1111" },
+{ name: "Savjibhai Chhaganbhai Ambaliya 2025", pdf: "Savjibhai Chhaganbhai Ambaliya 2025.pdf", password: "1111" },
+{ name: "Savliya Vishalkumar Dharamashibhai 2025", pdf: "Savliya Vishalkumar Dharamashibhai 2025.pdf", password: "1111" },
+{ name: "SAVSAVIYA CHETANBHAI D 2025", pdf: "SAVSAVIYA CHETANBHAI D 2025.pdf", password: "1111" },
+{ name: "SAVSAVIYA HIMMATBHAI 2025", pdf: "SAVSAVIYA HIMMATBHAI 2025.pdf", password: "1111" },
+{ name: "SAVSAVIYA NILESHBHAI HIMMATBHAI 2025", pdf: "SAVSAVIYA NILESHBHAI HIMMATBHAI 2025.pdf", password: "1111" },
+{ name: "SHAILESH GIRDHARBHAI VAHOLIYA 2025", pdf: "SHAILESH GIRDHARBHAI VAHOLIYA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI DAMJIBHAI DHAMELIYA 2025", pdf: "SHAILESHBHAI DAMJIBHAI DHAMELIYA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI DHIRUBHAI SAVSAVIYA 2025", pdf: "SHAILESHBHAI DHIRUBHAI SAVSAVIYA 2025.pdf", password: "1111" },
+{ name: "Shaileshbhai Kalubhai Gajipara 2025", pdf: "Shaileshbhai Kalubhai Gajipara 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI KALUBHAI GOYANI 2025", pdf: "SHAILESHBHAI KALUBHAI GOYANI 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI LABHUBHAI DONDA  PA 2025", pdf: "SHAILESHBHAI LABHUBHAI DONDA  PA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI LABHUBHAI DONDA 2025", pdf: "SHAILESHBHAI LABHUBHAI DONDA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI MANSUKHBHAI BABARIYA 2025", pdf: "SHAILESHBHAI MANSUKHBHAI BABARIYA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI SUDHIRBHAI ISAMALIA 2025", pdf: "SHAILESHBHAI SUDHIRBHAI ISAMALIA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI TULSIBHAI KUKADIYA  ENDO 2025", pdf: "SHAILESHBHAI TULSIBHAI KUKADIYA  ENDO 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI TULSIBHAI KUKADIYA 2025", pdf: "SHAILESHBHAI TULSIBHAI KUKADIYA 2025.pdf", password: "1111" },
+{ name: "SHAILESHBHAI VITTHALBHAI BHIMANI 2025", pdf: "SHAILESHBHAI VITTHALBHAI BHIMANI 2025.pdf", password: "1111" },
+{ name: "SHAILESHKUMAR GOVINDBHAI FINDORIA 2025", pdf: "SHAILESHKUMAR GOVINDBHAI FINDORIA 2025.pdf", password: "1111" },
+{ name: "SHAILESHKUMAR JAYANTIBHAI VEKARIYA 2025", pdf: "SHAILESHKUMAR JAYANTIBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "Shantilal Ramjibhai Gajera 2025", pdf: "Shantilal Ramjibhai Gajera 2025.pdf", password: "1111" },
+{ name: "SHARAD D  ISAMALIYA 2025", pdf: "SHARAD D  ISAMALIYA 2025.pdf", password: "1111" },
+{ name: "Shardaben Kantibhai TAVETHIYA 2025", pdf: "Shardaben Kantibhai TAVETHIYA 2025.pdf", password: "1111" },
+{ name: "SHAYESH RAMESHBHAI LATHIYA 2025", pdf: "SHAYESH RAMESHBHAI LATHIYA 2025.pdf", password: "1111" },
+{ name: "SHEKHALIYA KALPESHBHAI PUNABHAI MEDI 2025", pdf: "SHEKHALIYA KALPESHBHAI PUNABHAI MEDI 2025.pdf", password: "1111" },
+{ name: "SHELADIYA DHARMESHKUMAR BHIKHUBHAI 2025", pdf: "SHELADIYA DHARMESHKUMAR BHIKHUBHAI 2025.pdf", password: "1111" },
+{ name: "Sheladiya Mahendra Maganbhai 2025", pdf: "Sheladiya Mahendra Maganbhai 2025.pdf", password: "1111" },
+{ name: "SHELADIYA PARSHOTTAMBHAI M  PA  2025", pdf: "SHELADIYA PARSHOTTAMBHAI M  PA  2025.pdf", password: "1111" },
+{ name: "SHELADIYA PARSHOTTAMBHAI M  MEDI  2025", pdf: "SHELADIYA PARSHOTTAMBHAI M  MEDI  2025.pdf", password: "1111" },
+{ name: "SHELADIYA VIMALKUMAR BHIKHUBHAI 2025", pdf: "SHELADIYA VIMALKUMAR BHIKHUBHAI 2025.pdf", password: "1111" },
+{ name: "SHIROYA AJAYBHAI D 2025", pdf: "SHIROYA AJAYBHAI D 2025.pdf", password: "1111" },
+{ name: "SHIVAM CREATION 2025", pdf: "SHIVAM CREATION 2025.pdf", password: "1111" },
+{ name: "SHIVANG RANCHHODBHAI SABALPARA 2025", pdf: "SHIVANG RANCHHODBHAI SABALPARA 2025.pdf", password: "1111" },
+{ name: "SHOBHANADEVI K BANTHIYA 2025", pdf: "SHOBHANADEVI K BANTHIYA 2025.pdf", password: "1111" },
+{ name: "SHOBHNABEN P SHELADIYA XUV W10 8602 2025", pdf: "SHOBHNABEN P SHELADIYA XUV W10 8602 2025.pdf", password: "1111" },
+{ name: "SHREE HARI FABRICS 2025", pdf: "SHREE HARI FABRICS 2025.pdf", password: "1111" },
+{ name: "SHRUJAL PRAFULKUMAR SAVALIYA 2025", pdf: "SHRUJAL PRAFULKUMAR SAVALIYA 2025.pdf", password: "1111" },
+{ name: "SHYAM CREATION 2025", pdf: "SHYAM CREATION 2025.pdf", password: "1111" },
+{ name: "SHYAM V BHALU 2025", pdf: "SHYAM V BHALU 2025.pdf", password: "1111" },
+{ name: "Siddharth Nareshbhai Vekariya 2025", pdf: "Siddharth Nareshbhai Vekariya 2025.pdf", password: "1111" },
+{ name: "SITARAM VENIRAM LASHKRI 2025", pdf: "SITARAM VENIRAM LASHKRI 2025.pdf", password: "1111" },
+{ name: "SMIT GIRISHBHAI BHIMANI 2025", pdf: "SMIT GIRISHBHAI BHIMANI 2025.pdf", password: "1111" },
+{ name: "SORATHIYA VIJAY CHHAGANBHAI 2025", pdf: "SORATHIYA VIJAY CHHAGANBHAI 2025.pdf", password: "1111" },
+{ name: "SUBHASH SHANTIBHAI JOGANI 2025", pdf: "SUBHASH SHANTIBHAI JOGANI 2025.pdf", password: "1111" },
+{ name: "Sudhirbhai Manjibhai Isamalia 2025", pdf: "Sudhirbhai Manjibhai Isamalia 2025.pdf", password: "1111" },
+{ name: "Sudhirbhai Rameshbhai Rakholiya 2025", pdf: "Sudhirbhai Rameshbhai Rakholiya 2025.pdf", password: "1111" },
+{ name: "SUMIT HASMUKHBHAI JESANI 2025", pdf: "SUMIT HASMUKHBHAI JESANI 2025.pdf", password: "1111" },
+{ name: "SUMIT VALLABHBHAI SETA 2025", pdf: "SUMIT VALLABHBHAI SETA 2025.pdf", password: "1111" },
+{ name: "SUNDEEP MUKANCHAND SANKLECHA 2025", pdf: "SUNDEEP MUKANCHAND SANKLECHA 2025.pdf", password: "1111" },
+{ name: "SUNDEEP MUKANCHAND SANKLECHA", pdf: "SUNDEEP MUKANCHAND SANKLECHA.pdf", password: "1111" },
+{ name: "SUNIL T 2025", pdf: "SUNIL T 2025.pdf", password: "1111" },
+{ name: "SURAJ CHATURBHAI BAVISHI 2025", pdf: "SURAJ CHATURBHAI BAVISHI 2025.pdf", password: "1111" },
+{ name: "SURESH VALDORIYA 2025", pdf: "SURESH VALDORIYA 2025.pdf", password: "1111" },
+{ name: "SURESH VALDORIYA,   PA 2025", pdf: "SURESH VALDORIYA,   PA 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI BALUBHAI SUHAGIA 2025", pdf: "SURESHBHAI BALUBHAI SUHAGIA 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI BHIKHABHAI BODAR 2025", pdf: "SURESHBHAI BHIKHABHAI BODAR 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI CHHAGANBHAI VAVADIYA 2025", pdf: "SURESHBHAI CHHAGANBHAI VAVADIYA 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI DHANJIBHAI KEVADIYA 2025", pdf: "SURESHBHAI DHANJIBHAI KEVADIYA 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI HIMMATBHAI MALAVIYA 2025", pdf: "SURESHBHAI HIMMATBHAI MALAVIYA 2025.pdf", password: "1111" },
+{ name: "Sureshbhai Jashubhai Sorathiya 2025", pdf: "Sureshbhai Jashubhai Sorathiya 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI KANUBHAI VEKARIYA 2025", pdf: "SURESHBHAI KANUBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "SURESHBHAI MAGANBHAI ZALAVADIYA 2025", pdf: "SURESHBHAI MAGANBHAI ZALAVADIYA 2025.pdf", password: "1111" },
+{ name: "Sutariya Bhaveshbhai Devjibhai 2025", pdf: "Sutariya Bhaveshbhai Devjibhai 2025.pdf", password: "1111" },
+{ name: "SUTARIYA RAJNIKANT RASIKBHAI 2025", pdf: "SUTARIYA RAJNIKANT RASIKBHAI 2025.pdf", password: "1111" },
+{ name: "TARUN CHIMANBHAI MAKRUBIA 2025", pdf: "TARUN CHIMANBHAI MAKRUBIA 2025.pdf", password: "1111" },
+{ name: "TARUNBHAI PARESHBHAI BARVALIYA 2025", pdf: "TARUNBHAI PARESHBHAI BARVALIYA 2025.pdf", password: "1111" },
+{ name: "TEJAS POPATBHAI DAYANI 2025", pdf: "TEJAS POPATBHAI DAYANI 2025.pdf", password: "1111" },
+{ name: "Thakarshibhai Babubhai Vekariya 2025", pdf: "Thakarshibhai Babubhai Vekariya 2025.pdf", password: "1111" },
+{ name: "Thummar Sureshkumar Manubhai 2025", pdf: "Thummar Sureshkumar Manubhai 2025.pdf", password: "1111" },
+{ name: "Thummar Sureshkumar Manubhai ENDO 2025", pdf: "Thummar Sureshkumar Manubhai ENDO 2025.pdf", password: "1111" },
+{ name: "TRUPTI GHANSHYAMBHAI RADADIYA 2025", pdf: "TRUPTI GHANSHYAMBHAI RADADIYA 2025.pdf", password: "1111" },
+{ name: "TUSHAR MANSUKHBHAI DESAI 2025", pdf: "TUSHAR MANSUKHBHAI DESAI 2025.pdf", password: "1111" },
+{ name: "UDAYBHAI BABUBHAI UKANI 2025", pdf: "UDAYBHAI BABUBHAI UKANI 2025.pdf", password: "1111" },
+{ name: "UMESHBHAI CHUNIBHAI VEKARIYA 2025", pdf: "UMESHBHAI CHUNIBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "Vadilal N Kanani 2025", pdf: "Vadilal N Kanani 2025.pdf", password: "1111" },
+{ name: "VAGHANI SUNILBHAI MOHANBHAI 2025", pdf: "VAGHANI SUNILBHAI MOHANBHAI 2025.pdf", password: "1111" },
+{ name: "VAGHASIYA HANSABEN DULABHAI PA 2025", pdf: "VAGHASIYA HANSABEN DULABHAI PA 2025.pdf", password: "1111" },
+{ name: "VAGHASIYA HANSABEN DULABHAI MEDI 2025", pdf: "VAGHASIYA HANSABEN DULABHAI MEDI 2025.pdf", password: "1111" },
+{ name: "VAGHASIYA KAILASHBEN HARESHBHAI 2025", pdf: "VAGHASIYA KAILASHBEN HARESHBHAI 2025.pdf", password: "1111" },
+{ name: "VAGHASIYA VIMAL ARVINDBHAI 2025", pdf: "VAGHASIYA VIMAL ARVINDBHAI 2025.pdf", password: "1111" },
+{ name: "VAGHASIYA VIPULBHAI SHANTIBHAI 2025", pdf: "VAGHASIYA VIPULBHAI SHANTIBHAI 2025.pdf", password: "1111" },
+{ name: "Vallabh Odhavjibhai Vaghasiya 2025", pdf: "Vallabh Odhavjibhai Vaghasiya 2025.pdf", password: "1111" },
+{ name: "VAMANBHAI NANUBHAI  JAGANI 2025", pdf: "VAMANBHAI NANUBHAI  JAGANI 2025.pdf", password: "1111" },
+{ name: "Vasantben Chhaganbhai Katrodiya 2025", pdf: "Vasantben Chhaganbhai Katrodiya 2025.pdf", password: "1111" },
+{ name: "VASANTBHAI VALLABHBHAI SORATHIYA 2025", pdf: "VASANTBHAI VALLABHBHAI SORATHIYA 2025.pdf", password: "1111" },
+{ name: "VASOYA MADHUBHAI CHHAGANBHAI 2025", pdf: "VASOYA MADHUBHAI CHHAGANBHAI 2025.pdf", password: "1111" },
+{ name: "VASOYA MANOJBHAI BHAGVANBHAI 2025", pdf: "VASOYA MANOJBHAI BHAGVANBHAI 2025.pdf", password: "1111" },
+{ name: "VASOYA PANKAJBHAI CHHAGANBHAI 2025", pdf: "VASOYA PANKAJBHAI CHHAGANBHAI 2025.pdf", password: "1111" },
+{ name: "VEDPRAKASH ARUNKUMAR MISHRA 2025", pdf: "VEDPRAKASH ARUNKUMAR MISHRA 2025.pdf", password: "7573883652" },
+{ name: "VEKARIYA CHANDRESH KANUBHAI 2025", pdf: "VEKARIYA CHANDRESH KANUBHAI 2025.pdf", password: "1111" },
+{ name: "VEKARIYA CHUNIBHAI M 2025", pdf: "VEKARIYA CHUNIBHAI M 2025.pdf", password: "1111" },
+{ name: "VEKARIYA CHUNIBHAI M  PA 2025", pdf: "VEKARIYA CHUNIBHAI M  PA 2025.pdf", password: "1111" },
+{ name: "VEKARIYA DINESHBHAI VITHTHALBHAI 2025", pdf: "VEKARIYA DINESHBHAI VITHTHALBHAI 2025.pdf", password: "1111" },
+{ name: "VEKARIYA PARESHBHAI J 2025", pdf: "VEKARIYA PARESHBHAI J 2025.pdf", password: "1111" },
+{ name: "Vekariya Sureshbhai Dhirubhai 2025", pdf: "Vekariya Sureshbhai Dhirubhai 2025.pdf", password: "1111" },
+{ name: "VEKARIYA SURESHBHAI MANSUKHBHAI 2025", pdf: "VEKARIYA SURESHBHAI MANSUKHBHAI 2025.pdf", password: "1111" },
+{ name: "VICKY RANJEETBHAI CHAUHAN 2025", pdf: "VICKY RANJEETBHAI CHAUHAN 2025.pdf", password: "1111" },
+{ name: "VIJAY BABUBHAI PANCHANI 2025", pdf: "VIJAY BABUBHAI PANCHANI 2025.pdf", password: "1111" },
+{ name: "Vijay Parshottambhai Malani 2025", pdf: "Vijay Parshottambhai Malani 2025.pdf", password: "1111" },
+{ name: "Vijaybhai Kantilal Gondaliya 2025", pdf: "Vijaybhai Kantilal Gondaliya 2025.pdf", password: "1111" },
+{ name: "Vijaybhai Mansukhbhai Dobariya 2025", pdf: "Vijaybhai Mansukhbhai Dobariya 2025.pdf", password: "1111" },
+{ name: "VIKAS JITUBHAI VEKARIYA 2025", pdf: "VIKAS JITUBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "Vinodbhai Khodabhai Kothiya 2025", pdf: "Vinodbhai Khodabhai Kothiya 2025.pdf", password: "1111" },
+{ name: "Vinubhai Jivrajbhai Goti 2025", pdf: "Vinubhai Jivrajbhai Goti 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI 2025", pdf: "VIPULBHAI 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI BABUBHAI JAYANI 2025", pdf: "VIPULBHAI BABUBHAI JAYANI 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI DHIRUBHAI VASOYA 2025", pdf: "VIPULBHAI DHIRUBHAI VASOYA 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI GOBARBHAI KORAT 2025", pdf: "VIPULBHAI GOBARBHAI KORAT 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI GOVINDBHAI SENJALIYA 2025", pdf: "VIPULBHAI GOVINDBHAI SENJALIYA 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI JINABHAI MAKANI 2025", pdf: "VIPULBHAI JINABHAI MAKANI 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI LAXMANBHAI ISAMALIYA 2025", pdf: "VIPULBHAI LAXMANBHAI ISAMALIYA 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI MANUBHAI BORAD 2025", pdf: "VIPULBHAI MANUBHAI BORAD 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI POPATBHAI NAROLA 2025", pdf: "VIPULBHAI POPATBHAI NAROLA 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI POPATBHAI TIMBADIYA 2025", pdf: "VIPULBHAI POPATBHAI TIMBADIYA 2025.pdf", password: "1111" },
+{ name: "VIPULBHAI RAMJIBHAI SAVALIYA 2025", pdf: "VIPULBHAI RAMJIBHAI SAVALIYA 2025.pdf", password: "1111" },
+{ name: "VIRADIYA BHAVESHBHAI DAMJIBHAI 2025", pdf: "VIRADIYA BHAVESHBHAI DAMJIBHAI 2025.pdf", password: "1111" },
+{ name: "VIRAL JAGDISHBHAI SANCHANIA 2025", pdf: "VIRAL JAGDISHBHAI SANCHANIA 2025.pdf", password: "1111" },
+{ name: "VIRAL JAYNTIBHAI GELANI 2025", pdf: "VIRAL JAYNTIBHAI GELANI 2025.pdf", password: "1111" },
+{ name: "VIRALBHAI ASHOKBHAI SARDHARA 2025", pdf: "VIRALBHAI ASHOKBHAI SARDHARA 2025.pdf", password: "1111" },
+{ name: "VIRALKUMAR RAMESHBHAI CHODAVADIYA 2025", pdf: "VIRALKUMAR RAMESHBHAI CHODAVADIYA 2025.pdf", password: "1111" },
+{ name: "VIRANI BHARATKUMAR LABHUBHAI 2025", pdf: "VIRANI BHARATKUMAR LABHUBHAI 2025.pdf", password: "1111" },
+{ name: "VIRANI DHARMESH V 2025", pdf: "VIRANI DHARMESH V 2025.pdf", password: "1111" },
+{ name: "VIRANI RAJESHBHAI BABAUBHAI 2025", pdf: "VIRANI RAJESHBHAI BABAUBHAI 2025.pdf", password: "1111" },
+{ name: "VIRANI SANDIPBHAI LABHUBHAI 2025", pdf: "VIRANI SANDIPBHAI LABHUBHAI 2025.pdf", password: "1111" },
+{ name: "VISHAL BHARATBHAI RAMANI 2025", pdf: "VISHAL BHARATBHAI RAMANI 2025.pdf", password: "1111" },
+{ name: "VISHAL DINESHBHAI BUHA 2025", pdf: "VISHAL DINESHBHAI BUHA 2025.pdf", password: "1111" },
+{ name: "VISHALBHAI DHIRUBHAI KANANI 2025", pdf: "VISHALBHAI DHIRUBHAI KANANI 2025.pdf", password: "1111" },
+{ name: "VISHALBHAI HIMMATBHAI LATHIYA   HITPA TPA 2025", pdf: "VISHALBHAI HIMMATBHAI LATHIYA   HITPA TPA 2025.pdf", password: "1111" },
+{ name: "VISHALBHAI NATHABHAI SATANI 2025", pdf: "VISHALBHAI NATHABHAI SATANI 2025.pdf", password: "1111" },
+{ name: "VIVEKBHAI BHUPATBHAI PALADIYA 2025", pdf: "VIVEKBHAI BHUPATBHAI PALADIYA 2025.pdf", password: "1111" },
+{ name: "VORARAM C CHOUDHARY 2025", pdf: "VORARAM C CHOUDHARY 2025.pdf", password: "1111" },
+{ name: "WE CAN FAB 2025", pdf: "WE CAN FAB 2025.pdf", password: "1111" },
+{ name: "YAGNESH JIVANBHAI BARVALIA 2025", pdf: "YAGNESH JIVANBHAI BARVALIA 2025.pdf", password: "1111" },
+{ name: "YAGNIK  VAGADIYA 2025", pdf: "YAGNIK  VAGADIYA 2025.pdf", password: "1111" },
+{ name: "YAMUNA ART 2025", pdf: "YAMUNA ART 2025.pdf", password: "1111" },
+{ name: "YASHKUMAR KAMLESHBHAI PATEL 2025", pdf: "YASHKUMAR KAMLESHBHAI PATEL 2025.pdf", password: "1111" },
+{ name: "YOGESH JAYSUKHBHAI TRAPASIYA 2025", pdf: "YOGESH JAYSUKHBHAI TRAPASIYA 2025.pdf", password: "1111" },
+{ name: "YOGESHBHAI CHATURBHAI KATHIRIYA 2025", pdf: "YOGESHBHAI CHATURBHAI KATHIRIYA 2025.pdf", password: "1111" },
+{ name: "YOGESHBHAI JAYANTIBHAI VEKARIYA 2025", pdf: "YOGESHBHAI JAYANTIBHAI VEKARIYA 2025.pdf", password: "1111" },
+{ name: "ZALAVADIYA BHAVESH  LABHUBHAI 2025", pdf: "ZALAVADIYA BHAVESH  LABHUBHAI 2025.pdf", password: "1111" },
+{ name: "ZALAVADIYA CHIRAG R 2025", pdf: "ZALAVADIYA CHIRAG R 2025.pdf", password: "9428710311" },
+{ name: "Alpeshbhai Ravajibhai Bokha 2026", pdf: "Alpeshbhai Ravajibhai Bokha 2026.pdf", password: "1111" },
+{ name: "ANKIT HIMMATBHAI LATHIYA 2026", pdf: "ANKIT HIMMATBHAI LATHIYA 2026.pdf", password: "1111" },
+{ name: "ARUNBHAI JERAMBHAI RADADIA 2026", pdf: "ARUNBHAI JERAMBHAI RADADIA 2026.pdf", password: "1111" },
+{ name: "ASHOKBHAI BHIKHABHAI ANTALIYA 2026", pdf: "ASHOKBHAI BHIKHABHAI ANTALIYA 2026.pdf", password: "1111" },
+{ name: "ASHVINBHAI BHARATBHAI SOJITRA 2026", pdf: "ASHVINBHAI BHARATBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "BODA BHAVESH D 2026", pdf: "BODA BHAVESH D 2026.pdf", password: "1111" },
+{ name: "BOKHA ALPESHBHAI RAVJIBHAI H 2026", pdf: "BOKHA ALPESHBHAI RAVJIBHAI H 2026.pdf", password: "1111" },
+{ name: "CHETANKUMAR D 2026", pdf: "CHETANKUMAR D 2026.pdf", password: "1111" },
+{ name: "DHARMESHBHAI JENTIBHAI SAVALIYA 2026", pdf: "DHARMESHBHAI JENTIBHAI SAVALIYA 2026.pdf", password: "1111" },
+{ name: "DHAVALKUMAR KANUBHAI PATEL 2026", pdf: "DHAVALKUMAR KANUBHAI PATEL 2026.pdf", password: "1111" },
+{ name: "DIPAKBHAI HIMMATBHAI PANSERIYA 2026", pdf: "DIPAKBHAI HIMMATBHAI PANSERIYA 2026.pdf", password: "1111" },
+{ name: "DOBARIYA VIPULBHAI JAYANTIBHAI 2026", pdf: "DOBARIYA VIPULBHAI JAYANTIBHAI 2026.pdf", password: "1111" },
+{ name: "GAUTAMCHAND 2026", pdf: "GAUTAMCHAND 2026.pdf", password: "1111" },
+{ name: "Gopalbhai Mansukhbhai Dobariya 2026", pdf: "Gopalbhai Mansukhbhai Dobariya 2026.pdf", password: "1111" },
+{ name: "HARESHBHAI DHANJIBHAI SOJITRA 2026", pdf: "HARESHBHAI DHANJIBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "HARESHBHAI NANUBHAI SAVSAVIYA 2026", pdf: "HARESHBHAI NANUBHAI SAVSAVIYA 2026.pdf", password: "1111" },
+{ name: "JAYANT LAKSHMANBHAI VARTAK 2026", pdf: "JAYANT LAKSHMANBHAI VARTAK 2026.pdf", password: "1111" },
+{ name: "Kanani Bavchand Narsinhbhai 2026", pdf: "Kanani Bavchand Narsinhbhai 2026.pdf", password: "1111" },
+{ name: "KAPILBHAI K RAMANI Cancer Gard 2026", pdf: "KAPILBHAI K RAMANI Cancer Gard 2026.pdf", password: "1111" },
+{ name: "Kukadiya Prakashbhai Khimjibhai 2026", pdf: "Kukadiya Prakashbhai Khimjibhai 2026.pdf", password: "1111" },
+{ name: "LAXMANBHAI 2026", pdf: "LAXMANBHAI 2026.pdf", password: "1111" },
+{ name: "NARESHKUMAR DHANJIBHAI SOJITRA 2026", pdf: "NARESHKUMAR DHANJIBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "NAYANABEN DINESHBHAI RAMANI 2026", pdf: "NAYANABEN DINESHBHAI RAMANI 2026.pdf", password: "1111" },
+{ name: "NIKUL DHANJIBHAI SOJITRA 2026", pdf: "NIKUL DHANJIBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "Nileshkumar Pragjibhai Khokhariy 2026", pdf: "Nileshkumar Pragjibhai Khokhariy 2026.pdf", password: "1111" },
+{ name: "RADADIYA  BABUBHAI  V 2026", pdf: "RADADIYA  BABUBHAI  V 2026.pdf", password: "1111" },
+{ name: "RAMESHBHAI DANKHARA 2026", pdf: "RAMESHBHAI DANKHARA 2026.pdf", password: "1111" },
+{ name: "RAMESHBHAI DANKHARA.....PA 2026", pdf: "RAMESHBHAI DANKHARA.....PA 2026.pdf", password: "1111" },
+{ name: "SAVALIYA MANSUKHBHAI L 2026", pdf: "SAVALIYA MANSUKHBHAI L 2026.pdf", password: "1111" },
+{ name: "SUMIT VALLABHBHAI  SETA 2026", pdf: "SUMIT VALLABHBHAI  SETA 2026.pdf", password: "1111" },
+{ name: "SURESHBHAI MAGANBHAI ZALAVADIYA 2026", pdf: "SURESHBHAI MAGANBHAI ZALAVADIYA 2026.pdf", password: "1111" },
+{ name: "VAMANBHAI NANUBHAI JAGANI 2026", pdf: "VAMANBHAI NANUBHAI JAGANI 2026.pdf", password: "1111" },
+{ name: "Vijaybhai Mansukhbhai Dobariya 2026", pdf: "Vijaybhai Mansukhbhai Dobariya 2026.pdf", password: "1111" },
+{ name: "VISHALBHAI HIMMATBHAI LATHIYA 2026", pdf: "VISHALBHAI HIMMATBHAI LATHIYA 2026.pdf", password: "1111" },
+{ name: "CHIMANBHAI GABHRUBHAI MAKRUBIA 2026", pdf: "CHIMANBHAI GABHRUBHAI MAKRUBIA 2026.pdf", password: "1111" },
+{ name: "TARUN CHIMANBHAI MAKRUBIA 2026", pdf: "TARUN CHIMANBHAI MAKRUBIA 2026.pdf", password: "1111" },
+{ name: "SAVALIYA JENTIBHAI MEDI 2026", pdf: "SAVALIYA JENTIBHAI MEDI 2026.pdf", password: "1111" },
+{ name: "SAVALIYA JENTIBHAI PA 2026", pdf: "SAVALIYA JENTIBHAI PA 2026.pdf", password: "1111" },
+{ name: "BOGHANI KANTABEN PRAVINBHAI H CASH 2026", pdf: "BOGHANI KANTABEN PRAVINBHAI H CASH 2026.pdf", password: "1111" },
+{ name: "Vaghani Jeet Raghavbhai 2026", pdf: "Vaghani Jeet Raghavbhai 2026.pdf", password: "1111" },
+{ name: "Sanjaybhai Popatbhai Patel  PA 2026", pdf: "Sanjaybhai Popatbhai Patel  PA 2026.pdf", password: "1111" },
+{ name: "GOYANI PANKAJBHAI NARANBHAI 2026", pdf: "GOYANI PANKAJBHAI NARANBHAI 2026.pdf", password: "1111" },
+{ name: "JIGNESH DEVCHANDBHAI PANCHANI 2026 ASHUBHAI", pdf: "JIGNESH DEVCHANDBHAI PANCHANI 2026 ASHUBHAI.pdf", password: "1111" },
+{ name: "CHIRAG JAYSUKHBHAI SOJITRA 2026", pdf: "CHIRAG JAYSUKHBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "JAYSUKHBHAI HARIBHAI SOJITRA 2026", pdf: "JAYSUKHBHAI HARIBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "ROHIT JAYSUKHBHAI SOJITRA 2026", pdf: "ROHIT JAYSUKHBHAI SOJITRA 2026.pdf", password: "1111" },
+{ name: "KALPESH HIMMATBHAI SOLANKI 2026", pdf: "KALPESH HIMMATBHAI SOLANKI 2026.pdf", password: "1111" },
+{ name: "RAMANI KAPILBHAI KANTIBHAI  PA 2026", pdf: "RAMANI KAPILBHAI KANTIBHAI  PA 2026.pdf", password: "9277504513" },
+{ name: "DIVYESH BABUBHAI DOBARIYA 2026", pdf: "DIVYESH BABUBHAI DOBARIYA 2026.pdf", password: "1111" },
+{ name: "Sandip Babubhai Kakadiya ENDO 2025", pdf: "Sandip Babubhai Kakadiya ENDO 2025.pdf", password: "1111" },
+{ name: "Manjulaben Manshukhbhai Dobariya 2026", pdf: "Manjulaben Manshukhbhai Dobariya 2026.pdf", password: "1111" },
+{ name: "RASIKBHAI BHIKHABHAI POLARA 2026", pdf: "RASIKBHAI BHIKHABHAI POLARA 2026.pdf", password: "1111" },
+{ name: "AMITBHAI RAMJIBHAI THUMMAR 2026", pdf: "AMITBHAI RAMJIBHAI THUMMAR 2026.pdf", password: "1111" },
+{ name: "JAYESHBHAI DALSUKHBHAI ISAMALIYA 2026", pdf: "JAYESHBHAI DALSUKHBHAI ISAMALIYA 2026.pdf", password: "1111" },
+{ name: "PARMAR HIRENBHAI RAMESHBHAI 2026", pdf: "PARMAR HIRENBHAI RAMESHBHAI 2026.pdf", password: "1111" },
+{ name: "TARUNBHAI PARESHBHAI BARVALIYA 2026", pdf: "TARUNBHAI PARESHBHAI BARVALIYA 2026.pdf", password: "1111" },
+{ name: "Nikhilkumar Narandas Kotak 2026", pdf: "Nikhilkumar Narandas Kotak 2026.pdf", password: "1111" },
+{ name: "RIPUL BHAI VALLABH BHAI BHIMANI 2026", pdf: "RIPUL BHAI VALLABH BHAI BHIMANI 2026.pdf", password: "1111" },
+{ name: "CHIRAG ARVIND MALANI 2026", pdf: "CHIRAG ARVIND MALANI 2026.pdf", password: "1111" },
+{ name: "Arvindbhai Shambhubhai Malani 2026", pdf: "Arvindbhai Shambhubhai Malani 2026", password: "1111" },
+{ name: "CHANDRESH ARVINDBHAI MALANI 2026", pdf: "CHANDRESH ARVINDBHAI MALANI 2026.pdf", password: "1111" },
+{ name: "MAULIKBHAI NATHABHAI GONDALIYA 2026", pdf: "MAULIKBHAI NATHABHAI GONDALIYA 2026.pdf", password: "1111" },
+{ name: "KAUSHIKBHAI BHAILALBHAI BAVASIYA 2026", pdf: "KAUSHIKBHAI BHAILALBHAI BAVASIYA 2026.pdf", password: "9974198899" },
+{ name: "BHAVESHBHAI JIVANBHAI GAJERA 2026", pdf: "BHAVESHBHAI JIVANBHAI GAJERA 2026.pdf", password: "1111" },
+{ name: "RAMANIKBHAI CHHAGANBHAI VAGHASIYA 2026", pdf: "RAMANIKBHAI CHHAGANBHAI VAGHASIYA 2026.pdf", password: "1111" },
+{ name: "JAGRUTIBEN CHETANBHAI SAVSAVIYA 2026", pdf: "JAGRUTIBEN CHETANBHAI SAVSAVIYA 2026.pdf", password: "1111" },
+{ name: "HEENABEN VINUBHAI SAVSAVIYA 2026", pdf: "HEENABEN VINUBHAI SAVSAVIYA 2026.pdf", password: "1111" },
+{ name: "JAY KHODIYAR FASHION 2026", pdf: "JAY KHODIYAR FASHION 2026.pdf", password: "1111" },
+{ name: "KRISHNA FASHION 2026", pdf: "KRISHNA FASHION 2026.pdf", password: "1111" },
+{ name: "RADHE FASHION 2026", pdf: "RADHE FASHION 2026.pdf", password: "1111" },
+{ name: "SHREE HARI ART 2026", pdf: "SHREE HARI ART 2026.pdf", password: "1111" },
+{ name: "KETAN BHUPATBHAI PALADIYA 2026", pdf: "KETAN BHUPATBHAI PALADIYA 2026.pdf", password: "1111" },
+{ name: "VIVEKBHAI BHUPATBHAI PALADIYA 2026", pdf: "VIVEKBHAI BHUPATBHAI PALADIYA 2026.pdf", password: "1111" },
+{ name: "VIPULBHAI DHIRUBHAI VASOYA 2026", pdf: "VIPULBHAI DHIRUBHAI VASOYA 2026.pdf", password: "1111" },
+{ name: "KORAT RAVINDRA H   MEDI  2026", pdf: "KORAT RAVINDRA H   MEDI  2026.pdf", password: "1111" },
+{ name: "PARMAR VIMALBHAI RAMESHBHAI  MEDI 2026", pdf: "PARMAR VIMALBHAI RAMESHBHAI  MEDI 2026.pdf", password: "1111" },
+{ name: "LATHIYA JIVRAJBHAI K  MEDI  2026", pdf: "LATHIYA JIVRAJBHAI K  MEDI  2026.pdf", password: "1111" },
+{ name: "JIYANI PARSHOTTAMBHAI MAGANBHAI  MEDI   2026", pdf: "JIYANI PARSHOTTAMBHAI MAGANBHAI  MEDI   2026.pdf", password: "1111" },
+{ name: "DHRUVBHAI DAMJIBHAI GODHANI 2026", pdf: "DHRUVBHAI DAMJIBHAI GODHANI 2026.pdf", password: "1111" },
+{ name: "MAHENDRABHAI DAMJIBHAI GODHANI 2026", pdf: "MAHENDRABHAI DAMJIBHAI GODHANI 2026.pdf", password: "1111" },
+{ name: "PIYUSHBHAI MANSUKHBHAI KUMBHANI 2026", pdf: "PIYUSHBHAI MANSUKHBHAI KUMBHANI 2026.pdf", password: "9726545244" },
+{ name: "SHAILESHKUMAR GOVINDBHAI FINDORIA 2026", pdf: "SHAILESHKUMAR GOVINDBHAI FINDORIA 2026.pdf", password: "1111" },
+{ name: "CHIRAG VALJIBHAI CHODVADIYA 2026", pdf: "CHIRAG VALJIBHAI CHODVADIYA 2026.pdf", password: "1111" },
+{ name: "PRAFULBHAI DEVJIBHAI KIKANI 2026", pdf: "PRAFULBHAI DEVJIBHAI KIKANI 2026.pdf", password: "1111" },
+{ name: "PANKAJKUMAR KALUBHAI  KASVALA  2026", pdf: "PANKAJKUMAR KALUBHAI  KASVALA  2026.pdf", password: "1111" },
+{ name: "PADSALA JITUBHAI MANJIBHAI 2026", pdf: "PADSALA JITUBHAI MANJIBHAI 2026.pdf", password: "1111" },
+{ name: "Jitendrabhai Bhailalbhai Bavasiya 2026", pdf: "Jitendrabhai Bhailalbhai Bavasiya 2026.pdf", password: "1111" },
+{ name: "Amol Rameshbhai Soni 2026", pdf: "Amol Rameshbhai Soni 2026.pdf", password: "1111" },
+{ name: "Narmadaben Rameshbhai Soni 2026", pdf: "Narmadaben Rameshbhai Soni 2026.pdf", password: "1111" },
+{ name: "RAJESH A JAIN 2026", pdf: "RAJESH A JAIN 2026.pdf", password: "1111" },
+{ name: "DEVRAJBHAI MULJIBHAI ITALIYA 2026", pdf: "DEVRAJBHAI MULJIBHAI ITALIYA 2026.pdf", password: "9428181166" },
+{ name: "LIMBANI JANAKBHAI CHHAGANBHAI 2026", pdf: "LIMBANI JANAKBHAI CHHAGANBHAI 2026.pdf", password: "9913789121" },
+{ name: "RASIKBHAI LALJIBHAI RAMANI", pdf: "RASIKBHAI LALJIBHAI RAMANI.pdf", password: "9898885174" },
+{ name: "DIPAKBHAI MANSUKHBHAI MALAVIYA 2026", pdf: "DIPAKBHAI MANSUKHBHAI MALAVIYA 2026.pdf", password: "9512593793" },
+{ name: "RAJESHBHAI M MALAVIYA 2026", pdf: "RAJESHBHAI M MALAVIYA 2026.pdf", password: "9979113140" },
+{ name: "Hiren Kishorbhai Chavda 2026", pdf: "Hiren Kishorbhai Chavda 2026.pdf", password: "8866266812" },
+{ name: "SUNIL T  KUKADIYA 2026", pdf: "SUNIL T  KUKADIYA 2026.pdf", password: "9722454498" },
+{ name: "HIREN CHHAGANBHAI KATRODIYA 2026", pdf: "HIREN CHHAGANBHAI KATRODIYA 2026.pdf", password: "7069388190" },
+{ name: "MAHESHBHAI HIMMATBHAI KATHIRIYA 2026", pdf: "MAHESHBHAI HIMMATBHAI KATHIRIYA 2026.pdf", password: "8238238018" },
+{ name: "ASHABEN BHAVESHBHAI GOYANI 2026", pdf: "ASHABEN BHAVESHBHAI GOYANI 2026.pdf", password: "9638284379" },
+{ name: "SAGARBHAI B   KHOKHAR 2026", pdf: "SAGARBHAI B   KHOKHAR 2026.pdf", password: "9725118915" },
+{ name: "BHAVESHBHAI HIMMATBHAI KATHIRIYA 2026", pdf: "BHAVESHBHAI HIMMATBHAI KATHIRIYA 2026.pdf", password: "8238238018" },
+{ name: "KALPESHKUMAR MUKESHBHAI LEELA 2026", pdf: "KALPESHKUMAR MUKESHBHAI LEELA 2026.pdf", password: "8758544303" },
+{ name: "ROHITKUMAR DIPAKBHAI SUKHADIYA 2026", pdf: "ROHITKUMAR DIPAKBHAI SUKHADIYA 2026.pdf", password: "9714711564" },
+{ name: "PRAKASHBHAI KANUBHAI RAVAL 2026", pdf: "PRAKASHBHAI KANUBHAI RAVAL 2026.pdf", password: "9106092378" },
+{ name: "JAYPRAKASH ARUNKUMAR MISHRA 2026", pdf: "JAYPRAKASH ARUNKUMAR MISHRA 2026.pdf", password: "9879170940" },
+{ name: "VEDPRAKASH ARUNKUMAR MISHRA 2026", pdf: "VEDPRAKASH ARUNKUMAR MISHRA 2026.pdf", password: "7573883652" },
+{ name: "ASHWIN MAGANBHAI SAVALIYA 2026", pdf: "ASHWIN MAGANBHAI SAVALIYA 2026.pdf", password: "9824764347" },
+{ name: "Gautam Chhaganbhai Katrodiya 2026", pdf: "Gautam Chhaganbhai Katrodiya 2026.pdf", password: "8690998283" },
+{ name: "RAJESHBHAI VAJUBHAI SUVAGIA 2026", pdf: "RAJESHBHAI VAJUBHAI SUVAGIA 2026.pdf", password: "9429230383" },
+{ name: "CHIMANKUMAR DIPAKBHAI SUKHADIYA 2026", pdf: "CHIMANKUMAR DIPAKBHAI SUKHADIYA 2026.pdf", password: "8347808419" },
+{ name: "SATANI ALPESHBHAI 2026", pdf: "SATANI ALPESHBHAI 2026.pdf", password: "9712025803" },
+{ name: "Ramani Pareshkumar Laljibhai 2026", pdf: "Ramani Pareshkumar Laljibhai 2026.pdf", password: "9879120015" },
+{ name: "MAHESHBHAI GANESHBHAI GOYANI 2026", pdf: "MAHESHBHAI GANESHBHAI GOYANI 2026.pdf", password: "9879882743" },
+{ name: "GAJERA KAPILBHAI BHUPATBHAI  MEDI  2026", pdf: "GAJERA KAPILBHAI BHUPATBHAI  MEDI  2026.pdf", password: "9228232102" },
+{ name: "KEYURBHAI RAMESHBHAI ZALAVADIYA 2026", pdf: "KEYURBHAI RAMESHBHAI ZALAVADIYA 2026.pdf", password: "9428710311" },
+{ name: "SANDIPBHAI GANESHBHAI GOYANI 2026", pdf: "SANDIPBHAI GANESHBHAI GOYANI 2026.pdf", password: "9879728813" },
+{ name: "Ramani Rajeshkumar Babubhai 2026", pdf: "Ramani Rajeshkumar Babubhai 2026.pdf", password: "9913199237" },
+{ name: "GAURAV V GALANI 2026", pdf: "GAURAV V GALANI 2026.pdf", password: "9099153999" },
+{ name: "HITESH RAMESHBHAI DHOLA 2026", pdf: "HITESH RAMESHBHAI DHOLA 2026.pdf", password: "9276849722" },
+{ name: "Alpeshbhai Dhirubhai Savaliya 2026", pdf: "Alpeshbhai Dhirubhai Savaliya 2026.pdf", password: "9173765228" }
+        ];
+
+        const MASTER_PASSWORD = "9737208108";
+
+        function renderClients(clientId, clientData, colorClass) {
             const listElement = document.getElementById(clientId);
             if(!listElement) return;
             const countId = clientId === "mf-list" ? "mf-count-display" : "health-count-display";
             document.getElementById(countId).innerText = clientData.length;
             listElement.innerHTML = "";
-            clientData.forEach((client, index) => {
+            clientData.forEach(client => {
                 let displayName = typeof client === 'object' ? client.name : client;
                 let password = typeof client === 'object' ? client.password : "1111";
-                let pdfFile = typeof client === 'object' ? (client.pdf || client.fileName || "") : "";
+                let pdfFile = typeof client === 'object' ? (client.pdf || client.fileName) : "";
                 let pdfData = typeof client === 'object' ? client.pdfData : null;
-                let dbId = typeof client === 'object' ? client.id : null;
-                let virtualId = dbId || `hc-${index}`;
+                let id = typeof client === 'object' ? client.id : null;
 
                 const li = document.createElement("li");
-                li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition duration-300 shadow-sm backdrop-blur-sm hover:-translate-y-1 hover:shadow-md cursor-default`;
+                li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition duration-300 shadow-sm backdrop-blur-sm`;
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
                 
                 let adminButtons = '';
-                if (window.isAdminMode && clientId === "health-list") {
+                if (window.isAdminMode && id && clientId === "health-list") {
                     adminButtons = `
                         <div class="flex gap-2 mr-2">
-                            <button onclick="editHealthClient('${virtualId}')" class="text-blue-600 hover:text-blue-800" title="એડિટ કરો"><i class="fas fa-edit"></i></button>
-                            ${dbId ? `<button onclick="deleteHealthClient('${dbId}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700" title="કાઢી નાખો"><i class="fas fa-trash"></i></button>` : ''}
+                            <button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                 }
-                if (window.isAdminModeMF && dbId && clientId === "mf-list") {
+                if (window.isAdminModeMF && id && clientId === "mf-list") {
                     adminButtons = `
                         <div class="flex gap-2 mr-2">
-                            <button onclick="editMFClient('${dbId}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteMFClient('${dbId}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+                            <button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                 }
@@ -509,185 +1735,31 @@
                 li.innerHTML = content;
                 listElement.appendChild(li);
             });
-        };
+        }
 
-        window.handleDownload = (displayName, requiredPassword, pdfFilename, pdfData) => {
+        async function handleDownload(displayName, requiredPassword, pdfFilename, pdfData) {
             const pass = prompt(displayName + " નો પાસવર્ડ દાખલ કરો:");
             if (pass === requiredPassword || pass === MASTER_PASSWORD) {
-                if (pdfData && pdfData !== 'null' && pdfData !== 'undefined') {
+                if (pdfData) {
                     const link = document.createElement('a'); link.href = pdfData; link.download = pdfFilename || "policy.pdf"; link.click();
-                } else if (pdfFilename) {
+                } else {
                     const fileUrl = `https://raw.githubusercontent.com/Nareshsojitra/VEER/main/POLICY/${encodeURIComponent(pdfFilename)}`;
                     const link = document.createElement('a'); link.href = fileUrl; link.target = "_blank"; link.click();
-                } else {
-                    alert("ફાઇલ ઉપલબ્ધ નથી.");
                 }
             } else if (pass !== null) alert("ખોટો પાસવર્ડ!");
-        };
+        }
 
-        window.setupSearch = (inputId, listId, originalData, colorClass) => {
+        function setupSearch(inputId, listId, originalData, colorClass) {
             const input = document.getElementById(inputId);
             if(!input) return;
             input.oninput = (e) => {
                 const term = e.target.value.toLowerCase().trim();
                 const filtered = originalData.filter(c => (typeof c === 'object' ? c.name : c).toLowerCase().includes(term));
-                window.renderClients(listId, filtered, colorClass);
+                renderClients(listId, filtered, colorClass);
             };
-        };
+        }
 
-        // --- ADMIN ACTIONS ---
-        window.checkAdminAccess = () => {
-            const p = prompt("હેલ્થ એડમિન પાસવર્ડ:");
-            if(p === "395010") {
-                window.isAdminMode = true;
-                document.getElementById('admin-section').classList.remove('hidden');
-                document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-                const combined = [...healthInsuranceClients, ...window.dbHealthClients];
-                window.renderClients("health-list", combined, "border-red-500");
-                alert("હેલ્થ એડમિન લોગિન સફળ!");
-            } else { alert("ખોટો પાસવર્ડ!"); }
-        };
-
-        window.checkMFAdminAccess = () => {
-            const p = prompt("MF એડમિન પાસવર્ડ:");
-            if(p === "5555") {
-                window.isAdminModeMF = true;
-                document.getElementById('mf-admin-section').classList.remove('hidden');
-                document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-                const combined = [...mutualFundClients, ...window.dbMFClients];
-                window.renderClients("mf-list", combined, "border-blue-500");
-                alert("MF એડમિન લોગિન સફળ!");
-            } else { alert("ખોટો પાસવર્ડ!"); }
-        };
-
-        window.autoFillClientName = (input) => {
-            if (input.files && input.files[0]) {
-                document.getElementById('admin-name').value = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
-            }
-        };
-
-        window.addNewHealthClient = async () => {
-            const name = document.getElementById('admin-name').value.trim();
-            const pass = document.getElementById('admin-pass').value.trim();
-            const fileInput = document.getElementById('admin-file');
-            
-            if (!currentUser) { alert("લોગિન થવા સુધી રાહ જુઓ..."); return; }
-            if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
-            
-            const processSave = async (pdfData = null, fileName = null) => {
-                try {
-                    const clientData = { 
-                        name: name.toUpperCase(), 
-                        password: pass, 
-                        updatedAt: new Date().toISOString() 
-                    };
-                    
-                    if (pdfData) { 
-                        clientData.pdfData = pdfData; 
-                        clientData.fileName = fileName; 
-                    }
-                    
-                    if (editingClientId) {
-                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
-                        alert("વિગતો અપડેટ થઈ!");
-                    } else {
-                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF ફાઇલ જરૂરી છે!"); return; }
-                        clientData.createdAt = new Date().toISOString();
-                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
-                        alert("નવો ગ્રાહક સફળતાપૂર્વક ઉમેરાઈ ગયો!");
-                    }
-                    window.resetAdminForm();
-                } catch(e) { 
-                    console.error("Save Error:", e);
-                    alert("ડેટા સેવ કરવામાં ભૂલ આવી. ફાઇલ સાઇઝ ચેક કરો."); 
-                }
-            };
-
-            if (fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if (e.target.result.length > 1000000) { 
-                        alert("ફાઇલ ખૂબ મોટી છે (1MB થી ઓછી ફાઇલ રાખો)."); 
-                        return; 
-                    }
-                    processSave(e.target.result, fileInput.files[0].name);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else { 
-                processSave(); 
-            }
-        };
-
-        window.editHealthClient = (id) => {
-            let client;
-            const isHardcoded = id.startsWith('hc-');
-            if (isHardcoded) {
-                const index = parseInt(id.replace('hc-', ''));
-                client = healthInsuranceClients[index];
-                editingClientId = null; 
-            } else {
-                client = window.dbHealthClients.find(c => c.id === id);
-                editingClientId = id;
-            }
-            if (!client) return;
-            document.getElementById('admin-name').value = client.name;
-            document.getElementById('admin-pass').value = client.password;
-            document.getElementById('save-btn').innerText = editingClientId ? "અપડેટ કરો" : "ક્લાઉડમાં સેવ કરો";
-            document.getElementById('cancel-edit-btn').classList.remove('hidden');
-            document.getElementById('admin-section').classList.remove('hidden');
-            document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.deleteHealthClient = async (id, name) => {
-            if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch(e) {}
-        };
-
-        window.resetAdminForm = () => {
-            editingClientId = null;
-            document.getElementById('admin-name').value = ""; document.getElementById('admin-pass').value = ""; document.getElementById('admin-file').value = "";
-            document.getElementById('save-btn').innerText = "ડેટા સેવ કરો";
-            document.getElementById('cancel-edit-btn').classList.add('hidden');
-        };
-
-        window.addNewMFClient = async () => {
-            const name = document.getElementById('admin-mf-name').value.trim();
-            if (!name) { alert("નામ લખો!"); return; }
-            try {
-                if (editingMFClientId) {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name: name.toUpperCase(), updatedAt: new Date().toISOString() });
-                    alert("MF નામ અપડેટ થયું!");
-                } else {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mfClients'), { name: name.toUpperCase(), createdAt: new Date().toISOString() });
-                    alert("MF નામ ઉમેરાયું!");
-                }
-                window.resetMFAdminForm();
-            } catch(e) { alert("Error saving MF data"); }
-        };
-
-        window.editMFClient = (id) => {
-            const client = window.dbMFClients.find(c => c.id === id);
-            if (!client) return;
-            editingMFClientId = id;
-            document.getElementById('admin-mf-name').value = client.name;
-            document.getElementById('save-mf-btn').innerText = "MF અપડેટ કરો";
-            document.getElementById('cancel-mf-edit-btn').classList.remove('hidden');
-            document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.deleteMFClient = async (id, name) => {
-            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
-        };
-
-        window.resetMFAdminForm = () => {
-            editingMFClientId = null;
-            document.getElementById('admin-mf-name').value = "";
-            document.getElementById('save-mf-btn').innerText = "MF ડેટા સેવ કરો";
-            document.getElementById('cancel-mf-edit-btn').classList.add('hidden');
-        };
-
-        // --- AI CHAT ---
+        // --- AI & OTHERS ---
         async function askGemini(query) {
             const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના આસિસ્ટન્ટ છો. ગુજરાતીમાં જવાબ આપો. સંપર્ક: +91 97372 08108.";
             const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
@@ -696,11 +1768,11 @@
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
                 });
                 const result = await res.json();
-                return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો, હું અત્યારે જવાબ આપી શકતો નથી.";
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો...";
             } catch (err) { return "નેટવર્ક સમસ્યા છે."; }
         }
 
-        window.sendAIMessage = async () => {
+        async function sendAIMessage() {
             const input = document.getElementById('ai-input');
             const container = document.getElementById('ai-messages');
             const q = input.value.trim();
@@ -712,16 +1784,15 @@
             const ans = await askGemini(q); tDiv.remove();
             const aDiv = document.createElement('div'); aDiv.className = 'ai-msg'; aDiv.innerText = ans;
             container.appendChild(aDiv); container.scrollTop = container.scrollHeight;
-        };
+        }
 
-        window.toggleAIChat = () => {
+        function toggleAIChat() {
             const w = document.getElementById('ai-chat-window');
             w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
-        };
+        }
 
-        // Flower Show
-        window.startFlowerShow = () => { for(let i=0; i<6; i++) setTimeout(() => createFlower(), i * 150); };
-        window.spawnFlower = (e) => { if (Math.random() > 0.85) createFlower(e.clientX, e.clientY); };
+        function startFlowerShow() { for(let i=0; i<6; i++) setTimeout(() => createFlower(), i * 150); }
+        function spawnFlower(e) { if (Math.random() > 0.85) createFlower(e.clientX, e.clientY); }
         function createFlower(cx, cy) {
             const container = document.getElementById('photo-container');
             const rect = container.getBoundingClientRect();
@@ -735,13 +1806,11 @@
             container.appendChild(flower); setTimeout(() => flower.remove(), 1500);
         }
 
-        // Init
         document.addEventListener('DOMContentLoaded', () => {
-            window.renderClients("mf-list", mutualFundClients, "border-blue-500");
-            window.renderClients("health-list", healthInsuranceClients, "border-red-500");
-            window.setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
-            window.setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
-            initAuth();
+            renderClients("mf-list", mutualFundClients, "border-blue-500");
+            renderClients("health-list", healthInsuranceClients, "border-red-500");
+            setupSearch("mf-search", "mf-list", mutualFundClients, "border-blue-500");
+            setupSearch("health-search", "health-list", healthInsuranceClients, "border-red-500");
         });
     </script>
 </body>
