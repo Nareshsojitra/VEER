@@ -92,9 +92,40 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
+
+        /* Custom Success Notification Box */
+        #success-toast {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 2000;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slide-down 0.5s ease-out;
+        }
+
+        @keyframes slide-down {
+            from { top: -100px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
     </style>
 </head>
 <body class="text-slate-800">
+
+    <!-- Success Toast Notification -->
+    <div id="success-toast" style="display: none;">
+        <i class="fas fa-check-circle text-xl"></i>
+        <span>સફળતાપૂર્વક સેવ થયું!</span>
+    </div>
 
     <!-- Header / Navigation Bar -->
     <nav class="bg-white/90 backdrop-blur-md text-slate-800 shadow-lg fixed w-full z-50 top-0 border-b-4 border-red-600">
@@ -208,7 +239,7 @@
                 </div>
             </div>
 
-            <!-- MF ADMIN SECTION (Initially Hidden) -->
+            <!-- MF ADMIN SECTION -->
             <div id="mf-admin-section" class="max-w-4xl mx-auto mt-16 glass-panel p-8 rounded-xl shadow-lg border-2 border-blue-100 hidden">
                 <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <i class="fas fa-chart-line text-blue-600"></i> MF એડમિન પેનલ
@@ -229,7 +260,7 @@
                 </div>
             </div>
 
-            <!-- HEALTH ADMIN SECTION (Initially Hidden) -->
+            <!-- HEALTH ADMIN SECTION -->
             <div id="admin-section" class="max-w-4xl mx-auto mt-16 glass-panel p-8 rounded-xl shadow-lg border-2 border-red-100 hidden">
                 <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <i class="fas fa-user-shield text-red-600"></i> હેલ્થ એડમિન પેનલ
@@ -373,6 +404,15 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Global Success Notification Function
+        window.showSuccessToast = () => {
+            const toast = document.getElementById('success-toast');
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        };
+
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "",
             authDomain: "ramani-insurance.firebaseapp.com",
@@ -383,10 +423,9 @@
         };
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-        let db, auth;
         const app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
         let dbHealthClients = [];
         let dbMFClients = [];
@@ -403,7 +442,6 @@
             } catch (err) { console.error("Auth Error:", err); }
         }
 
-        // --- DATABASE LISTENERS ---
         function listenToHealthClients(user) {
             if (!user) return;
             const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
@@ -426,43 +464,82 @@
             }, (err) => console.error("MF DB Error:", err));
         }
 
-        // --- HEALTH ADMIN ---
+        // --- HEALTH ADMIN SAVE ---
         window.addNewHealthClient = async () => {
+            const user = auth.currentUser;
+            if (!user) { alert("લોગિન પ્રોસેસ ચાલુ છે..."); return; }
+
             const name = document.getElementById('admin-name').value.trim();
             const pass = document.getElementById('admin-pass').value.trim();
             const fileInput = document.getElementById('admin-file');
+            
             if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
             
             const processSave = async (pdfData = null, fileName = null) => {
                 try {
-                    const clientData = { name, password: pass, updatedAt: new Date().toISOString() };
+                    const clientData = { name: name.toUpperCase(), password: pass, updatedAt: new Date().toISOString() };
                     if (pdfData) { clientData.pdfData = pdfData; clientData.fileName = fileName; }
+                    
+                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
                     
                     if (editingClientId) {
                         await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
-                        alert("વિગતો અપડેટ થઈ!");
                     } else {
-                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF જરૂરી છે!"); return; }
+                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF ફાઇલ જરૂરી છે!"); return; }
                         clientData.createdAt = new Date().toISOString();
-                        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'healthClients'), clientData);
-                        alert("ગ્રાહક ઉમેરાઈ ગયા!");
+                        await addDoc(collectionRef, clientData);
                     }
+                    window.showSuccessToast(); // SHOW SUCCESS MSG
                     resetAdminForm();
-                } catch(e) { alert("Error saving data"); }
+                } catch(e) { alert("સેવ કરવામાં ભૂલ આવી: " + e.message); }
             };
 
             if (fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => processSave(e.target.result, fileInput.files[0].name);
                 reader.readAsDataURL(fileInput.files[0]);
-            } else { processSave(); }
+            } else if (editingClientId) { processSave(); }
+            else { alert("મહેરબાની કરીને PDF ફાઇલ પસંદ કરો."); }
+        };
+
+        // --- MF ADMIN SAVE ---
+        window.addNewMFClient = async () => {
+            if (!auth.currentUser) return;
+            const name = document.getElementById('admin-mf-name').value.trim();
+            if (!name) { alert("ગ્રાહકનું નામ લખો!"); return; }
+            
+            try {
+                const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
+                if (editingMFClientId) {
+                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name: name.toUpperCase(), updatedAt: new Date().toISOString() });
+                } else {
+                    await addDoc(collectionRef, { name: name.toUpperCase(), createdAt: new Date().toISOString() });
+                }
+                window.showSuccessToast(); // SHOW SUCCESS MSG
+                resetMFAdminForm();
+            } catch(e) { alert("ભૂલ આવી: " + e.message); }
         };
 
         window.deleteHealthClient = async (id, name) => {
+            if (!auth.currentUser) return;
             if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
             try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch(e) {}
         };
 
+        window.deleteMFClient = async (id, name) => {
+            if (!auth.currentUser) return;
+            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
+            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                listenToHealthClients(user);
+                listenToMFClients(user);
+            }
+        });
+
+        // Other utility functions...
         window.editHealthClient = (id) => {
             const client = dbHealthClients.find(c => c.id === id);
             if (!client) return;
@@ -481,27 +558,6 @@
             document.getElementById('cancel-edit-btn').classList.add('hidden');
         };
 
-        // --- MF ADMIN ---
-        window.addNewMFClient = async () => {
-            const name = document.getElementById('admin-mf-name').value.trim();
-            if (!name) { alert("નામ લખો!"); return; }
-            try {
-                if (editingMFClientId) {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name, updatedAt: new Date().toISOString() });
-                    alert("MF નામ અપડેટ થયું!");
-                } else {
-                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mfClients'), { name, createdAt: new Date().toISOString() });
-                    alert("MF નામ ઉમેરાયું!");
-                }
-                resetMFAdminForm();
-            } catch(e) { alert("Error saving MF data"); }
-        };
-
-        window.deleteMFClient = async (id, name) => {
-            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
-        };
-
         window.editMFClient = (id) => {
             const client = dbMFClients.find(c => c.id === id);
             if (!client) return;
@@ -518,13 +574,6 @@
             document.getElementById('save-mf-btn').innerText = "MF ડેટા સેવ કરો";
             document.getElementById('cancel-mf-edit-btn').classList.add('hidden');
         };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                listenToHealthClients(user);
-                listenToMFClients(user);
-            }
-        });
 
         initAuth();
     </script>
@@ -546,7 +595,6 @@
                 window.isAdminMode = true;
                 document.getElementById('admin-section').classList.remove('hidden');
                 document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-                renderClients("health-list", [...healthInsuranceClients, ...dbHealthClients], "border-red-500");
                 alert("હેલ્થ એડમિન લોગિન સફળ!");
             } else { alert("ખોટો પાસવર્ડ!"); }
         };
@@ -557,14 +605,11 @@
                 window.isAdminModeMF = true;
                 document.getElementById('mf-admin-section').classList.remove('hidden');
                 document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-                renderClients("mf-list", [...mutualFundClients, ...dbMFClients], "border-blue-500");
                 alert("MF એડમિન લોગિન સફળ!");
             } else { alert("ખોટો પાસવર્ડ!"); }
         };
 
-        // --- HARDCODED DATA ---
-        const mutualFundClients = [
-         "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
+        const mutualFundClients = ["KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
             "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
             "ASMITABEN ALPESHBHAI MALAVIYA", "BHAVESHBHAI BALUBHAI KOTADIYA", "SUBHASH RANA", "SANJAYKUMAR R JOGANI", "MALANI SANJAYBHAI RASIKBHAI",
             "SAVALIYA CHANDRIKABEN BAVCHANDBHAI", "ASODARIYA MAHESHKUMAR N", "RATANAPARA VIJAY JASMATBHAI", "CHAUHAN BHAVESHBHAI VINUBHAI", "RAMANI VINUBHAI RAVJIBHAI",
@@ -680,8 +725,9 @@
             "NILESH VALJIBHAI BHALALA", "CHIRAGBHAI RAMESHBHAI DHAMELIYA", "NITESHBHAI ARVINDBHAI BALAR", "MANSUKHBHAI CHHAGANBHAI SAVALIYA", "JANAKKUMAR GOYANI",
             "RINKALBEN TULSHIBHAI CHOVATIYA", "ASHOKBHAI NARSINHBHAI PAGHADAL", "KHUSHAL BHIKHABHAI JYANI", "SAGARBHAI BHIKHABHAI MALAVIYA"
         ];
+
         const healthInsuranceClients = [
-            { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
+{ name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
 { name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
 { name: "AJAYKUMAR VINUBHAI DHANANI 2025", pdf: "AJAYKUMAR VINUBHAI DHANANI 2025.pdf", password: "1111" },
 { name: "AKBARI GOVINDBHAI 2025", pdf: "AKBARI GOVINDBHAI 2025.pdf", password: "1111" },
@@ -1695,10 +1741,8 @@
 { name: "JATINKUMAR DALSUKHBHAI  GAMI 2026", pdf: "JATINKUMAR DALSUKHBHAI  GAMI 2026.pdf", password: "9979708729" },
 { name: "JIGNESH JAYANTIBHAI DOBARIYA 2026", pdf: "JIGNESH JAYANTIBHAI DOBARIYA 2026.pdf", password: "9979597221" }
         ];
-
         const MASTER_PASSWORD = "9737208108";
 
-        // Updated function to include lift-up effect on hover for each list item
         function renderClients(clientId, clientData, colorClass) {
             const listElement = document.getElementById(clientId);
             if(!listElement) return;
@@ -1711,38 +1755,11 @@
                 let pdfFile = typeof client === 'object' ? (client.pdf || client.fileName) : "";
                 let pdfData = typeof client === 'object' ? client.pdfData : null;
                 let id = typeof client === 'object' ? client.id : null;
-
                 const li = document.createElement("li");
-                // Added hover:-translate-y-1, hover:shadow-md, and transition-all for the lift-up effect
                 li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition-all duration-300 shadow-sm backdrop-blur-sm hover:-translate-y-1 hover:shadow-md cursor-pointer`;
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
-                
-                let adminButtons = '';
-                if (window.isAdminMode && id && clientId === "health-list") {
-                    adminButtons = `
-                        <div class="flex gap-2 mr-2">
-                            <button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `;
-                }
-                if (window.isAdminModeMF && id && clientId === "mf-list") {
-                    adminButtons = `
-                        <div class="flex gap-2 mr-2">
-                            <button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
-                        </div>
-                    `;
-                }
-
-                let content = `
-                    <div class="flex items-center flex-1 truncate"><i class="fas ${icon} mr-3"></i><span class="font-medium text-xs md:text-sm uppercase">${displayName}</span></div>
-                    <div class="flex items-center">
-                        ${adminButtons}
-                        ${clientId === "health-list" ? `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}', ${pdfData ? `'${pdfData}'` : 'null'})" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition flex items-center gap-1"><i class="fas fa-download"></i></button>` : ''}
-                    </div>
-                `;
-                li.innerHTML = content;
+                let adminButtons = (window.isAdminMode && id && clientId === "health-list") ? `<div class="flex gap-2 mr-2"><button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button><button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>` : (window.isAdminModeMF && id && clientId === "mf-list") ? `<div class="flex gap-2 mr-2"><button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button><button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>` : '';
+                li.innerHTML = `<div class="flex items-center flex-1 truncate"><i class="fas ${icon} mr-3"></i><span class="font-medium text-xs md:text-sm uppercase">${displayName}</span></div><div class="flex items-center">${adminButtons}${clientId === "health-list" ? `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}', ${pdfData ? `'${pdfData}'` : 'null'})" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition flex items-center gap-1"><i class="fas fa-download"></i></button>` : ''}</div>`;
                 listElement.appendChild(li);
             });
         }
@@ -1750,12 +1767,8 @@
         async function handleDownload(displayName, requiredPassword, pdfFilename, pdfData) {
             const pass = prompt(displayName + " નો પાસવર્ડ દાખલ કરો:");
             if (pass === requiredPassword || pass === MASTER_PASSWORD) {
-                if (pdfData) {
-                    const link = document.createElement('a'); link.href = pdfData; link.download = pdfFilename || "policy.pdf"; link.click();
-                } else {
-                    const fileUrl = `https://raw.githubusercontent.com/Nareshsojitra/VEER/main/POLICY/${encodeURIComponent(pdfFilename)}`;
-                    const link = document.createElement('a'); link.href = fileUrl; link.target = "_blank"; link.click();
-                }
+                if (pdfData) { const link = document.createElement('a'); link.href = pdfData; link.download = pdfFilename || "policy.pdf"; link.click(); }
+                else { const link = document.createElement('a'); link.href = `https://raw.githubusercontent.com/Nareshsojitra/VEER/main/POLICY/${encodeURIComponent(pdfFilename)}`; link.target = "_blank"; link.click(); }
             } else if (pass !== null) alert("ખોટો પાસવર્ડ!");
         }
 
@@ -1777,45 +1790,30 @@
             const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના આસિસ્ટન્ટ છો. ગુજરાતીમાં જવાબ આપો. સંપર્ક: +91 97372 08108.";
             const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
-                });
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 const result = await res.json();
                 return result.candidates?.[0]?.content?.parts?.[0]?.text || "ક્ષમા કરશો...";
             } catch (err) { return "નેટવર્ક સમસ્યા છે."; }
         }
 
         async function sendAIMessage() {
-            const input = document.getElementById('ai-input');
-            const container = document.getElementById('ai-messages');
-            const q = input.value.trim();
+            const input = document.getElementById('ai-input'), container = document.getElementById('ai-messages'), q = input.value.trim();
             if (!q) return;
-            const uDiv = document.createElement('div'); uDiv.className = 'user-msg'; uDiv.innerText = q;
-            container.appendChild(uDiv); input.value = ""; container.scrollTop = container.scrollHeight;
-            const tDiv = document.createElement('div'); tDiv.className = 'typing mb-2'; tDiv.innerText = "વિચારી રહ્યો છું...";
-            container.appendChild(tDiv);
+            const uDiv = document.createElement('div'); uDiv.className = 'user-msg'; uDiv.innerText = q; container.appendChild(uDiv); input.value = ""; container.scrollTop = container.scrollHeight;
+            const tDiv = document.createElement('div'); tDiv.className = 'typing mb-2'; tDiv.innerText = "વિચારી રહ્યો છું..."; container.appendChild(tDiv);
             const ans = await askGemini(q); tDiv.remove();
-            const aDiv = document.createElement('div'); aDiv.className = 'ai-msg'; aDiv.innerText = ans;
-            container.appendChild(aDiv); container.scrollTop = container.scrollHeight;
+            const aDiv = document.createElement('div'); aDiv.className = 'ai-msg'; aDiv.innerText = ans; container.appendChild(aDiv); container.scrollTop = container.scrollHeight;
         }
 
-        function toggleAIChat() {
-            const w = document.getElementById('ai-chat-window');
-            w.style.display = w.style.display === 'flex' ? 'none' : 'flex';
-        }
-
+        function toggleAIChat() { const w = document.getElementById('ai-chat-window'); w.style.display = w.style.display === 'flex' ? 'none' : 'flex'; }
         function startFlowerShow() { for(let i=0; i<6; i++) setTimeout(() => createFlower(), i * 150); }
         function spawnFlower(e) { if (Math.random() > 0.85) createFlower(e.clientX, e.clientY); }
         function createFlower(cx, cy) {
-            const container = document.getElementById('photo-container');
-            const rect = container.getBoundingClientRect();
-            const flower = document.createElement('div'); flower.className = 'flower-particle'; flower.innerText = '🌼';
+            const container = document.getElementById('photo-container'), rect = container.getBoundingClientRect(), flower = document.createElement('div');
+            flower.className = 'flower-particle'; flower.innerText = '🌼';
             const angle = Math.random() * Math.PI * 2, dist = 40 + Math.random() * 80;
-            flower.style.setProperty('--tw-x', `${Math.cos(angle) * dist}px`);
-            flower.style.setProperty('--tw-y', `${Math.sin(angle) * dist - 20}px`);
-            flower.style.setProperty('--tw-rotate', `${Math.random() * 360}deg`);
-            flower.style.left = `${cx ? (cx - rect.left) : (rect.width / 2)}px`;
-            flower.style.top = `${cy ? (cy - rect.top) : (rect.height / 3)}px`;
+            flower.style.setProperty('--tw-x', `${Math.cos(angle) * dist}px`); flower.style.setProperty('--tw-y', `${Math.sin(angle) * dist - 20}px`); flower.style.setProperty('--tw-rotate', `${Math.random() * 360}deg`);
+            flower.style.left = `${cx ? (cx - rect.left) : (rect.width / 2)}px`; flower.style.top = `${cy ? (cy - rect.top) : (rect.height / 3)}px`;
             container.appendChild(flower); setTimeout(() => flower.remove(), 1500);
         }
 
