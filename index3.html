@@ -1685,8 +1685,7 @@
 { name: "Ramani Rajeshkumar Babubhai 2026", pdf: "Ramani Rajeshkumar Babubhai 2026.pdf", password: "9913199237" },
 { name: "GAURAV V GALANI 2026", pdf: "GAURAV V GALANI 2026.pdf", password: "9099153999" },
 { name: "HITESH RAMESHBHAI DHOLA 2026", pdf: "HITESH RAMESHBHAI DHOLA 2026.pdf", password: "9276849722" },
-{ name: "Alpeshbhai Dhirubhai Savaliya 2026", pdf: "Alpeshbhai Dhirubhai Savaliya 2026.pdf", password: "9173765228" },
-{ name: "ARUNKUMAR HARILAL VAGHASIA 2026", pdf: "ARUNKUMAR HARILAL VAGHASIA 2026.pdf", password: "9687131808" }
+{ name: "Alpeshbhai Dhirubhai Savaliya 2026", pdf: "Alpeshbhai Dhirubhai Savaliya 2026.pdf", password: "9173765228" }
         ];
 
         const MASTER_PASSWORD = "9737208108";
@@ -1750,20 +1749,12 @@
             } else if (pass !== null) alert("ખોટો પાસવર્ડ!");
         }
 
-        // --- IMPROVED MULTI-WORD SEARCH FORMULA ---
         function setupSearch(inputId, listId, originalData, colorClass) {
             const input = document.getElementById(inputId);
             if(!input) return;
             input.oninput = (e) => {
                 const term = e.target.value.toLowerCase().trim();
-                // Split the search term into individual words (keywords)
-                const keywords = term.split(/\s+/).filter(k => k.length > 0);
-
-                const filtered = originalData.filter(c => {
-                    const clientName = (typeof c === 'object' ? c.name : c).toLowerCase();
-                    // Check if EVERY keyword exists somewhere in the client name
-                    return keywords.every(keyword => clientName.includes(keyword));
-                });
+                const filtered = originalData.filter(c => (typeof c === 'object' ? c.name : c).toLowerCase().includes(term));
                 renderClients(listId, filtered, colorClass);
             };
         }
