@@ -213,7 +213,12 @@
                 <div class="glass-panel rounded-xl shadow-2xl overflow-hidden flex flex-col transition duration-300 hover:-translate-y-2 border border-slate-200">
                     <div class="bg-blue-900 p-4 flex items-center justify-between text-white border-b border-blue-800">
                         <h3 class="font-bold text-xl"><i class="fas fa-chart-pie mr-2 text-amber-400"></i> Mutual Fund</h3>
-                        <span class="inline-block bg-blue-950 text-sm px-3 py-1 rounded-full border border-blue-400 font-bold shadow-sm">Total: <span id="mf-count-display">0</span></span>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-block bg-blue-950 text-sm px-3 py-1 rounded-full border border-blue-400 font-bold shadow-sm">Total: <span id="mf-count-display">0</span></span>
+                            <button onclick="toggleMfSort()" class="bg-blue-950 hover:bg-blue-800 text-white w-8 h-8 rounded-full flex items-center justify-center border border-blue-400 transition" title="Sort Order">
+                                <i id="mf-sort-icon" class="fas fa-sort"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="p-6">
                         <div class="mb-4 relative">
@@ -227,7 +232,12 @@
                 <div class="glass-panel rounded-xl shadow-2xl overflow-hidden flex flex-col transition duration-300 hover:-translate-y-2 border border-slate-200">
                     <div class="bg-red-800 p-4 flex items-center justify-between text-white border-b border-red-700">
                         <h3 class="font-bold text-xl"><i class="fas fa-heartbeat mr-2 text-white"></i> Health Insurance</h3>
-                        <span class="inline-block bg-red-950 text-sm px-3 py-1 rounded-full border border-red-400 font-bold shadow-sm">Total: <span id="health-count-display">0</span></span>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-block bg-red-950 text-sm px-3 py-1 rounded-full border border-red-400 font-bold shadow-sm">Total: <span id="health-count-display">0</span></span>
+                            <button onclick="toggleHealthSort()" class="bg-red-950 hover:bg-red-800 text-white w-8 h-8 rounded-full flex items-center justify-center border border-red-400 transition" title="Sort Order">
+                                <i id="health-sort-icon" class="fas fa-sort"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="p-6">
                         <div class="mb-4 relative">
@@ -447,9 +457,7 @@
             const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
             onSnapshot(healthCol, (snapshot) => {
                 dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const combined = [...healthInsuranceClients, ...dbHealthClients];
-                renderClients("health-list", combined, "border-red-500");
-                setupSearch("health-search", "health-list", combined, "border-red-500");
+                updateHealthDisplay();
             }, (err) => console.error("Health DB Error:", err));
         }
 
@@ -458,11 +466,22 @@
             const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
             onSnapshot(mfCol, (snapshot) => {
                 dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                const combined = [...mutualFundClients, ...dbMFClients];
-                renderClients("mf-list", combined, "border-blue-500");
-                setupSearch("mf-search", "mf-list", combined, "border-blue-500");
+                updateMFDisplay();
             }, (err) => console.error("MF DB Error:", err));
         }
+
+        // --- Helper functions for updating UI based on global data ---
+        window.updateHealthDisplay = () => {
+            const combined = [...healthInsuranceClients, ...dbHealthClients];
+            renderClients("health-list", combined, "border-red-500");
+            setupSearch("health-search", "health-list", combined, "border-red-500");
+        };
+
+        window.updateMFDisplay = () => {
+            const combined = [...mutualFundClients, ...dbMFClients];
+            renderClients("mf-list", combined, "border-blue-500");
+            setupSearch("mf-search", "mf-list", combined, "border-blue-500");
+        };
 
         // --- HEALTH ADMIN SAVE ---
         window.addNewHealthClient = async () => {
@@ -582,6 +601,10 @@
         const apiKey = ""; 
         window.isAdminMode = false;
         window.isAdminModeMF = false;
+        
+        // --- Sorting State Variables ---
+        window.mfSortDesc = false;
+        window.healthSortDesc = false;
 
         window.autoFillClientName = (input) => {
             if (input.files && input.files[0]) {
@@ -596,6 +619,7 @@
                 document.getElementById('admin-section').classList.remove('hidden');
                 document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
                 alert("હેલ્થ એડમિન લોગિન સફળ!");
+                if(window.updateHealthDisplay) window.updateHealthDisplay();
             } else { alert("ખોટો પાસવર્ડ!"); }
         };
 
@@ -606,6 +630,7 @@
                 document.getElementById('mf-admin-section').classList.remove('hidden');
                 document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
                 alert("MF એડમિન લોગિન સફળ!");
+                if(window.updateMFDisplay) window.updateMFDisplay();
             } else { alert("ખોટો પાસવર્ડ!"); }
         };
 
@@ -1748,13 +1773,38 @@
         ];
         const MASTER_PASSWORD = "9737208108";
 
+        // --- Sorting Functions ---
+        window.toggleMfSort = () => {
+            window.mfSortDesc = !window.mfSortDesc;
+            const icon = document.getElementById('mf-sort-icon');
+            icon.className = window.mfSortDesc ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up-alt';
+            // Trigger search logic or snaphot logic to refresh with new order
+            const searchInput = document.getElementById('mf-search');
+            searchInput.dispatchEvent(new Event('input'));
+        };
+
+        window.toggleHealthSort = () => {
+            window.healthSortDesc = !window.healthSortDesc;
+            const icon = document.getElementById('health-sort-icon');
+            icon.className = window.healthSortDesc ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up-alt';
+            const searchInput = document.getElementById('health-search');
+            searchInput.dispatchEvent(new Event('input'));
+        };
+
         function renderClients(clientId, clientData, colorClass) {
             const listElement = document.getElementById(clientId);
             if(!listElement) return;
+
+            // Apply Sorting based on flag
+            let finalData = [...clientData];
+            if ((clientId === "mf-list" && window.mfSortDesc) || (clientId === "health-list" && window.healthSortDesc)) {
+                finalData.reverse();
+            }
+
             const countId = clientId === "mf-list" ? "mf-count-display" : "health-count-display";
-            document.getElementById(countId).innerText = clientData.length;
+            document.getElementById(countId).innerText = finalData.length;
             listElement.innerHTML = "";
-            clientData.forEach(client => {
+            finalData.forEach(client => {
                 let displayName = typeof client === 'object' ? client.name : client;
                 let password = typeof client === 'object' ? client.password : "1111";
                 let pdfFile = typeof client === 'object' ? (client.pdf || client.fileName) : "";
