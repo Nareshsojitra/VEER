@@ -92,40 +92,9 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
-
-        /* Custom Success Notification Box */
-        #success-toast {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 2000;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slide-down 0.5s ease-out;
-        }
-
-        @keyframes slide-down {
-            from { top: -100px; opacity: 0; }
-            to { top: 20px; opacity: 1; }
-        }
     </style>
 </head>
 <body class="text-slate-800">
-
-    <!-- Success Toast Notification -->
-    <div id="success-toast" style="display: none;">
-        <i class="fas fa-check-circle text-xl"></i>
-        <span>સફળતાપૂર્વક સેવ થયું!</span>
-    </div>
 
     <!-- Header / Navigation Bar -->
     <nav class="bg-white/90 backdrop-blur-md text-slate-800 shadow-lg fixed w-full z-50 top-0 border-b-4 border-red-600">
@@ -248,54 +217,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- MF ADMIN SECTION -->
-            <div id="mf-admin-section" class="max-w-4xl mx-auto mt-16 glass-panel p-8 rounded-xl shadow-lg border-2 border-blue-100 hidden">
-                <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <i class="fas fa-chart-line text-blue-600"></i> MF એડમિન પેનલ
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-slate-600">ગ્રાહકનું નામ</label>
-                        <input type="text" id="admin-mf-name" placeholder="ગ્રાહકનું નામ દાખલ કરો" class="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white uppercase">
-                    </div>
-                    <div class="flex items-end">
-                        <button id="save-mf-btn" onclick="addNewMFClient()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition shadow-md flex items-center justify-center gap-2">
-                            <i class="fas fa-save"></i> MF ડેટા સેવ કરો
-                        </button>
-                    </div>
-                </div>
-                <div class="mt-4 flex gap-4">
-                    <button id="cancel-mf-edit-btn" onclick="resetMFAdminForm()" class="hidden bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-300 transition">Cancel Edit</button>
-                </div>
-            </div>
-
-            <!-- HEALTH ADMIN SECTION -->
-            <div id="admin-section" class="max-w-4xl mx-auto mt-16 glass-panel p-8 rounded-xl shadow-lg border-2 border-red-100 hidden">
-                <h3 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <i class="fas fa-user-shield text-red-600"></i> હેલ્થ એડમિન પેનલ
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-slate-600">ગ્રાહકનું નામ</label>
-                        <input type="text" id="admin-name" placeholder="ફાઇલ મુજબ આપોઆપ આવશે" class="p-3 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-slate-600">ડાઉનલોડ પાસવર્ડ</label>
-                        <input type="text" id="admin-pass" placeholder="દા.ત. 1234" class="p-3 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white">
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-bold text-slate-600">PDF ફાઈલ અપલોડ કરો</label>
-                        <input type="file" id="admin-file" accept=".pdf" onchange="autoFillClientName(this)" class="p-2.5 border rounded-lg focus:ring-2 focus:ring-red-500 outline-none bg-white text-sm">
-                    </div>
-                </div>
-                <div class="mt-6 flex gap-4">
-                    <button id="save-btn" onclick="addNewHealthClient()" class="flex-1 bg-red-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition shadow-md flex items-center justify-center gap-2">
-                        <i class="fas fa-save"></i> ડેટા સેવ કરો
-                    </button>
-                    <button id="cancel-edit-btn" onclick="resetAdminForm()" class="hidden bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-lg hover:bg-slate-300 transition">Cancel Edit</button>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -378,10 +299,6 @@
 
     <!-- Footer -->
     <footer class="bg-slate-950 pb-8 pt-6 text-center border-t border-slate-800">
-        <div class="flex justify-center gap-6 mb-4">
-            <button onclick="checkAdminAccess()" class="text-slate-700 hover:text-red-500 text-[10px] transition uppercase tracking-widest font-bold border-r border-slate-800 pr-6">Health Admin</button>
-            <button onclick="checkMFAdminAccess()" class="text-slate-700 hover:text-blue-500 text-[10px] transition uppercase tracking-widest font-bold">MF Admin</button>
-        </div>
         <p class="text-slate-400 text-xs md:text-sm">© 2026 રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસ. All Rights Reserved.</p>
     </footer>
 
@@ -408,233 +325,13 @@
         </div>
     </div>
 
-    <!-- Firebase Logic -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, onSnapshot, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Global Success Notification Function
-        window.showSuccessToast = () => {
-            const toast = document.getElementById('success-toast');
-            toast.style.display = 'flex';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        };
-
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "",
-            authDomain: "ramani-insurance.firebaseapp.com",
-            projectId: "ramani-insurance",
-            storageBucket: "ramani-insurance.appspot.com",
-            messagingSenderId: "9737208108",
-            appId: "1:9737208108:web:ramani123"
-        };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let dbHealthClients = [];
-        let dbMFClients = [];
-        let editingClientId = null;
-        let editingMFClientId = null;
-
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (err) { console.error("Auth Error:", err); }
-        }
-
-        function listenToHealthClients(user) {
-            if (!user) return;
-            const healthCol = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
-            onSnapshot(healthCol, (snapshot) => {
-                dbHealthClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateHealthDisplay();
-            }, (err) => console.error("Health DB Error:", err));
-        }
-
-        function listenToMFClients(user) {
-            if (!user) return;
-            const mfCol = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
-            onSnapshot(mfCol, (snapshot) => {
-                dbMFClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                updateMFDisplay();
-            }, (err) => console.error("MF DB Error:", err));
-        }
-
-        // --- Helper functions for updating UI based on global data ---
-        window.updateHealthDisplay = () => {
-            const combined = [...healthInsuranceClients, ...dbHealthClients];
-            renderClients("health-list", combined, "border-red-500");
-            setupSearch("health-search", "health-list", combined, "border-red-500");
-        };
-
-        window.updateMFDisplay = () => {
-            const combined = [...mutualFundClients, ...dbMFClients];
-            renderClients("mf-list", combined, "border-blue-500");
-            setupSearch("mf-search", "mf-list", combined, "border-blue-500");
-        };
-
-        // --- HEALTH ADMIN SAVE ---
-        window.addNewHealthClient = async () => {
-            const user = auth.currentUser;
-            if (!user) { alert("લોગિન પ્રોસેસ ચાલુ છે..."); return; }
-
-            const name = document.getElementById('admin-name').value.trim();
-            const pass = document.getElementById('admin-pass').value.trim();
-            const fileInput = document.getElementById('admin-file');
-            
-            if (!name || !pass) { alert("નામ અને પાસવર્ડ જરૂરી છે!"); return; }
-            
-            const processSave = async (pdfData = null, fileName = null) => {
-                try {
-                    const clientData = { name: name.toUpperCase(), password: pass, updatedAt: new Date().toISOString() };
-                    if (pdfData) { clientData.pdfData = pdfData; clientData.fileName = fileName; }
-                    
-                    const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'healthClients');
-                    
-                    if (editingClientId) {
-                        await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', editingClientId), clientData);
-                    } else {
-                        if(!pdfData) { alert("નવા ગ્રાહક માટે PDF ફાઇલ જરૂરી છે!"); return; }
-                        clientData.createdAt = new Date().toISOString();
-                        await addDoc(collectionRef, clientData);
-                    }
-                    window.showSuccessToast(); // SHOW SUCCESS MSG
-                    resetAdminForm();
-                } catch(e) { alert("સેવ કરવામાં ભૂલ આવી: " + e.message); }
-            };
-
-            if (fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => processSave(e.target.result, fileInput.files[0].name);
-                reader.readAsDataURL(fileInput.files[0]);
-            } else if (editingClientId) { processSave(); }
-            else { alert("મહેરબાની કરીને PDF ફાઇલ પસંદ કરો."); }
-        };
-
-        // --- MF ADMIN SAVE ---
-        window.addNewMFClient = async () => {
-            if (!auth.currentUser) return;
-            const name = document.getElementById('admin-mf-name').value.trim();
-            if (!name) { alert("ગ્રાહકનું નામ લખો!"); return; }
-            
-            try {
-                const collectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'mfClients');
-                if (editingMFClientId) {
-                    await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', editingMFClientId), { name: name.toUpperCase(), updatedAt: new Date().toISOString() });
-                } else {
-                    await addDoc(collectionRef, { name: name.toUpperCase(), createdAt: new Date().toISOString() });
-                }
-                window.showSuccessToast(); // SHOW SUCCESS MSG
-                resetMFAdminForm();
-            } catch(e) { alert("ભૂલ આવી: " + e.message); }
-        };
-
-        window.deleteHealthClient = async (id, name) => {
-            if (!auth.currentUser) return;
-            if (!confirm(`"${name}" ને લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'healthClients', id)); } catch(e) {}
-        };
-
-        window.deleteMFClient = async (id, name) => {
-            if (!auth.currentUser) return;
-            if (!confirm(`"${name}" ને MF લિસ્ટમાંથી કાઢી નાખવું છે?`)) return;
-            try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mfClients', id)); } catch(e) {}
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                listenToHealthClients(user);
-                listenToMFClients(user);
-            }
-        });
-
-        // Other utility functions...
-        window.editHealthClient = (id) => {
-            const client = dbHealthClients.find(c => c.id === id);
-            if (!client) return;
-            editingClientId = id;
-            document.getElementById('admin-name').value = client.name;
-            document.getElementById('admin-pass').value = client.password;
-            document.getElementById('save-btn').innerText = "ડેટા અપડેટ કરો";
-            document.getElementById('cancel-edit-btn').classList.remove('hidden');
-            document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.resetAdminForm = () => {
-            editingClientId = null;
-            document.getElementById('admin-name').value = ""; document.getElementById('admin-pass').value = ""; document.getElementById('admin-file').value = "";
-            document.getElementById('save-btn').innerText = "ડેટા સેવ કરો";
-            document.getElementById('cancel-edit-btn').classList.add('hidden');
-        };
-
-        window.editMFClient = (id) => {
-            const client = dbMFClients.find(c => c.id === id);
-            if (!client) return;
-            editingMFClientId = id;
-            document.getElementById('admin-mf-name').value = client.name;
-            document.getElementById('save-mf-btn').innerText = "MF અપડેટ કરો";
-            document.getElementById('cancel-mf-edit-btn').classList.remove('hidden');
-            document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.resetMFAdminForm = () => {
-            editingMFClientId = null;
-            document.getElementById('admin-mf-name').value = "";
-            document.getElementById('save-mf-btn').innerText = "MF ડેટા સેવ કરો";
-            document.getElementById('cancel-mf-edit-btn').classList.add('hidden');
-        };
-
-        initAuth();
-    </script>
-
     <script>
         const apiKey = ""; 
-        window.isAdminMode = false;
-        window.isAdminModeMF = false;
-        
-        // --- Sorting State Variables ---
-        window.mfSortDesc = false;
-        window.healthSortDesc = false;
 
-        window.autoFillClientName = (input) => {
-            if (input.files && input.files[0]) {
-                document.getElementById('admin-name').value = input.files[0].name.replace(/\.[^/.]+$/, "").toUpperCase();
-            }
-        };
-
-        window.checkAdminAccess = () => {
-            const p = prompt("હેલ્થ એડમિન પાસવર્ડ:");
-            if(p === "395010") {
-                window.isAdminMode = true;
-                document.getElementById('admin-section').classList.remove('hidden');
-                document.getElementById('admin-section').scrollIntoView({ behavior: 'smooth' });
-                alert("હેલ્થ એડમિન લોગિન સફળ!");
-                if(window.updateHealthDisplay) window.updateHealthDisplay();
-            } else { alert("ખોટો પાસવર્ડ!"); }
-        };
-
-        window.checkMFAdminAccess = () => {
-            const p = prompt("MF એડમિન પાસવર્ડ:");
-            if(p === "5555") {
-                window.isAdminModeMF = true;
-                document.getElementById('mf-admin-section').classList.remove('hidden');
-                document.getElementById('mf-admin-section').scrollIntoView({ behavior: 'smooth' });
-                alert("MF એડમિન લોગિન સફળ!");
-                if(window.updateMFDisplay) window.updateMFDisplay();
-            } else { alert("ખોટો પાસવર્ડ!"); }
-        };
-
-        const mutualFundClients = ["KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
+        // STATIC DATA LISTS - Add new names here directly
+        // નવું નામ આ લિસ્ટમાં છેલ્લે એડ કરવાથી તે વેબ પેજ પર સૌથી ઉપર દેખાશે.
+        const mutualFundClients = [
+            "KANANI NISHANT", "ZADAFIYA BHUMI JIGNESHKUMAR", "RAMESHBHAI MOHANBHAI BHALALA", "DAYANI NIHAR DINESHBHAI", "UMESH MAIDA",
             "KISHANKUMAR KALUBHAI MORADIYA", "SOLANKI DIPAK MAHESHBHAI", "LAXMANBHAI PRABHUBHAI SUMBAD", "BHARATIBEN NAVINBHAI CHAUDHARY", "DONDA PRADIPBHAI LABHUBHAI",
             "ASMITABEN ALPESHBHAI MALAVIYA", "BHAVESHBHAI BALUBHAI KOTADIYA", "SUBHASH RANA", "SANJAYKUMAR R JOGANI", "MALANI SANJAYBHAI RASIKBHAI",
             "SAVALIYA CHANDRIKABEN BAVCHANDBHAI", "ASODARIYA MAHESHKUMAR N", "RATANAPARA VIJAY JASMATBHAI", "CHAUHAN BHAVESHBHAI VINUBHAI", "RAMANI VINUBHAI RAVJIBHAI",
@@ -752,7 +449,7 @@
         ];
 
         const healthInsuranceClients = [
-{ name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
+            { name: "ABHAY JAYANTIBHAI LALKIYA 2025", pdf: "ABHAY JAYANTIBHAI LALKIYA 2025.pdf", password: "1111" },
 { name: "AJAY SHAMJIBHAI RATHOD 2025", pdf: "AJAY SHAMJIBHAI RATHOD 2025.pdf", password: "1111" },
 { name: "AJAYKUMAR VINUBHAI DHANANI 2025", pdf: "AJAYKUMAR VINUBHAI DHANANI 2025.pdf", password: "9712425291" },
 { name: "AKBARI GOVINDBHAI 2025", pdf: "AKBARI GOVINDBHAI 2025.pdf", password: "1111" },
@@ -1004,7 +701,7 @@
 { name: "GEETABEN ASHVINBHAI RUPAVATIYA 2025", pdf: "GEETABEN ASHVINBHAI RUPAVATIYA 2025.pdf", password: "9913623086" },
 { name: "GEVARIYA CHIRAG MANSUKHBHAI MEDI 2025", pdf: "GEVARIYA CHIRAG MANSUKHBHAI MEDI 2025.pdf", password: "1111" },
 { name: "GHANSHYAM RAMNIKLAL  SAVALIYA 2025", pdf: "GHANSHYAM RAMNIKLAL  SAVALIYA 2025.pdf", password: "1111" },
-{ name: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2025", pdf: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2025.pdf", password: "1111" },
+{ name: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2025", pdf: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2025.pdf", password: "8140307644" },
 { name: "GHANSHYAMBHAI HARIBHAI GONDALIYA 2025", pdf: "GHANSHYAMBHAI HARIBHAI GONDALIYA 2025.pdf", password: "1111" },
 { name: "Ghanshyambhai Jagabhai Zalavadiya 2025", pdf: "Ghanshyambhai Jagabhai Zalavadiya 2025.pdf", password: "1111" },
 { name: "GHANSHYAMBHAI NATHABHAI DHAKECHA 2025", pdf: "GHANSHYAMBHAI NATHABHAI DHAKECHA 2025.pdf", password: "1111" },
@@ -1900,33 +1597,36 @@
 { name: "VISHAL DINESHBHAI BUHA 2026", pdf: "VISHAL DINESHBHAI BUHA 2026.pdf", password: "9574372836" },
 { name: "BHIKADIYA VISHALKUMAR BHARATBHAI 2026", pdf: "BHIKADIYA VISHALKUMAR BHARATBHAI 2026.pdf", password: "8000051772" },
 { name: "VR TECHNOCRAFT 2026", pdf: "VR TECHNOCRAFT 2026.pdf", password: "9898519815" },
+{ name: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2026 ASHUBHAI", pdf: "GHANSHYAMBHAI DHARAMSHIBHAI DHOLAKIYA 2026 ASHUBHAI.pdf", password: "8140307644" },
         ];
+
         const MASTER_PASSWORD = "9737208108";
+        window.mfSortDesc = false;
+        window.healthSortDesc = false;
 
         // --- Sorting Functions ---
         window.toggleMfSort = () => {
             window.mfSortDesc = !window.mfSortDesc;
             const icon = document.getElementById('mf-sort-icon');
             icon.className = window.mfSortDesc ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up-alt';
-            // Trigger search logic or snaphot logic to refresh with new order
-            const searchInput = document.getElementById('mf-search');
-            searchInput.dispatchEvent(new Event('input'));
+            renderClients("mf-list", mutualFundClients, "border-blue-500");
         };
 
         window.toggleHealthSort = () => {
             window.healthSortDesc = !window.healthSortDesc;
             const icon = document.getElementById('health-sort-icon');
             icon.className = window.healthSortDesc ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up-alt';
-            const searchInput = document.getElementById('health-search');
-            searchInput.dispatchEvent(new Event('input'));
+            renderClients("health-list", healthInsuranceClients, "border-red-500");
         };
 
         function renderClients(clientId, clientData, colorClass) {
             const listElement = document.getElementById(clientId);
             if(!listElement) return;
 
-            // Apply Sorting based on flag
-            let finalData = [...clientData];
+            // નવું નામ લિસ્ટમાં સૌથી ઉપર બતાવવા માટે એરેને ઉલટો (Reverse) કરવામાં આવ્યો છે.
+            let finalData = [...clientData].reverse();
+
+            // જો સોર્ટિંગ બટન દબાવવામાં આવે તો લિસ્ટ પાછું સીધું (Original Order) થઇ જશે.
             if ((clientId === "mf-list" && window.mfSortDesc) || (clientId === "health-list" && window.healthSortDesc)) {
                 finalData.reverse();
             }
@@ -1934,26 +1634,35 @@
             const countId = clientId === "mf-list" ? "mf-count-display" : "health-count-display";
             document.getElementById(countId).innerText = finalData.length;
             listElement.innerHTML = "";
+
             finalData.forEach(client => {
                 let displayName = typeof client === 'object' ? client.name : client;
                 let password = typeof client === 'object' ? client.password : "1111";
-                let pdfFile = typeof client === 'object' ? (client.pdf || client.fileName) : "";
-                let pdfData = typeof client === 'object' ? client.pdfData : null;
-                let id = typeof client === 'object' ? client.id : null;
+                let pdfFile = typeof client === 'object' ? client.pdf : "";
+                
                 const li = document.createElement("li");
                 li.className = `flex items-center justify-between text-slate-700 p-2 bg-white/60 rounded border-l-4 ${colorClass} hover:bg-white transition-all duration-300 shadow-sm backdrop-blur-sm hover:-translate-y-1 hover:shadow-md cursor-pointer`;
                 let icon = clientId.includes('mf') ? 'fa-chart-line text-blue-400' : 'fa-heartbeat text-red-400';
-                let adminButtons = (window.isAdminMode && id && clientId === "health-list") ? `<div class="flex gap-2 mr-2"><button onclick="editHealthClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button><button onclick="deleteHealthClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>` : (window.isAdminModeMF && id && clientId === "mf-list") ? `<div class="flex gap-2 mr-2"><button onclick="editMFClient('${id}')" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button><button onclick="deleteMFClient('${id}', '${displayName.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button></div>` : '';
-                li.innerHTML = `<div class="flex items-center flex-1 truncate"><i class="fas ${icon} mr-3"></i><span class="font-medium text-xs md:text-sm uppercase">${displayName}</span></div><div class="flex items-center">${adminButtons}${clientId === "health-list" ? `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}', ${pdfData ? `'${pdfData}'` : 'null'})" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition flex items-center gap-1"><i class="fas fa-download"></i></button>` : ''}</div>`;
+                
+                li.innerHTML = `
+                    <div class="flex items-center flex-1 truncate">
+                        <i class="fas ${icon} mr-3"></i>
+                        <span class="font-medium text-xs md:text-sm uppercase">${displayName}</span>
+                    </div>
+                    <div class="flex items-center">
+                        ${clientId === "health-list" ? `<button onclick="handleDownload('${displayName.replace(/'/g, "\\'")}', '${password}', '${pdfFile.replace(/'/g, "\\'")}')" class="ml-2 bg-red-600 text-white text-[10px] md:text-xs px-2 md:px-3 py-1.5 rounded hover:bg-red-700 transition flex items-center gap-1"><i class="fas fa-download"></i></button>` : ''}
+                    </div>`;
                 listElement.appendChild(li);
             });
         }
 
-        async function handleDownload(displayName, requiredPassword, pdfFilename, pdfData) {
+        async function handleDownload(displayName, requiredPassword, pdfFilename) {
             const pass = prompt(displayName + " નો પાસવર્ડ દાખલ કરો:");
             if (pass === requiredPassword || pass === MASTER_PASSWORD) {
-                if (pdfData) { const link = document.createElement('a'); link.href = pdfData; link.download = pdfFilename || "policy.pdf"; link.click(); }
-                else { const link = document.createElement('a'); link.href = `https://raw.githubusercontent.com/Nareshsojitra/VEER/main/POLICY/${encodeURIComponent(pdfFilename)}`; link.target = "_blank"; link.click(); }
+                const link = document.createElement('a');
+                link.href = `https://raw.githubusercontent.com/Nareshsojitra/VEER/main/POLICY/${encodeURIComponent(pdfFilename)}`;
+                link.target = "_blank";
+                link.click();
             } else if (pass !== null) alert("ખોટો પાસવર્ડ!");
         }
 
@@ -1971,6 +1680,7 @@
             };
         }
 
+        // --- Gemini AI Functions ---
         async function askGemini(query) {
             const systemPrompt = "તમે રામાણી ઇન્સ્યુરન્સ અને મ્યુચ્યુઅલ ફંડ સર્વિસના આસિસ્ટન્ટ છો. ગુજરાતીમાં જવાબ આપો. સંપર્ક: +91 97372 08108.";
             const payload = { contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: systemPrompt }] } };
